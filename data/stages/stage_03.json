@@ -1,0 +1,36 @@
+{
+  "stage_id": 3,
+  "name": "時計の針",
+  "assets": {
+    "background": "bg_stage_03.png",
+    "door": "door_white_wood.png",
+    "bgm": "ambient_mystery_02.mp3"
+  },
+  "interactables": [
+    { "id": "broken_clock", "rect": [220, 160, 90, 90], "zoom_image": "clock_0345_zoom.png", "reveals": "0345" }
+  ],
+  "gimmick": {
+    "type": "number_pad",
+    "solutions": { "normal": "0345" },
+    "validate": "exact"
+  },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "broken_clock", "rect": [220, 160, 90, 90], "zoom_image": "clock_glyph_zoom.png", "reveals_glyphs": ["g_0", "g_3", "g_4", "g_5"] }
+    ],
+    "gimmick": {
+      "type": "number_pad",
+      "solutions": { "hard": "0345" },
+      "validate": "exact"
+    },
+    "decode_hint": "文字盤の数字は回廊文字。解読書で数字に直してテンキーへ。"
+  },
+  "hints": ["h_s03_1", "h_s03_2"],
+  "rewards": {
+    "memory_id": "mem_03",
+    "text_full": "t_s03_full",
+    "text_corrupt": "t_s03_corrupt",
+    "item": null
+  }
+}

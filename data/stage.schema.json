@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage Definition - 記憶の回廊",
+  "type": "object",
+  "required": ["stage_id", "assets", "interactables", "gimmick", "rewards"],
+  "properties": {
+    "stage_id": { "type": "integer" },
+    "name": { "type": "string" },
+    "assets": {
+      "type": "object",
+      "required": ["background", "door"],
+      "properties": {
+        "background": { "type": "string" },
+        "door": { "type": "string" },
+        "bgm": { "type": "string" }
+      }
+    },
+    "interactables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "rect"],
+        "properties": {
+          "id": { "type": "string" },
+          "rect": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 4,
+            "maxItems": 4,
+            "description": "[x, y, w, h]"
+          },
+          "zoom_image": { "type": "string" },
+          "reveals": { "type": "string", "description": "拡大時に見える手がかり" },
+          "toggle": { "type": "boolean", "description": "状態を切り替えられるか" },
+          "states": { "type": "array", "items": { "type": "string" } },
+          "gives_item": { "type": "string", "description": "タップで入手するアイテムID" },
+          "hidden": { "type": "boolean", "description": "謎解きに不要な隠し要素か" },
+          "decoy": { "type": "boolean", "description": "hard: 偽の手がかり（論理で除外させるダミー）" },
+          "reveals_glyphs": { "type": "array", "items": { "type": "string" }, "description": "hard: 回廊文字の手がかり（グリフID列）" },
+          "reveals_glyphs_reflected": { "type": "array", "items": { "type": "string" }, "description": "hard: 鏡文字（左右反転）の回廊文字" },
+          "label_glyph": { "type": "string", "description": "hard: ボタン等のラベルを回廊文字にする" },
+          "requires_item": { "type": "string", "description": "item_use: この対象に使うのに必要なアイテムID" },
+          "on_use_state": { "type": "string", "description": "item_use: 使用後にこの対象を指定状態にする（prerequisites 連動）" },
+          "on_use_gives_item": { "type": "string", "description": "item_use: 使用後に入手するアイテムID" },
+          "on_use_reveals": { "type": "string", "description": "item_use: 使用後に見える手がかり" },
+          "draggable": { "type": "boolean", "description": "drag: ドラッグできるピース" },
+          "slot": { "type": "boolean", "description": "drag: ピースの受け皿" },
+          "requires_state": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["interactable", "state"],
+              "properties": {
+                "interactable": { "type": "string" },
+                "state": { "type": "string" }
+              }
+            },
+            "description": "この対象が反応する前提状態（例：照明=off, レバー=on）"
+          }
+        }
+      }
+    },
+    "gimmick": { "$ref": "#/definitions/gimmick" },
+    "hard": {
+      "type": "object",
+      "description": "ハードモードでの上書き（任意）",
+      "properties": {
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["cipher", "decoy", "hidden_clue", "extra_step", "scramble", "indirection", "no_hint"]
+          },
+          "description": "難化モディファイアの宣言。cipher の時だけ暗号解読書ボタンを表示する等に使う"
+        },
+        "interactables": { "type": "array" },
+        "gimmick": { "$ref": "#/definitions/gimmick" },
+        "hints": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "hints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "ヒント文言のID（text_ja.json を参照）"
+    },
+    "rewards": {
+      "type": "object",
+      "required": ["memory_id", "text_full", "text_corrupt"],
+      "properties": {
+        "memory_id": { "type": "string" },
+        "text_full": { "type": "string" },
+        "text_corrupt": { "type": "string" },
+        "item": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "definitions": {
+    "gimmick": {
+      "type": "object",
+      "required": ["type", "validate"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["number_pad", "text_input", "sequence_tap", "state_toggle", "condition", "drag"]
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["interactable", "state"],
+            "properties": {
+              "interactable": { "type": "string" },
+              "state": { "type": "string" }
+            }
+          }
+        },
+        "solutions": {
+          "type": "object",
+          "required": ["normal"],
+          "properties": {
+            "normal": {},
+            "hard": {}
+          }
+        },
+        "validate": {
+          "type": "string",
+          "enum": ["exact", "case_insensitive", "order"]
+        }
+      }
+    }
+  }
+}

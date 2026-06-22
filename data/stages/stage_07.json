@@ -1,0 +1,50 @@
+{
+  "stage_id": 7,
+  "name": "薬品棚のすりガラス",
+  "assets": {
+    "background": "bg_stage_07.png",
+    "door": "door_white_wood.png",
+    "bgm": "ambient_mystery_02.mp3"
+  },
+  "interactables": [
+    { "id": "lever", "rect": [300, 240, 45, 90], "toggle": true, "states": ["off", "on"] },
+    {
+      "id": "bottles",
+      "rect": [120, 170, 150, 130],
+      "zoom_image": "bottles_zoom.png",
+      "requires_state": [ { "interactable": "lever", "state": "on" } ],
+      "reveals": "バックライトに照らされ、ボトルの影が数字に見える：『3 5 1 4』。"
+    }
+  ],
+  "gimmick": {
+    "type": "number_pad",
+    "solutions": { "normal": "3514" },
+    "validate": "exact"
+  },
+  "hard": {
+    "modifiers": ["cipher", "hidden_clue"],
+    "interactables": [
+      { "id": "lever", "rect": [300, 240, 45, 90], "toggle": true, "states": ["off", "on"] },
+      {
+        "id": "bottles",
+        "rect": [120, 170, 150, 130],
+        "zoom_image": "bottles_glyph_zoom.png",
+        "requires_state": [ { "interactable": "lever", "state": "on" } ],
+        "reveals_glyphs": ["g_3", "g_5", "g_1", "g_4"]
+      }
+    ],
+    "gimmick": {
+      "type": "number_pad",
+      "solutions": { "hard": "3514" },
+      "validate": "exact"
+    },
+    "hints": []
+  },
+  "hints": ["h_s07_1", "h_s07_2"],
+  "rewards": {
+    "memory_id": "mem_07",
+    "text_full": "t_s07_full",
+    "text_corrupt": "t_s07_corrupt",
+    "item": null
+  }
+}

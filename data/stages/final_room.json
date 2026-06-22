@@ -1,0 +1,29 @@
+{
+  "stage_id": 30,
+  "name": "玄関ホール（最終室）",
+  "assets": {
+    "background": "bg_final_hall.png",
+    "door": "door_none.png",
+    "bgm": "ambient_finale.mp3"
+  },
+  "prompt_text": "t_final_prompt",
+
+  "deduction": {
+    "optional": true,
+    "question": "t_final_deduction_q",
+    "options": [
+      { "id": "witness", "text": "t_ded_opt_witness", "correct": true,  "requires_memories": ["mem_02", "mem_04"] },
+      { "id": "culprit", "text": "t_ded_opt_culprit", "correct": false },
+      { "id": "unknown", "text": "t_ded_opt_unknown", "correct": false }
+    ],
+    "on_correct_flag": "deduction_correct",
+    "note": "requires_memories が full でない場合、その選択肢は根拠が虫食い(■■)で示され、論理的に選べない設計にする。正解で deduction_correct=true。任意ステップなのでスキップ可。"
+  },
+
+  "choices": [
+    { "id": "phone",     "rect": [80, 300, 70, 90],  "label": "警察に通報する",         "ending_branch": "police" },
+    { "id": "fireplace", "rect": [180, 300, 90, 90], "label": "暖炉の隠し通路へ逃げる", "ending_branch": "flee" },
+    { "id": "backdoor",  "rect": [290, 280, 70, 110],"label": "裏口の鍵を開けて出る",   "ending_branch": "backdoor" }
+  ],
+  "ending_logic_ref": "data/endings.json"
+}

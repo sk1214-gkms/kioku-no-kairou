@@ -1,0 +1,44 @@
+{
+  "stage_id": 6,
+  "name": "肖像画のチェス",
+  "assets": {
+    "background": "bg_stage_06.png",
+    "door": "door_white_wood.png",
+    "bgm": "ambient_mystery_02.mp3"
+  },
+  "interactables": [
+    { "id": "portrait", "rect": [110, 140, 90, 120], "zoom_image": "portrait_zoom.png", "reveals": "老人（館の主）が手にしているのは『ナイト』が1つ。台座に『歩→騎→城 の順』と刻まれている。" },
+    { "id": "shelf", "rect": [230, 160, 90, 110], "zoom_image": "shelf_zoom.png", "reveals": "棚の飾り：ルークが2つ、ポーンが3つ。" },
+    { "id": "btn_pawn", "rect": [90, 300, 60, 50] },
+    { "id": "btn_knight", "rect": [160, 300, 60, 50] },
+    { "id": "btn_rook", "rect": [230, 300, 60, 50] }
+  ],
+  "gimmick": {
+    "type": "sequence_tap",
+    "solutions": { "normal": ["btn_pawn", "btn_pawn", "btn_pawn", "btn_knight", "btn_rook", "btn_rook"] },
+    "validate": "order"
+  },
+  "hard": {
+    "modifiers": ["indirection"],
+    "interactables": [
+      { "id": "portrait", "rect": [110, 140, 90, 120], "zoom_image": "portrait_zoom_hard.png", "reveals": "老人が持つのは『ナイト』1つ。だが台座の刻印は裏返り——『城→騎→歩 の逆順に押せ』。" },
+      { "id": "shelf", "rect": [230, 160, 90, 110], "zoom_image": "shelf_zoom.png", "reveals": "棚の飾り：ルークが2つ、ポーンが3つ。" },
+      { "id": "btn_pawn", "rect": [90, 300, 60, 50] },
+      { "id": "btn_knight", "rect": [160, 300, 60, 50] },
+      { "id": "btn_rook", "rect": [230, 300, 60, 50] }
+    ],
+    "gimmick": {
+      "type": "sequence_tap",
+      "solutions": { "hard": ["btn_rook", "btn_rook", "btn_knight", "btn_pawn", "btn_pawn", "btn_pawn"] },
+      "validate": "order"
+    },
+    "hints": []
+  },
+  "hints": ["h_s06_1", "h_s06_2"],
+  "rewards": {
+    "memory_id": "mem_06",
+    "text_full": "t_s06_full",
+    "text_corrupt": "t_s06_corrupt",
+    "item": null
+  }
+}

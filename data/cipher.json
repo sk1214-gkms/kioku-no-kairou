@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "name": "回廊文字（Corridor Script）",
+    "description": "ハードモード専用の架空言語。各ステージの手がかりはこの文字で表示され、メニューの『暗号解読書』を参照して解読しないと答えが分からない。これがハードの『手数増』の正体。",
+    "availability": "hard モードでのみメニューから常時閲覧可能（ノーマル/タイマーでは非表示）",
+    "render_note": "proto_symbol は試作用のプレースホルダ表示（日本語フォントで確実に出る記号を使用）。製品では glyph_image（画像）に差し替える。"
+  },
+  "glyphs": {
+    "g_0": { "value": "0", "proto_symbol": "○", "glyph_image": "glyph_0.png" },
+    "g_1": { "value": "1", "proto_symbol": "●", "glyph_image": "glyph_1.png" },
+    "g_2": { "value": "2", "proto_symbol": "△", "glyph_image": "glyph_2.png" },
+    "g_3": { "value": "3", "proto_symbol": "▲", "glyph_image": "glyph_3.png" },
+    "g_4": { "value": "4", "proto_symbol": "□", "glyph_image": "glyph_4.png" },
+    "g_5": { "value": "5", "proto_symbol": "■", "glyph_image": "glyph_5.png" },
+    "g_6": { "value": "6", "proto_symbol": "◇", "glyph_image": "glyph_6.png" },
+    "g_7": { "value": "7", "proto_symbol": "◆", "glyph_image": "glyph_7.png" },
+    "g_8": { "value": "8", "proto_symbol": "☆", "glyph_image": "glyph_8.png" },
+    "g_9": { "value": "9", "proto_symbol": "★", "glyph_image": "glyph_9.png" },
+
+    "g_O": { "value": "O", "proto_symbol": "◎", "glyph_image": "glyph_o.png" },
+    "g_P": { "value": "P", "proto_symbol": "※", "glyph_image": "glyph_p.png" },
+    "g_E": { "value": "E", "proto_symbol": "＋", "glyph_image": "glyph_e.png" },
+    "g_N": { "value": "N", "proto_symbol": "×", "glyph_image": "glyph_n.png" },
+
+    "g_red":    { "value": "red",    "proto_symbol": "▽", "glyph_image": "glyph_red.png" },
+    "g_blue":   { "value": "blue",   "proto_symbol": "▼", "glyph_image": "glyph_blue.png" },
+    "g_yellow": { "value": "yellow", "proto_symbol": "÷", "glyph_image": "glyph_yellow.png" }
+  }
+}

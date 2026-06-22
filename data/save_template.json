@@ -1,0 +1,25 @@
+{
+  "mode": "normal",
+  "current_stage": 1,
+  "memories": {
+    "mem_01": "unknown",
+    "mem_02": "unknown",
+    "mem_03": "unknown",
+    "mem_04": "unknown",
+    "mem_05": "unknown",
+    "mem_06": "unknown",
+    "mem_07": "unknown",
+    "mem_08": "unknown",
+    "mem_09": "unknown",
+    "mem_10": "unknown"
+  },
+  "items": [],
+  "flags": {
+    "has_culprit_evidence": false,
+    "deduction_correct": false,
+    "deduction_answered": false
+  },
+  "hints_used": {},
+  "memory_score": 0,
+  "_note": "memory_score = (memories 内の 'full' の数 / 全 memory 数) * 100。ステージクリア時に再計算する。deduction_correct は最終室の任意推理で正解すると true。"
+}

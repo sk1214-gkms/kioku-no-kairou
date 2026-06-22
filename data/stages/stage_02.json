@@ -1,0 +1,42 @@
+{
+  "stage_id": 2,
+  "name": "色の並び替え",
+  "assets": {
+    "background": "bg_stage_02.png",
+    "door": "door_white_wood.png",
+    "bgm": "ambient_mystery_01.mp3"
+  },
+  "interactables": [
+    { "id": "floor_books", "rect": [80, 420, 200, 80], "zoom_image": "books_zoom.png", "reveals": "blue,yellow,red" },
+    { "id": "btn_red",    "rect": [120, 260, 50, 50] },
+    { "id": "btn_blue",   "rect": [190, 260, 50, 50] },
+    { "id": "btn_yellow", "rect": [260, 260, 50, 50] }
+  ],
+  "gimmick": {
+    "type": "sequence_tap",
+    "solutions": { "normal": ["btn_blue", "btn_yellow", "btn_red"] },
+    "validate": "order"
+  },
+  "hard": {
+    "modifiers": ["cipher", "scramble"],
+    "interactables": [
+      { "id": "floor_books", "rect": [80, 420, 200, 80], "zoom_image": "books_zoom_hard.png", "reveals_glyphs": ["g_blue", "g_yellow", "g_red"] },
+      { "id": "btn_a", "rect": [120, 260, 50, 50], "label_glyph": "g_red" },
+      { "id": "btn_b", "rect": [190, 260, 50, 50], "label_glyph": "g_blue" },
+      { "id": "btn_c", "rect": [260, 260, 50, 50], "label_glyph": "g_yellow" }
+    ],
+    "gimmick": {
+      "type": "sequence_tap",
+      "solutions": { "hard": ["btn_b", "btn_c", "btn_a"] },
+      "validate": "order"
+    },
+    "decode_hint": "床の手がかりもボタンも回廊文字。色を解読し、青→黄→赤の順にボタンを押せ。"
+  },
+  "hints": ["h_s02_1", "h_s02_2"],
+  "rewards": {
+    "memory_id": "mem_02",
+    "text_full": "t_s02_full",
+    "text_corrupt": "t_s02_corrupt",
+    "item": "item_invitation"
+  }
+}

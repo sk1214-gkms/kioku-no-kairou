@@ -1,0 +1,46 @@
+{
+  "stage_id": 1,
+  "name": "目覚めの暗号",
+  "assets": {
+    "background": "bg_stage_01.png",
+    "door": "door_white_wood.png",
+    "bgm": "ambient_mystery_01.mp3"
+  },
+  "interactables": [
+    {
+      "id": "painting",
+      "rect": [120, 200, 80, 120],
+      "zoom_image": "painting_zoom_01.png",
+      "reveals": "1024"
+    }
+  ],
+  "gimmick": {
+    "type": "number_pad",
+    "solutions": { "normal": "1024" },
+    "validate": "exact"
+  },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      {
+        "id": "painting",
+        "rect": [120, 200, 80, 120],
+        "zoom_image": "painting_zoom_01_hard.png",
+        "reveals_glyphs": ["g_1", "g_0", "g_2", "g_4"]
+      }
+    ],
+    "gimmick": {
+      "type": "number_pad",
+      "solutions": { "hard": "1024" },
+      "validate": "exact"
+    },
+    "decode_hint": "絵画の文字は『回廊文字』。暗号解読書で数字に変換せよ。"
+  },
+  "hints": ["h_s01_1", "h_s01_2"],
+  "rewards": {
+    "memory_id": "mem_01",
+    "text_full": "t_s01_full",
+    "text_corrupt": "t_s01_corrupt",
+    "item": null
+  }
+}

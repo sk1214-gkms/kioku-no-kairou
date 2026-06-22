@@ -65,7 +65,9 @@ flutter run
 - 未対応（次段）：効果音、アート/BGM、ハード/難易度のバランス調整、本番AdMob ID
 
 ## 広告（マネタイズ）の土台
-[lib/ad_service.dart](lib/ad_service.dart) に実装。**既定は無効**（`AdService.enabled = false`）。AdMob のアプリID設定が済むまではオフのまま安全に開発できる（未設定で有効化すると起動クラッシュの恐れ）。広告の有無でゲームは詰まない。
+> **現在はスタブ化中**：テスト優先のため `google_mobile_ads` を依存から外し、[lib/ad_service.dart](lib/ad_service.dart) は no-op スタブにしてある（依存に入れるだけで AndroidがアプリID未設定で起動クラッシュするのを回避）。マネタイズ時に以下の手順で戻す。本実装は git 履歴に保存。
+
+[lib/ad_service.dart](lib/ad_service.dart) に実装（※現在スタブ）。**既定は無効**（`AdService.enabled = false`）。AdMob のアプリID設定が済むまではオフのまま安全に開発できる（未設定で有効化すると起動クラッシュの恐れ）。広告の有無でゲームは詰まない。
 
 - **インタースティシャル**：2クリアごと（[game_flow.dart](lib/screens/game_flow.dart) の `_clearCount`）。閉じてから次の部屋へ進むので次のタイマーは広告後に開始。
 - **リワード**：ヒント解放（[stage_screen.dart](lib/screens/stage_screen.dart) の `_onHintPressed`）。広告中はタイマー一時停止。広告が無ければ暫定でヒント表示。

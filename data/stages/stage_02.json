@@ -7,30 +7,32 @@
     "bgm": "ambient_mystery_01.mp3"
   },
   "interactables": [
-    { "id": "floor_books", "rect": [80, 420, 200, 80], "zoom_image": "books_zoom.png", "reveals": "blue,yellow,red" },
-    { "id": "btn_red",    "rect": [120, 260, 50, 50] },
-    { "id": "btn_blue",   "rect": [190, 260, 50, 50] },
-    { "id": "btn_yellow", "rect": [260, 260, 50, 50] }
+    { "id": "floor_books", "rect": [70, 420, 220, 80], "zoom_image": "books_zoom.png", "reveals": "床に散らばった本の色は、手前から 青→黄→赤→緑 の順だ。" },
+    { "id": "btn_blue",   "rect": [70, 270, 55, 55] },
+    { "id": "btn_yellow", "rect": [135, 270, 55, 55] },
+    { "id": "btn_red",    "rect": [200, 270, 55, 55] },
+    { "id": "btn_green",  "rect": [265, 270, 55, 55] }
   ],
   "gimmick": {
     "type": "sequence_tap",
-    "solutions": { "normal": ["btn_blue", "btn_yellow", "btn_red"] },
+    "solutions": { "normal": ["btn_blue", "btn_yellow", "btn_red", "btn_green"] },
     "validate": "order"
   },
   "hard": {
     "modifiers": ["cipher", "scramble"],
     "interactables": [
-      { "id": "floor_books", "rect": [80, 420, 200, 80], "zoom_image": "books_zoom_hard.png", "reveals_glyphs": ["g_blue", "g_yellow", "g_red"] },
-      { "id": "btn_a", "rect": [120, 260, 50, 50], "label_glyph": "g_red" },
-      { "id": "btn_b", "rect": [190, 260, 50, 50], "label_glyph": "g_blue" },
-      { "id": "btn_c", "rect": [260, 260, 50, 50], "label_glyph": "g_yellow" }
+      { "id": "floor_books", "rect": [70, 420, 220, 80], "zoom_image": "books_zoom_hard.png", "reveals_glyphs": ["g_blue", "g_yellow", "g_red", "g_green"] },
+      { "id": "btn_a", "rect": [200, 270, 55, 55], "label_glyph": "g_red" },
+      { "id": "btn_b", "rect": [70, 270, 55, 55],  "label_glyph": "g_blue" },
+      { "id": "btn_c", "rect": [135, 270, 55, 55], "label_glyph": "g_yellow" },
+      { "id": "btn_d", "rect": [265, 270, 55, 55], "label_glyph": "g_green" }
     ],
     "gimmick": {
       "type": "sequence_tap",
-      "solutions": { "hard": ["btn_b", "btn_c", "btn_a"] },
+      "solutions": { "hard": ["btn_b", "btn_c", "btn_a", "btn_d"] },
       "validate": "order"
     },
-    "decode_hint": "床の手がかりもボタンも回廊文字。色を解読し、青→黄→赤の順にボタンを押せ。"
+    "hints": []
   },
   "hints": ["h_s02_1", "h_s02_2"],
   "rewards": {

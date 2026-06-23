@@ -24,6 +24,7 @@
 
     "g_red":    { "value": "red",    "proto_symbol": "▽", "glyph_image": "glyph_red.png" },
     "g_blue":   { "value": "blue",   "proto_symbol": "▼", "glyph_image": "glyph_blue.png" },
-    "g_yellow": { "value": "yellow", "proto_symbol": "÷", "glyph_image": "glyph_yellow.png" }
+    "g_yellow": { "value": "yellow", "proto_symbol": "÷", "glyph_image": "glyph_yellow.png" },
+    "g_green":  { "value": "green",  "proto_symbol": "＝", "glyph_image": "glyph_green.png" }
   }
 }

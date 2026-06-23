@@ -7,24 +7,26 @@
     "bgm": "ambient_mystery_02.mp3"
   },
   "interactables": [
-    { "id": "broken_clock", "rect": [220, 160, 90, 90], "zoom_image": "clock_0345_zoom.png", "reveals": "0345" }
+    { "id": "broken_clock", "rect": [210, 150, 95, 95], "zoom_image": "clock_0345_zoom.png", "reveals": "壁の時計は止まっている。針は 03:45 を指したまま動かない。" },
+    { "id": "phone", "rect": [120, 340, 90, 130], "zoom_image": "phone_zoom.png", "reveals": "ポケットのスマホが震えた。『圏外』。だが画面の現在時刻は【04:15】を示している。" }
   ],
   "gimmick": {
     "type": "number_pad",
-    "solutions": { "normal": "0345" },
+    "solutions": { "normal": "0415" },
     "validate": "exact"
   },
   "hard": {
     "modifiers": ["cipher"],
     "interactables": [
-      { "id": "broken_clock", "rect": [220, 160, 90, 90], "zoom_image": "clock_glyph_zoom.png", "reveals_glyphs": ["g_0", "g_3", "g_4", "g_5"] }
+      { "id": "broken_clock", "rect": [210, 150, 95, 95], "zoom_image": "clock_0345_zoom.png", "reveals": "壁の時計は止まっている。針は 03:45 を指したまま動かない。" },
+      { "id": "phone", "rect": [120, 340, 90, 130], "zoom_image": "phone_glyph_zoom.png", "reveals_glyphs": ["g_0", "g_4", "g_1", "g_5"] }
     ],
     "gimmick": {
       "type": "number_pad",
-      "solutions": { "hard": "0345" },
+      "solutions": { "hard": "0415" },
       "validate": "exact"
     },
-    "decode_hint": "文字盤の数字は回廊文字。解読書で数字に直してテンキーへ。"
+    "hints": []
   },
   "hints": ["h_s03_1", "h_s03_2"],
   "rewards": {

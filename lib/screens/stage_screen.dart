@@ -943,6 +943,7 @@ class _StageScreenState extends State<StageScreen> {
     'clue_d': '手がかりD',
     'clue_e': '手がかりE',
     'switch': 'スイッチ',
+    'power': '電源',
     'obj_coat': '白衣',
     'fingerprint': '指紋',
     'obj_key1': '銀の鍵',

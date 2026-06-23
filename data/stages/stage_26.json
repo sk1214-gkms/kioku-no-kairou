@@ -3,7 +3,7 @@
   "name": "封蝋の紋章",
   "assets": { "background": "bg_stage_26.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
   "interactables": [
-    { "id": "note", "rect": [60, 150, 240, 60], "zoom_image": "seal_zoom.png", "reveals": "封蝋の日付から、古いものを先に押せ：△ → ◯ → □ → ☆ の順。" },
+    { "id": "note", "rect": [60, 150, 240, 60], "zoom_image": "seal_zoom.png", "reveals": "証拠箱の封蝋を、日付の古い順に解け：△ → ◯ → □ → ☆。" },
     { "id": "btn_triangle", "rect": [70, 290, 55, 55] },
     { "id": "btn_circle",   "rect": [135, 290, 55, 55] },
     { "id": "btn_square",   "rect": [200, 290, 55, 55] },

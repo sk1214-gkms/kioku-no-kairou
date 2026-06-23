@@ -1,13 +1,9 @@
 {
   "stage_id": 24,
-  "name": "砂嵐のモニター",
+  "name": "壁の血文字",
   "assets": { "background": "bg_stage_24.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
   "interactables": [
-    { "id": "note",   "rect": [60, 150, 240, 50], "reveals": "メモ：『モニターを左から順に、よぎる人影の数を読め』。" },
-    { "id": "clue_a", "rect": [40, 230, 60, 60], "reveals": "モニターA：人影が 4 回よぎる。" },
-    { "id": "clue_b", "rect": [110, 230, 60, 60], "reveals": "モニターB：人影が 7 回よぎる。" },
-    { "id": "clue_c", "rect": [180, 230, 60, 60], "reveals": "モニターC：人影が 3 回よぎる。" },
-    { "id": "clue_d", "rect": [250, 230, 60, 60], "reveals": "モニターD：人影が 6 回よぎる。" }
+    { "id": "clue_a", "rect": [110, 160, 170, 150], "zoom_image": "bloodtext_zoom.png", "reveals": "壁に血で書かれた文字。掠れた血の中に、数字が滲んでいる：『4736』。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "4736" }, "validate": "exact" },
   "hints": ["h_s24_1", "h_s24_2", "h_s24_3"],

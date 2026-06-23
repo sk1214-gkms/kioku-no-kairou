@@ -1,12 +1,11 @@
 {
   "stage_id": 19,
-  "name": "振り子の間",
+  "name": "万年筆の跡",
   "assets": { "background": "bg_stage_19.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
   "interactables": [
-    { "id": "lever", "rect": [300, 250, 45, 90], "toggle": true, "states": ["on", "off"] },
-    { "id": "clue_a", "rect": [110, 160, 150, 130], "zoom_image": "pendulum_zoom.png", "requires_state": [ { "interactable": "lever", "state": "off" } ], "reveals": "振り子が止まると、背後の壁に刻まれた数字が読める：『3052』。" }
+    { "id": "clue_a", "rect": [110, 160, 160, 140], "zoom_image": "pen_zoom.png", "reveals": "床の万年筆（6号室の肖像で氷室が持っていたもの）。傍の便箋の筆圧跡を鉛筆でこすると数字が浮かぶ：『3052』。" }
   ],
-  "gimmick": { "type": "number_pad", "prerequisites": [ { "interactable": "lever", "state": "off" } ], "solutions": { "normal": "3052" }, "validate": "exact" },
+  "gimmick": { "type": "number_pad", "solutions": { "normal": "3052" }, "validate": "exact" },
   "hints": ["h_s19_1", "h_s19_2", "h_s19_3"],
   "rewards": { "memory_id": "mem_19", "text_full": "t_s19_full", "text_corrupt": "t_s19_corrupt", "item": null }
 }

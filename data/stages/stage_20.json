@@ -5,8 +5,8 @@
   "interactables": [
     { "id": "obj_driver", "rect": [60, 440, 70, 50], "zoom_image": "driver_zoom.png", "gives_item": "item_driver", "reveals": "床にドライバーが落ちている。" },
     { "id": "breaker", "rect": [300, 250, 45, 80], "toggle": true, "states": ["off", "on"] },
-    { "id": "panel", "rect": [150, 160, 130, 110], "zoom_image": "panel_zoom.png", "requires_item": "item_driver", "on_use_state": "open", "on_use_reveals": "パネルを外すと配線図と数字『6 _ 7 _』。欠けた桁は通電しないと読めない。" },
-    { "id": "clue_a", "rect": [40, 300, 90, 60], "requires_state": [ { "interactable": "breaker", "state": "on" } ], "reveals": "通電すると、欠けていた桁が点灯：『_ 2 _ 1』。" }
+    { "id": "panel", "rect": [150, 160, 130, 110], "zoom_image": "panel_zoom.png", "requires_item": "item_driver", "on_use_state": "open", "on_use_reveals": "モニターの配線を直す。映像コードの一部『6 _ 7 _』。通電すれば残りが出る。" },
+    { "id": "clue_a", "rect": [40, 300, 90, 60], "requires_state": [ { "interactable": "breaker", "state": "on" } ], "reveals": "通電すると残りのコードが点灯：『_ 2 _ 1』。" }
   ],
   "gimmick": { "type": "number_pad", "prerequisites": [ { "interactable": "panel", "state": "open" }, { "interactable": "breaker", "state": "on" } ], "solutions": { "normal": "6271" }, "validate": "exact" },
   "hints": ["h_s20_1", "h_s20_2", "h_s20_3"],

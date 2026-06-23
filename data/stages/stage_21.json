@@ -1,9 +1,9 @@
 {
   "stage_id": 21,
-  "name": "逆さの時計",
+  "name": "映像の続き",
   "assets": { "background": "bg_stage_21.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
   "interactables": [
-    { "id": "clue_a", "rect": [110, 160, 150, 130], "zoom_image": "rev_clock_zoom.png", "reveals": "デジタル時計が逆回り：12:00 → 11:45 → 11:30 → 11:15 …と表示が減っていく。次に表示される時刻を入れよ。" }
+    { "id": "clue_a", "rect": [110, 160, 160, 140], "zoom_image": "footage_zoom.png", "reveals": "防犯映像の続きを再生する。甥が私の背後に回り、注射器を構える——壁の時計は『11:00』を指していた。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "1100" }, "validate": "exact" },
   "hints": ["h_s21_1", "h_s21_2", "h_s21_3"],

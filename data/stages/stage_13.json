@@ -7,7 +7,7 @@
     "bgm": "ambient_mystery_03.mp3"
   },
   "interactables": [
-    { "id": "footprints_white", "rect": [50, 150, 220, 70], "zoom_image": "foot_white_zoom.png", "reveals": "白い足跡は ↑ → ↓ ← の順に続いている。" },
+    { "id": "footprints_white", "rect": [50, 150, 220, 70], "zoom_image": "foot_white_zoom.png", "reveals": "私のものではない、男物の革靴の足跡。↑ → ↓ ← と続いている。" },
     { "id": "footprints_blood", "rect": [50, 430, 220, 70], "zoom_image": "foot_blood_zoom.png", "decoy": true, "reveals": "血の足跡。何かを引きずった跡だ。奥の闇へ消えている…これは辿ってはいけない。" },
     { "id": "btn_left",  "rect": [60, 290, 50, 50] },
     { "id": "btn_up",    "rect": [120, 290, 50, 50] },

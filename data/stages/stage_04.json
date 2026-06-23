@@ -41,6 +41,6 @@
     "memory_id": "mem_04",
     "text_full": "t_s04_full",
     "text_corrupt": "t_s04_corrupt",
-    "item": "item_diary"
+    "item": null
   }
 }

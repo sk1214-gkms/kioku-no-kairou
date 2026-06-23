@@ -970,7 +970,7 @@ class _StageScreenState extends State<StageScreen> {
   static const Map<String, String> _itemLabels = {
     'item_invitation': '館の招待状',
     'item_diary': '引きちぎられた日記',
-    'item_culprit_evidence': '真犯人の遺留品',
+    'item_culprit_evidence': '金属製の筒（毒薬シリンジ）',
     'item_driver': 'ドライバー',
     'item_doorknob': 'ドアノブ',
     'item_handle': '古い取っ手',

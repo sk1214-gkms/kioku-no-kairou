@@ -1,0 +1,29 @@
+{
+  "stage_id": 13,
+  "name": "すれ違う足跡",
+  "assets": {
+    "background": "bg_stage_13.png",
+    "door": "door_white_wood.png",
+    "bgm": "ambient_mystery_03.mp3"
+  },
+  "interactables": [
+    { "id": "footprints_white", "rect": [50, 150, 220, 70], "zoom_image": "foot_white_zoom.png", "reveals": "白い足跡は ↑ → ↓ ← の順に続いている。" },
+    { "id": "footprints_blood", "rect": [50, 430, 220, 70], "zoom_image": "foot_blood_zoom.png", "decoy": true, "reveals": "血の足跡。何かを引きずった跡だ。奥の闇へ消えている…これは辿ってはいけない。" },
+    { "id": "btn_left",  "rect": [60, 290, 50, 50] },
+    { "id": "btn_up",    "rect": [120, 290, 50, 50] },
+    { "id": "btn_down",  "rect": [180, 290, 50, 50] },
+    { "id": "btn_right", "rect": [240, 290, 50, 50] }
+  ],
+  "gimmick": {
+    "type": "sequence_tap",
+    "solutions": { "normal": ["btn_up", "btn_right", "btn_down", "btn_left"] },
+    "validate": "order"
+  },
+  "hints": ["h_s13_1", "h_s13_2", "h_s13_3"],
+  "rewards": {
+    "memory_id": "mem_13",
+    "text_full": "t_s13_full",
+    "text_corrupt": "t_s13_corrupt",
+    "item": null
+  }
+}

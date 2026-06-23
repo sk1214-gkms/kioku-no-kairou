@@ -1,0 +1,31 @@
+{
+  "stage_id": 11,
+  "name": "破れたカルテ",
+  "assets": {
+    "background": "bg_stage_11.png",
+    "door": "door_white_wood.png",
+    "bgm": "ambient_mystery_03.mp3"
+  },
+  "interactables": [
+    { "id": "slot_1", "rect": [140, 120, 80, 80], "slot": true },
+    { "id": "slot_2", "rect": [140, 210, 80, 80], "slot": true },
+    { "id": "slot_3", "rect": [140, 300, 80, 80], "slot": true },
+    { "id": "piece_a", "rect": [40, 430, 70, 70], "draggable": true },
+    { "id": "piece_b", "rect": [150, 430, 70, 70], "draggable": true },
+    { "id": "piece_c", "rect": [260, 430, 70, 70], "draggable": true }
+  ],
+  "gimmick": {
+    "type": "drag",
+    "solutions": {
+      "normal": { "piece_a": "slot_2", "piece_b": "slot_3", "piece_c": "slot_1" }
+    },
+    "validate": "exact"
+  },
+  "hints": ["h_s11_1", "h_s11_2", "h_s11_3"],
+  "rewards": {
+    "memory_id": "mem_11",
+    "text_full": "t_s11_full",
+    "text_corrupt": "t_s11_corrupt",
+    "item": null
+  }
+}

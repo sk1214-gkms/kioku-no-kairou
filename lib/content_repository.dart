@@ -55,6 +55,9 @@ class ContentRepository {
       'data/stages/stage_08.json',
       'data/stages/stage_09.json',
       'data/stages/stage_10.json',
+      'data/stages/stage_11.json',
+      'data/stages/stage_12.json',
+      'data/stages/stage_13.json',
     ];
     final stages = <Stage>[];
     for (final p in stagePaths) {

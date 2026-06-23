@@ -15,17 +15,47 @@ class Prerequisite {
       Prerequisite(m['interactable'] as String, m['state'] as String);
 }
 
+/// branch タイプの選択肢。選ぶと story テキスト表示＋メーター/フラグを更新。
+class BranchOption {
+  final String id;
+  final String label;
+  final String text; // 表示するストーリーテキストID
+  final String? meter; // 加算するメーター名（例: confront）
+  final int delta; // メーターの増減
+  final String? setFlag;
+
+  BranchOption({
+    required this.id,
+    required this.label,
+    required this.text,
+    this.meter,
+    this.delta = 0,
+    this.setFlag,
+  });
+
+  factory BranchOption.fromJson(Map<String, dynamic> m) => BranchOption(
+        id: m['id'] as String,
+        label: m['label'] as String,
+        text: m['text'] as String,
+        meter: m['meter'] as String?,
+        delta: (m['delta'] as num?)?.toInt() ?? 0,
+        setFlag: m['set_flag'] as String?,
+      );
+}
+
 class Gimmick {
-  final String type; // number_pad | text_input | sequence_tap | state_toggle
+  final String type; // number_pad | text_input | sequence_tap | state_toggle | condition | drag | branch
   final List<Prerequisite> prerequisites;
   final Map<String, dynamic> solutions; // normal/hard。値は String か List
   final String validate; // exact | case_insensitive | order
+  final List<BranchOption>? branches; // branch タイプの選択肢
 
   Gimmick({
     required this.type,
     required this.prerequisites,
     required this.solutions,
     required this.validate,
+    this.branches,
   });
 
   factory Gimmick.fromJson(Map<String, dynamic> m) => Gimmick(
@@ -36,6 +66,9 @@ class Gimmick {
             .toList(),
         solutions: (m['solutions'] as Map?)?.cast<String, dynamic>() ?? {},
         validate: (m['validate'] as String?) ?? 'exact',
+        branches: (m['branches'] as List?)
+            ?.map((e) => BranchOption.fromJson((e as Map).cast<String, dynamic>()))
+            .toList(),
       );
 }
 
@@ -212,12 +245,14 @@ class GameState {
   final Map<String, String> memories; // memory_id -> unknown | corrupted | full
   final List<String> items;
   final Map<String, bool> flags; // has_culprit_evidence / deduction_correct
+  final Map<String, int> meters; // 逃避⇄直面 等の軸（例: confront）
 
   GameState({
     required this.mode,
     required this.memories,
     required this.items,
     required this.flags,
+    required this.meters,
   });
 
   factory GameState.initial(List<Stage> stages, {String mode = 'normal'}) {
@@ -234,6 +269,7 @@ class GameState {
         'deduction_correct': false,
         'deduction_answered': false,
       },
+      meters: {},
     );
   }
 
@@ -249,6 +285,7 @@ class GameState {
         'memories': memories,
         'items': items,
         'flags': flags,
+        'meters': meters,
       };
 
   factory GameState.fromJson(Map<String, dynamic> m) => GameState(
@@ -258,5 +295,8 @@ class GameState {
         items: (m['items'] as List).map((e) => e.toString()).toList(),
         flags: (m['flags'] as Map)
             .map((k, v) => MapEntry(k.toString(), v as bool)),
+        meters: (m['meters'] as Map?)
+                ?.map((k, v) => MapEntry(k.toString(), (v as num).toInt())) ??
+            <String, int>{},
       );
 }

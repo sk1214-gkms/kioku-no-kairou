@@ -19,6 +19,9 @@
     "deduction_correct": false,
     "deduction_answered": false
   },
+  "meters": {
+    "confront": 0
+  },
   "hints_used": {},
   "memory_score": 0,
   "_note": "memory_score = (memories 内の 'full' の数 / 全 memory 数) * 100。ステージクリア時に再計算する。deduction_correct は最終室の任意推理で正解すると true。"

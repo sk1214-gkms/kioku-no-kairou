@@ -1,6 +1,6 @@
 {
   "stage_id": 5,
-  "name": "消えた明かり",
+  "name": "消えた明かりと、選択",
   "assets": {
     "background": "bg_stage_05.png",
     "door": "door_glow.png",
@@ -16,29 +16,17 @@
     {
       "id": "door_glow_text",
       "rect": [150, 200, 140, 120],
-      "zoom_image": "door_open_glow_zoom.png",
-      "reveals": "OPEN"
+      "requires_state": [ { "interactable": "breaker", "state": "off" } ],
+      "reveals": "暗闇に、ドアの『OPEN』が浮かぶ。外でサイレンが近づく。足元には、血に濡れた“それ”が落ちている。"
     }
   ],
   "gimmick": {
-    "type": "text_input",
+    "type": "branch",
     "prerequisites": [ { "interactable": "breaker", "state": "off" } ],
-    "solutions": { "normal": "OPEN" },
-    "validate": "case_insensitive"
-  },
-  "hard": {
-    "modifiers": ["cipher", "hidden_clue"],
-    "interactables": [
-      { "id": "breaker", "rect": [300, 360, 50, 70], "toggle": true, "states": ["on", "off"] },
-      { "id": "door_glow_text", "rect": [150, 200, 140, 120], "zoom_image": "door_open_glow_glyph_zoom.png", "reveals_glyphs": ["g_O", "g_P", "g_E", "g_N"] }
-    ],
-    "gimmick": {
-      "type": "text_input",
-      "prerequisites": [ { "interactable": "breaker", "state": "off" } ],
-      "solutions": { "hard": "OPEN" },
-      "validate": "case_insensitive"
-    },
-    "decode_hint": "暗闇に浮かぶのは回廊文字。解読書でアルファベットに直すと答えになる。"
+    "branches": [
+      { "id": "examine", "label": "震える手で“それ”を写真に撮る", "text": "t_s05_examine", "meter": "confront", "delta": 1, "set_flag": "s05_examine" },
+      { "id": "hide",    "label": "“それ”を拭き取り、隅へ隠す",   "text": "t_s05_hide",    "meter": "confront", "delta": -1, "set_flag": "s05_hide" }
+    ]
   },
   "hints": ["h_s05_1", "h_s05_2"],
   "rewards": {

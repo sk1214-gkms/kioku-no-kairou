@@ -97,11 +97,27 @@
   "definitions": {
     "gimmick": {
       "type": "object",
-      "required": ["type", "validate"],
+      "required": ["type"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["number_pad", "text_input", "sequence_tap", "state_toggle", "condition", "drag"]
+          "enum": ["number_pad", "text_input", "sequence_tap", "state_toggle", "condition", "drag", "branch"]
+        },
+        "branches": {
+          "type": "array",
+          "description": "branch タイプの選択肢。各選択が story テキスト＋meter/flag を更新",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "text"],
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "text": { "type": "string", "description": "表示するストーリーテキストID" },
+              "meter": { "type": "string", "description": "加算する軸名（例: confront）" },
+              "delta": { "type": "number" },
+              "set_flag": { "type": "string" }
+            }
+          }
         },
         "prerequisites": {
           "type": "array",

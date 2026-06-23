@@ -61,7 +61,8 @@ flutter run
 - 対応：**タイトル/モード選択**、**ノーマル**／**タイマー（90秒・時間切れで虫食い）**／**ハード**、**第1章 St.1〜10（ノーマル＋ハード変種 完成）**、隠しアイテム、最終室の任意推理、A/A＋/A′/B/B′/C/C′ 分岐、**永続セーブ＋つづきから**、**広告の土台**（既定オフ）
 - **ハードの難化モディファイア**：cipher（回廊文字）/ decoy / hidden_clue / extra_step / scramble / indirection
 - **テスト手順**：[docs/テスト手順_第1章.md](docs/テスト手順_第1章.md)
-- **仕掛けタイプ**：number_pad / text_input / sequence_tap / 状態トグル＋前提 / **item_use（アイテムを対象に使う）** / **condition（前提が揃うと自動クリア）** / **drag（ピースを枠へドラッグ）**
+- **仕掛けタイプ**：number_pad / text_input / sequence_tap / 状態トグル＋前提 / **item_use** / **condition** / **drag** / **branch（複数回答→物語分岐）**
+- **物語軸**：`meters.confront`（逃避⇄直面）。5/15/25号室の選択で増減し、将来エンディングに反映（構成案 [docs/構成案_謎と物語_v1.md](docs/構成案_謎と物語_v1.md)）
 - 未対応（次段）：効果音、アート/BGM、ハード/難易度のバランス調整、本番AdMob ID
 
 ## 広告（マネタイズ）の土台

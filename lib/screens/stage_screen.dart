@@ -654,9 +654,69 @@ class _StageScreenState extends State<StageScreen> {
         return _infoBar('ピースを正しい枠へドラッグしよう');
       case 'condition':
         return _infoBar('アイテムや仕掛けを使ってドアを開けよう');
+      case 'branch':
+        return _branchPanel();
       default:
         return _textInput();
     }
+  }
+
+  Widget _branchPanel() {
+    if (_g.prerequisites.isNotEmpty && !_prereqSatisfied) {
+      return _infoBar('（まだ状況がつかめない…部屋を調べてみよう）');
+    }
+    final branches = _g.branches ?? const <BranchOption>[];
+    return Container(
+      color: const Color(0xFF12101A),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final b in branches)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => _chooseBranch(b),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(b.label, textAlign: TextAlign.center),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _chooseBranch(BranchOption b) {
+    _timer?.cancel();
+    setState(() {
+      if (b.meter != null) {
+        final cur = widget.gameState.meters[b.meter!] ?? 0;
+        widget.gameState.meters[b.meter!] = cur + b.delta;
+      }
+      if (b.setFlag != null) widget.gameState.flags[b.setFlag!] = true;
+    });
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text('扉の前で'),
+        content: SingleChildScrollView(child: Text(widget.repo.text(b.text))),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              widget.onSolved(widget.stage);
+            },
+            child: const Text('次へ進む'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _infoBar(String text) => Container(

@@ -45,6 +45,7 @@ class _StageScreenState extends State<StageScreen> {
   String _message = 'まわりを調べてみよう。';
   Timer? _timer;
   int _remaining = 0;
+  int _hintsUnlocked = 0; // この部屋で開放したヒント段階
 
   bool get _hard => widget.mode == 'hard';
   String get _solKey => _hard ? 'hard' : 'normal';
@@ -822,35 +823,62 @@ class _StageScreenState extends State<StageScreen> {
     );
   }
 
+  /// ヒントは段階制（最大3段）。各段の開放にリワード動画を視聴する。
+  /// 段が進むほど核心に迫る。広告中はタイマーを一時停止。
   Future<void> _onHintPressed() async {
     final wasTimed = widget.timed;
     if (wasTimed) _timer?.cancel();
-    await AdService.instance.showRewarded();
-    if (!mounted) return;
-    await _showHints();
+    await _showHintDialog();
     if (mounted && wasTimed && _remaining > 0) _startTimer();
   }
 
-  Future<void> _showHints() {
+  Future<void> _showHintDialog() {
+    final hints = _hints;
     return showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('ヒント'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (var i = 0; i < _hints.length; i++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text('${i + 1}. ${widget.repo.text(_hints[i])}'),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) {
+          final hasMore = _hintsUnlocked < hints.length;
+          return AlertDialog(
+            title: Text('ヒント（$_hintsUnlocked/${hints.length}）'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (_hintsUnlocked == 0)
+                    const Text('動画を見ると、ヒントを段階的に表示します。\n進むほど核心に迫ります。'),
+                  for (var i = 0; i < _hintsUnlocked && i < hints.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text('ヒント${i + 1}: ${widget.repo.text(hints[i])}'),
+                    ),
+                ],
               ),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text('閉じる')),
-        ],
+            ),
+            actions: [
+              if (hasMore)
+                FilledButton.icon(
+                  icon: const Icon(Icons.ondemand_video),
+                  label: Text(
+                      _hintsUnlocked == 0 ? 'ヒントを見る（動画）' : '次のヒント（動画）'),
+                  onPressed: () async {
+                    await AdService.instance.showRewarded();
+                    if (!mounted) return;
+                    setLocal(() {
+                      _hintsUnlocked++;
+                      if (_hintsUnlocked > hints.length) {
+                        _hintsUnlocked = hints.length;
+                      }
+                    });
+                  },
+                ),
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('閉じる')),
+            ],
+          );
+        },
       ),
     );
   }

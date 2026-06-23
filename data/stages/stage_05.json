@@ -28,7 +28,7 @@
       { "id": "hide",    "label": "“それ”を拭き取り、隅へ隠す",   "text": "t_s05_hide",    "meter": "confront", "delta": -1, "set_flag": "s05_hide" }
     ]
   },
-  "hints": ["h_s05_1", "h_s05_2"],
+  "hints": ["h_s05_1", "h_s05_2", "h_s05_3"],
   "rewards": {
     "memory_id": "mem_05",
     "text_full": "t_s05_full",

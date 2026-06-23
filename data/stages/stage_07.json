@@ -40,7 +40,7 @@
     },
     "hints": []
   },
-  "hints": ["h_s07_1", "h_s07_2"],
+  "hints": ["h_s07_1", "h_s07_2", "h_s07_3"],
   "rewards": {
     "memory_id": "mem_07",
     "text_full": "t_s07_full",

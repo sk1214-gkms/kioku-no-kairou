@@ -29,7 +29,7 @@
     },
     "hints": []
   },
-  "hints": ["h_s09_1", "h_s09_2"],
+  "hints": ["h_s09_1", "h_s09_2", "h_s09_3"],
   "rewards": {
     "memory_id": "mem_09",
     "text_full": "t_s09_full",

@@ -28,7 +28,7 @@
     },
     "hints": []
   },
-  "hints": ["h_s03_1", "h_s03_2"],
+  "hints": ["h_s03_1", "h_s03_2", "h_s03_3"],
   "rewards": {
     "memory_id": "mem_03",
     "text_full": "t_s03_full",

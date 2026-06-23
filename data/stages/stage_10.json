@@ -61,7 +61,7 @@
     },
     "hints": []
   },
-  "hints": ["h_s10_1", "h_s10_2"],
+  "hints": ["h_s10_1", "h_s10_2", "h_s10_3"],
   "rewards": {
     "memory_id": "mem_10",
     "text_full": "t_s10_full",

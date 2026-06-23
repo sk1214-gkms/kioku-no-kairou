@@ -20,10 +20,14 @@ EndingResult evaluateEnding(
   final endings = repo.endings;
   final thresholds = (endings['thresholds'] as Map).cast<String, dynamic>();
 
+  // 案A：confront（逃避⇄直面 −3〜+3）を加味した実効スコアで判定する。
+  final confront = gs.meters['confront'] ?? 0;
+  final effective = (gs.memoryScore + confront * 5).clamp(0, 100);
   final vars = <String, dynamic>{
-    'memory_score': gs.memoryScore,
+    'memory_score': effective,
     'memory_high': thresholds['memory_high'],
     'memory_low': thresholds['memory_low'],
+    'confront': confront,
     'deduction_correct': gs.flags['deduction_correct'] ?? false,
     'has_culprit_evidence': gs.flags['has_culprit_evidence'] ?? false,
   };

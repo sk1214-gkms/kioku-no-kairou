@@ -9,15 +9,34 @@
   "prompt_text": "t_final_prompt",
 
   "deduction": {
-    "optional": true,
-    "question": "t_final_deduction_q",
-    "options": [
-      { "id": "witness", "text": "t_ded_opt_witness", "correct": true,  "requires_memories": ["mem_02", "mem_04"] },
-      { "id": "culprit", "text": "t_ded_opt_culprit", "correct": false },
-      { "id": "unknown", "text": "t_ded_opt_unknown", "correct": false }
+    "intro": "（集めた記憶を統合し、事件を推理する。3問すべて正解で真相に至る）",
+    "questions": [
+      {
+        "id": "culprit", "q": "真犯人は誰か？", "requires_memories": ["mem_14", "mem_20"],
+        "options": [
+          { "text": "氷室の甥", "correct": true },
+          { "text": "私（蓮見鏡介）", "correct": false },
+          { "text": "館の使用人", "correct": false }
+        ]
+      },
+      {
+        "id": "time", "q": "殺害が起きた時刻は？", "requires_memories": ["mem_18"],
+        "options": [
+          { "text": "03:45", "correct": true },
+          { "text": "04:15", "correct": false },
+          { "text": "11:00", "correct": false }
+        ]
+      },
+      {
+        "id": "weapon", "q": "凶器は何か？", "requires_memories": ["mem_20"],
+        "options": [
+          { "text": "ナイフ", "correct": true },
+          { "text": "注射器", "correct": false },
+          { "text": "鉄の棒", "correct": false }
+        ]
+      }
     ],
-    "on_correct_flag": "deduction_correct",
-    "note": "requires_memories が full でない場合、その選択肢は根拠が虫食い(■■)で示され、論理的に選べない設計にする。正解で deduction_correct=true。任意ステップなのでスキップ可。"
+    "note": "全問正解で deduction_correct=true。requires_memories が full でない設問は正解選択肢が虫食い(■■)になり当てにくい。meters.deduction に正解数を保存。"
   },
 
   "choices": [

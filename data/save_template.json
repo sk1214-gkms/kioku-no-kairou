@@ -39,7 +39,8 @@
     "deduction_answered": false
   },
   "meters": {
-    "confront": 0
+    "confront": 0,
+    "deduction": 0
   },
   "hints_used": {},
   "memory_score": 0,

@@ -136,12 +136,28 @@ class _GameFlowState extends State<GameFlow> {
           onChanged: _persist,
         );
       case _Phase.ending:
+        final confront = _gs.meters['confront'] ?? 0;
+        final eff = (_gs.memoryScore + confront * 5).clamp(0, 100);
+        final dTotal =
+            (_repo!.finalRoom.deduction?['questions'] as List?)?.length ?? 0;
+        String axis(String a, String b) => (_gs.flags[a] == true)
+            ? '直面'
+            : (_gs.flags[b] == true)
+                ? '逃避'
+                : '—';
+        final breakdown =
+            '5:${axis('s05_examine', 's05_hide')} / 15:${axis('s15_accept', 's15_deny')} / 25:${axis('s25_confront', 's25_avert')}';
         return EndingScreen(
           result: _ending!,
           summary: GameStateSummary(
             memoryScore: _gs.memoryScore,
-            hasEvidence: _gs.flags['has_culprit_evidence'] ?? false,
+            confront: confront,
+            effectiveScore: eff,
+            deductionScore: _gs.meters['deduction'] ?? 0,
+            deductionTotal: dTotal,
             deductionCorrect: _gs.flags['deduction_correct'] ?? false,
+            hasEvidence: _gs.flags['has_culprit_evidence'] ?? false,
+            confrontBreakdown: breakdown,
           ),
           onRestart: _backToTitle,
         );

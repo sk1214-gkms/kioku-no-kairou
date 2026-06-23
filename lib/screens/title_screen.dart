@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../save_service.dart';
+import 'deep_room_screen.dart';
 import 'game_flow.dart';
 
 /// タイトル＋モード選択。ここで選んだモードが体験（記憶・結末）を変える。
@@ -109,6 +110,20 @@ class _TitleScreenState extends State<TitleScreen> {
                       'タイマー', '1部屋90秒。時間切れで記憶が虫食いに。結末が変わる。', 'timer'),
                   _modeButton(
                       'ハード', '謎の言語「回廊文字」＋暗号解読書で解く上級モード。', 'hard'),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: 320,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => const DeepRoomScreen())),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Text('🔍 深い部屋（試作）',
+                            style: TextStyle(fontSize: 14)),
+                      ),
+                    ),
+                  ),
                 ],
               ],
             ),

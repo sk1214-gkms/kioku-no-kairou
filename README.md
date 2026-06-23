@@ -69,6 +69,7 @@ flutter run
 - **仕掛けタイプ**：number_pad / text_input / sequence_tap / 状態トグル＋前提 / **item_use** / **condition** / **drag** / **branch（複数回答→物語分岐）**
 - **物語軸**：`meters.confront`（逃避⇄直面）。5/15/25号室の選択で増減し、将来エンディングに反映（構成案 [docs/構成案_謎と物語_v1.md](docs/構成案_謎と物語_v1.md)）
 - 未対応（次段）：効果音、アート/BGM、ハード/難易度のバランス調整、本番AdMob ID
+- **🔍 深い部屋（試作）**：タイトルから起動。**東西南北4視点＋ネスト調査＋アイテム合成＋多段ロック**の“濃い1部屋”を検証する縦スライス（[lib/screens/deep_room_screen.dart](lib/screens/deep_room_screen.dart) / [data/deep_rooms/study.json](data/deep_rooms/study.json)）。手触り確認後に本編へ展開予定。
 
 ## 広告（マネタイズ）の土台
 > **現在はスタブ化中**：テスト優先のため `google_mobile_ads` を依存から外し、[lib/ad_service.dart](lib/ad_service.dart) は no-op スタブにしてある（依存に入れるだけで AndroidがアプリID未設定で起動クラッシュするのを回避）。マネタイズ時に以下の手順で戻す。本実装は git 履歴に保存。

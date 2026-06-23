@@ -22,3 +22,4 @@ flutter:
   assets:
     - data/
     - data/stages/
+    - data/deep_rooms/

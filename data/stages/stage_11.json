@@ -21,6 +21,24 @@
     },
     "validate": "exact"
   },
+  "hard": {
+    "modifiers": ["decoy"],
+    "interactables": [
+      { "id": "slot_1", "rect": [140, 120, 80, 80], "slot": true },
+      { "id": "slot_2", "rect": [140, 210, 80, 80], "slot": true },
+      { "id": "slot_3", "rect": [140, 300, 80, 80], "slot": true },
+      { "id": "piece_a", "rect": [20, 430, 70, 70], "draggable": true },
+      { "id": "piece_b", "rect": [110, 430, 70, 70], "draggable": true },
+      { "id": "piece_c", "rect": [200, 430, 70, 70], "draggable": true },
+      { "id": "piece_d", "rect": [290, 430, 70, 70], "draggable": true }
+    ],
+    "gimmick": {
+      "type": "drag",
+      "solutions": { "hard": { "piece_a": "slot_2", "piece_b": "slot_3", "piece_c": "slot_1" } },
+      "validate": "exact"
+    },
+    "hints": []
+  },
   "hints": ["h_s11_1", "h_s11_2", "h_s11_3"],
   "rewards": {
     "memory_id": "mem_11",

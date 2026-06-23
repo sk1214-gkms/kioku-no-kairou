@@ -7,6 +7,16 @@
     { "id": "letter", "rect": [150, 160, 150, 160], "zoom_image": "letter_zoom.png", "requires_item": "item_stencil", "on_use_state": "overlaid", "on_use_reveals": "甥の脅迫状に型紙を重ねると、穴から文字が浮かぶ——『K I L L』。" }
   ],
   "gimmick": { "type": "text_input", "prerequisites": [ { "interactable": "letter", "state": "overlaid" } ], "solutions": { "normal": "KILL" }, "validate": "case_insensitive" },
+  "hard": {
+    "modifiers": ["decoy"],
+    "interactables": [
+      { "id": "obj_stencil", "rect": [60, 430, 80, 70], "zoom_image": "stencil_zoom.png", "gives_item": "item_stencil", "reveals": "穴あきの型紙が落ちている。" },
+      { "id": "letter", "rect": [150, 160, 150, 160], "zoom_image": "letter_zoom.png", "requires_item": "item_stencil", "on_use_state": "overlaid", "on_use_reveals": "甥の脅迫状に型紙を重ねると文字が浮かぶ——『K I L L』。" },
+      { "id": "decoy_letter", "rect": [40, 160, 90, 130], "zoom_image": "letter_decoy_zoom.png", "decoy": true, "requires_item": "item_stencil", "on_use_reveals": "別の手紙に重ねると『L I V E』…これは関係なさそうだ。" }
+    ],
+    "gimmick": { "type": "text_input", "prerequisites": [ { "interactable": "letter", "state": "overlaid" } ], "solutions": { "hard": "KILL" }, "validate": "case_insensitive" },
+    "hints": []
+  },
   "hints": ["h_s14_1", "h_s14_2", "h_s14_3"],
   "rewards": { "memory_id": "mem_14", "text_full": "t_s14_full", "text_corrupt": "t_s14_corrupt", "item": null }
 }

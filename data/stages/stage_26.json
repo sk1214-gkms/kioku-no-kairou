@@ -10,6 +10,18 @@
     { "id": "btn_star",     "rect": [265, 290, 55, 55] }
   ],
   "gimmick": { "type": "sequence_tap", "solutions": { "normal": ["btn_triangle", "btn_circle", "btn_square", "btn_star"] }, "validate": "order" },
+  "hard": {
+    "modifiers": ["scramble"],
+    "interactables": [
+      { "id": "note", "rect": [60, 150, 240, 60], "zoom_image": "seal_zoom.png", "reveals": "証拠箱の封蝋を、日付の古い順に解け：△ → ◯ → □ → ☆。" },
+      { "id": "btn_circle",   "rect": [70, 290, 55, 55] },
+      { "id": "btn_star",     "rect": [135, 290, 55, 55] },
+      { "id": "btn_triangle", "rect": [200, 290, 55, 55] },
+      { "id": "btn_square",   "rect": [265, 290, 55, 55] }
+    ],
+    "gimmick": { "type": "sequence_tap", "solutions": { "hard": ["btn_triangle", "btn_circle", "btn_square", "btn_star"] }, "validate": "order" },
+    "hints": []
+  },
   "hints": ["h_s26_1", "h_s26_2", "h_s26_3"],
   "rewards": { "memory_id": "mem_26", "text_full": "t_s26_full", "text_corrupt": "t_s26_corrupt", "item": null }
 }

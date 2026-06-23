@@ -6,6 +6,14 @@
     { "id": "clue_a", "rect": [120, 170, 150, 140], "zoom_image": "lastlock_zoom.png", "reveals": "玄関ホールへの最後の施錠盤。刻印は『2045』——まだ来ない、未来の年。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "2045" }, "validate": "exact" },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "clue_a", "rect": [120, 170, 150, 140], "zoom_image": "lastlock_glyph_zoom.png", "reveals_glyphs": ["g_2", "g_0", "g_4", "g_5"] }
+    ],
+    "gimmick": { "type": "number_pad", "solutions": { "hard": "2045" }, "validate": "exact" },
+    "hints": []
+  },
   "hints": ["h_s28_1", "h_s28_2", "h_s28_3"],
   "rewards": { "memory_id": "mem_28", "text_full": "t_s28_full", "text_corrupt": "t_s28_corrupt", "item": null }
 }

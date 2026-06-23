@@ -15,6 +15,15 @@
     "solutions": { "normal": "802" },
     "validate": "exact"
   },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "recorder", "rect": [60, 180, 90, 120], "zoom_image": "recorder_glyph_zoom.png", "reveals_glyphs": ["g_8", "g_0", "g_2"] },
+      { "id": "radio", "rect": [200, 180, 110, 120], "zoom_image": "radio_zoom.png", "reveals": "古いラジオ。周波数を合わせれば、何か聞こえるかもしれない。" }
+    ],
+    "gimmick": { "type": "number_pad", "solutions": { "hard": "802" }, "validate": "exact" },
+    "hints": []
+  },
   "hints": ["h_s12_1", "h_s12_2", "h_s12_3"],
   "rewards": {
     "memory_id": "mem_12",

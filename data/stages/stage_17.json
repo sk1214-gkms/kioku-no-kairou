@@ -7,6 +7,15 @@
     { "id": "clue_a", "rect": [130, 240, 110, 110], "zoom_image": "safe_zoom.png", "reveals": "ダイヤル式の金庫。4桁の暗証番号が要る。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "1984" }, "validate": "exact" },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "note", "rect": [60, 150, 240, 60], "zoom_image": "memo_glyph_zoom.png", "reveals_glyphs": ["g_1", "g_9", "g_8", "g_4"] },
+      { "id": "clue_a", "rect": [130, 240, 110, 110], "zoom_image": "safe_zoom.png", "reveals": "ダイヤル式の金庫。4桁の暗証番号が要る。" }
+    ],
+    "gimmick": { "type": "number_pad", "solutions": { "hard": "1984" }, "validate": "exact" },
+    "hints": []
+  },
   "hints": ["h_s17_1", "h_s17_2", "h_s17_3"],
   "rewards": { "memory_id": "mem_17", "text_full": "t_s17_full", "text_corrupt": "t_s17_corrupt", "item": null }
 }

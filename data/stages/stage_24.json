@@ -6,6 +6,14 @@
     { "id": "clue_a", "rect": [110, 160, 170, 150], "zoom_image": "bloodtext_zoom.png", "reveals": "壁に血で書かれた文字。掠れた血の中に、数字が滲んでいる：『4736』。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "4736" }, "validate": "exact" },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "clue_a", "rect": [110, 160, 170, 150], "zoom_image": "bloodtext_glyph_zoom.png", "reveals_glyphs": ["g_4", "g_7", "g_3", "g_6"] }
+    ],
+    "gimmick": { "type": "number_pad", "solutions": { "hard": "4736" }, "validate": "exact" },
+    "hints": []
+  },
   "hints": ["h_s24_1", "h_s24_2", "h_s24_3"],
   "rewards": { "memory_id": "mem_24", "text_full": "t_s24_full", "text_corrupt": "t_s24_corrupt", "item": null }
 }

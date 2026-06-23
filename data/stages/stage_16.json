@@ -6,6 +6,14 @@
     { "id": "clue_a", "rect": [120, 150, 150, 160], "zoom_image": "coat_name_zoom.png", "reveals": "ベッドの白衣。胸の刺繍に『蓮見 鏡介 ／ 第7病棟 305号』とある。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "7305" }, "validate": "exact" },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "clue_a", "rect": [120, 150, 150, 160], "zoom_image": "coat_glyph_zoom.png", "reveals_glyphs": ["g_7", "g_3", "g_0", "g_5"] }
+    ],
+    "gimmick": { "type": "number_pad", "solutions": { "hard": "7305" }, "validate": "exact" },
+    "hints": []
+  },
   "hints": ["h_s16_1", "h_s16_2", "h_s16_3"],
   "rewards": { "memory_id": "mem_16", "text_full": "t_s16_full", "text_corrupt": "t_s16_corrupt", "item": null }
 }

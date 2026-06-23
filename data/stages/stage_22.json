@@ -6,6 +6,14 @@
     { "id": "clue_a", "rect": [150, 180, 130, 150], "zoom_image": "print_zoom.png", "reveals": "ドアの指紋認証パネル。傍の拡大鏡で覗くと、指紋の渦が数字の形になっている：『6739』。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "6739" }, "validate": "exact" },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "clue_a", "rect": [150, 180, 130, 150], "zoom_image": "print_glyph_zoom.png", "reveals_glyphs": ["g_6", "g_7", "g_3", "g_9"] }
+    ],
+    "gimmick": { "type": "number_pad", "solutions": { "hard": "6739" }, "validate": "exact" },
+    "hints": []
+  },
   "hints": ["h_s22_1", "h_s22_2", "h_s22_3"],
   "rewards": { "memory_id": "mem_22", "text_full": "t_s22_full", "text_corrupt": "t_s22_corrupt", "item": null }
 }

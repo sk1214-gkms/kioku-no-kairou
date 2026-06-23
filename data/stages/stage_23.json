@@ -6,6 +6,14 @@
     { "id": "clue_a", "rect": [120, 170, 150, 140], "zoom_image": "spare_key_zoom.png", "reveals": "床に落ちていた『裏口の予備鍵』。タグに日付『0729』が刻まれ、それが小箱の暗証になっている。" }
   ],
   "gimmick": { "type": "number_pad", "solutions": { "normal": "0729" }, "validate": "exact" },
+  "hard": {
+    "modifiers": ["cipher"],
+    "interactables": [
+      { "id": "clue_a", "rect": [120, 170, 150, 140], "zoom_image": "spare_key_glyph_zoom.png", "reveals_glyphs": ["g_0", "g_7", "g_2", "g_9"] }
+    ],
+    "gimmick": { "type": "number_pad", "solutions": { "hard": "0729" }, "validate": "exact" },
+    "hints": []
+  },
   "hints": ["h_s23_1", "h_s23_2", "h_s23_3"],
   "rewards": { "memory_id": "mem_23", "text_full": "t_s23_full", "text_corrupt": "t_s23_corrupt", "item": null }
 }

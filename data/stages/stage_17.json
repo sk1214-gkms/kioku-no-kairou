@@ -1,0 +1,16 @@
+{
+  "stage_id": 17,
+  "name": "四つの石板",
+  "assets": { "background": "bg_stage_17.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
+  "interactables": [
+    { "id": "note",   "rect": [60, 150, 240, 50], "zoom_image": "note_zoom.png", "reveals": "壁のメモ：『石板を 左から A B C D の順に読め』。" },
+    { "id": "clue_a", "rect": [40, 240, 60, 60], "reveals": "石板A：『1』" },
+    { "id": "clue_b", "rect": [110, 240, 60, 60], "reveals": "石板B：『9』" },
+    { "id": "clue_c", "rect": [180, 240, 60, 60], "reveals": "石板C：『8』" },
+    { "id": "clue_d", "rect": [250, 240, 60, 60], "reveals": "石板D：『4』" },
+    { "id": "clue_e", "rect": [150, 420, 60, 60], "decoy": true, "reveals": "割れた石板：『0』。…ひびが入り、後から置かれたように見える。" }
+  ],
+  "gimmick": { "type": "number_pad", "solutions": { "normal": "1984" }, "validate": "exact" },
+  "hints": ["h_s17_1", "h_s17_2", "h_s17_3"],
+  "rewards": { "memory_id": "mem_17", "text_full": "t_s17_full", "text_corrupt": "t_s17_corrupt", "item": null }
+}

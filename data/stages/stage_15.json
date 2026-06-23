@@ -1,0 +1,26 @@
+{
+  "stage_id": 15,
+  "name": "もう一つの顔",
+  "assets": { "background": "bg_stage_15.png", "door": "door_carved.png", "bgm": "ambient_mystery_03.mp3" },
+  "interactables": [
+    { "id": "light_switch", "rect": [300, 250, 45, 80], "toggle": true, "states": ["on", "off"] },
+    {
+      "id": "portrait",
+      "rect": [120, 140, 120, 160],
+      "zoom_image": "portrait_master_zoom.png",
+      "reveals": "館の主の肖像画。穏やかな老人が微笑んでいる。",
+      "reveals_alt": "——明かりを消すと、肖像の顔が歪む。そこに浮かぶのは、あなた自身の顔だ。",
+      "alt_when": [ { "interactable": "light_switch", "state": "off" } ]
+    }
+  ],
+  "gimmick": {
+    "type": "branch",
+    "prerequisites": [ { "interactable": "light_switch", "state": "off" } ],
+    "branches": [
+      { "id": "accept", "label": "これは私の記憶だと受け入れる", "text": "t_s15_accept", "meter": "confront", "delta": 1, "set_flag": "s15_accept" },
+      { "id": "deny",   "label": "他人のそら似だと打ち消す",     "text": "t_s15_deny",   "meter": "confront", "delta": -1, "set_flag": "s15_deny" }
+    ]
+  },
+  "hints": ["h_s15_1", "h_s15_2", "h_s15_3"],
+  "rewards": { "memory_id": "mem_15", "text_full": "t_s15_full", "text_corrupt": "t_s15_corrupt", "item": null }
+}

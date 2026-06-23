@@ -58,6 +58,22 @@ class ContentRepository {
       'data/stages/stage_11.json',
       'data/stages/stage_12.json',
       'data/stages/stage_13.json',
+      'data/stages/stage_14.json',
+      'data/stages/stage_15.json',
+      'data/stages/stage_16.json',
+      'data/stages/stage_17.json',
+      'data/stages/stage_18.json',
+      'data/stages/stage_19.json',
+      'data/stages/stage_20.json',
+      'data/stages/stage_21.json',
+      'data/stages/stage_22.json',
+      'data/stages/stage_23.json',
+      'data/stages/stage_24.json',
+      'data/stages/stage_25.json',
+      'data/stages/stage_26.json',
+      'data/stages/stage_27.json',
+      'data/stages/stage_28.json',
+      'data/stages/stage_29.json',
     ];
     final stages = <Stage>[];
     for (final p in stagePaths) {

@@ -220,8 +220,7 @@ class _StageScreenState extends State<StageScreen> {
     }
 
     // 6) 調査（拡大して手がかりを見る）
-    final locked = _g.prerequisites.isNotEmpty && !_prereqSatisfied;
-    _showZoom(_label(it.id), _revealBody(it, locked));
+    _showZoom(_label(it.id), _revealBody(it));
   }
 
   void _handleUse(Interactable it) {
@@ -248,8 +247,10 @@ class _StageScreenState extends State<StageScreen> {
     _checkCondition();
   }
 
-  String _revealBody(Interactable it, bool locked) {
-    if (locked) return '（まだ何も見えない…暗くしないと？）';
+  String _revealBody(Interactable it) {
+    if (it.altWhen != null && _stateOk(it.altWhen!)) {
+      return it.altReveal ?? it.reveals ?? '';
+    }
     if (it.decoy && it.reveals == null && it.revealsGlyphs == null) {
       return '特に手がかりは無さそうだ…（ダミー）';
     }
@@ -932,6 +933,22 @@ class _StageScreenState extends State<StageScreen> {
     'decoy_memo': '別のメモ',
     'old_handle': '古い取っ手',
     'driver_floor': 'ドライバー',
+    'obj_driver': 'ドライバー',
+    'obj_stencil': '型紙',
+    'letter': '脅迫状',
+    'note': 'メモ',
+    'clue_a': '手がかりA',
+    'clue_b': '手がかりB',
+    'clue_c': '手がかりC',
+    'clue_d': '手がかりD',
+    'clue_e': '手がかりE',
+    'switch': 'スイッチ',
+    'obj_coat': '白衣',
+    'fingerprint': '指紋',
+    'obj_key1': '銀の鍵',
+    'obj_key2': '金の鍵',
+    'lock_a': '銀の錠',
+    'lock_b': '金の錠',
     'panel': 'パネル',
     'decoy_panel': '別のパネル',
     'piece_a': '紙片A',
@@ -957,6 +974,10 @@ class _StageScreenState extends State<StageScreen> {
     'item_driver': 'ドライバー',
     'item_doorknob': 'ドアノブ',
     'item_handle': '古い取っ手',
+    'item_stencil': '型紙',
+    'item_magnifier': '虫眼鏡',
+    'item_key_a': '銀の鍵',
+    'item_key_b': '金の鍵',
   };
   String _itemLabel(String id) => _itemLabels[id] ?? id;
 

@@ -1,0 +1,11 @@
+{
+  "stage_id": 16,
+  "name": "鏡文字の処方箋",
+  "assets": { "background": "bg_stage_16.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
+  "interactables": [
+    { "id": "clue_a", "rect": [110, 160, 150, 130], "zoom_image": "prescription_zoom.png", "reveals": "鏡文字の処方箋に『2148』。注記：『鏡で戻し、さらに各桁から1を引け』。" }
+  ],
+  "gimmick": { "type": "number_pad", "solutions": { "normal": "7301" }, "validate": "exact" },
+  "hints": ["h_s16_1", "h_s16_2", "h_s16_3"],
+  "rewards": { "memory_id": "mem_16", "text_full": "t_s16_full", "text_corrupt": "t_s16_corrupt", "item": null }
+}

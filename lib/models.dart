@@ -94,6 +94,8 @@ class Interactable {
   final bool draggable; // ドラッグできるピース
   final bool slot; // ピースの受け皿
   final List<Prerequisite>? requiresState; // この対象が反応する前提状態（例：照明=off）
+  final String? altReveal; // altWhen が成立した時に見せる別の手がかり
+  final List<Prerequisite>? altWhen; // altReveal を出す条件（例：照明=off）
 
   Interactable({
     required this.id,
@@ -115,6 +117,8 @@ class Interactable {
     this.draggable = false,
     this.slot = false,
     this.requiresState,
+    this.altReveal,
+    this.altWhen,
   });
 
   factory Interactable.fromJson(Map<String, dynamic> m) => Interactable(
@@ -137,6 +141,10 @@ class Interactable {
         draggable: (m['draggable'] as bool?) ?? false,
         slot: (m['slot'] as bool?) ?? false,
         requiresState: (m['requires_state'] as List?)
+            ?.map((e) => Prerequisite.fromJson((e as Map).cast<String, dynamic>()))
+            .toList(),
+        altReveal: m['reveals_alt'] as String?,
+        altWhen: (m['alt_when'] as List?)
             ?.map((e) => Prerequisite.fromJson((e as Map).cast<String, dynamic>()))
             .toList(),
       );

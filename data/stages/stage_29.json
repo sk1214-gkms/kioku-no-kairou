@@ -1,0 +1,12 @@
+{
+  "stage_id": 29,
+  "name": "真実の扉",
+  "assets": { "background": "bg_stage_29.png", "door": "door_carved.png", "bgm": "ambient_finale.mp3" },
+  "interactables": [
+    { "id": "note",   "rect": [110, 150, 150, 110], "zoom_image": "final_door_zoom.png", "reveals": "最後の扉に問いが刻まれている——『この館とは、何だったのか』。英単語で答えよ。" },
+    { "id": "clue_a", "rect": [110, 290, 150, 70], "reveals": "招待状も、日記も、カルテも、肖像も——すべてはあなたの中にあった。一連の出来事が、一つの言葉を囁いている。" }
+  ],
+  "gimmick": { "type": "text_input", "solutions": { "normal": "MEMORY" }, "validate": "case_insensitive" },
+  "hints": ["h_s29_1", "h_s29_2", "h_s29_3"],
+  "rewards": { "memory_id": "mem_29", "text_full": "t_s29_full", "text_corrupt": "t_s29_corrupt", "item": null }
+}

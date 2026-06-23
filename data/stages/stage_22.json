@@ -1,0 +1,12 @@
+{
+  "stage_id": 22,
+  "name": "白衣のポケット",
+  "assets": { "background": "bg_stage_22.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
+  "interactables": [
+    { "id": "obj_coat", "rect": [60, 160, 90, 150], "zoom_image": "coat_zoom.png", "gives_item": "item_magnifier", "reveals": "壁に掛けられた白衣。ポケットを探ると、小さな虫眼鏡が出てきた。" },
+    { "id": "fingerprint", "rect": [200, 200, 110, 110], "zoom_image": "print_zoom.png", "requires_item": "item_magnifier", "on_use_state": "seen", "on_use_reveals": "虫眼鏡で拡大すると、指紋の渦が数字の形に：『6739』。" }
+  ],
+  "gimmick": { "type": "number_pad", "prerequisites": [ { "interactable": "fingerprint", "state": "seen" } ], "solutions": { "normal": "6739" }, "validate": "exact" },
+  "hints": ["h_s22_1", "h_s22_2", "h_s22_3"],
+  "rewards": { "memory_id": "mem_22", "text_full": "t_s22_full", "text_corrupt": "t_s22_corrupt", "item": null }
+}

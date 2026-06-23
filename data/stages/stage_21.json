@@ -1,0 +1,11 @@
+{
+  "stage_id": 21,
+  "name": "逆さの時計",
+  "assets": { "background": "bg_stage_21.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
+  "interactables": [
+    { "id": "clue_a", "rect": [110, 160, 150, 130], "zoom_image": "rev_clock_zoom.png", "reveals": "デジタル時計が逆回り：12:00 → 11:45 → 11:30 → 11:15 …と表示が減っていく。次に表示される時刻を入れよ。" }
+  ],
+  "gimmick": { "type": "number_pad", "solutions": { "normal": "1100" }, "validate": "exact" },
+  "hints": ["h_s21_1", "h_s21_2", "h_s21_3"],
+  "rewards": { "memory_id": "mem_21", "text_full": "t_s21_full", "text_corrupt": "t_s21_corrupt", "item": null }
+}

@@ -1,0 +1,12 @@
+{
+  "stage_id": 14,
+  "name": "脅迫状の型紙",
+  "assets": { "background": "bg_stage_14.png", "door": "door_white_wood.png", "bgm": "ambient_mystery_03.mp3" },
+  "interactables": [
+    { "id": "obj_stencil", "rect": [60, 430, 80, 70], "zoom_image": "stencil_zoom.png", "gives_item": "item_stencil", "reveals": "穴がいくつも空いた型紙が落ちている。" },
+    { "id": "letter", "rect": [150, 160, 150, 160], "zoom_image": "letter_zoom.png", "requires_item": "item_stencil", "on_use_state": "overlaid", "on_use_reveals": "型紙を手紙に重ねると、穴から文字が浮かぶ——『K I L L』。" }
+  ],
+  "gimmick": { "type": "text_input", "prerequisites": [ { "interactable": "letter", "state": "overlaid" } ], "solutions": { "normal": "KILL" }, "validate": "case_insensitive" },
+  "hints": ["h_s14_1", "h_s14_2", "h_s14_3"],
+  "rewards": { "memory_id": "mem_14", "text_full": "t_s14_full", "text_corrupt": "t_s14_corrupt", "item": null }
+}

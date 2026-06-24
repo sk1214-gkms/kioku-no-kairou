@@ -1,18 +1,18 @@
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import '../models.dart';
 import '../widgets/design_canvas.dart';
 
 /// 深い部屋（東西南北4視点 × ネスト調査 × アイテム合成 × 多段ロック）。
 /// キャンペーンから room データ＋GameState を注入して使う（onCleared を呼ぶ）。
-/// 脳死カウントダウンはキャンペーン側が保持し、残り秒(globalRemaining)を受け取り表示するだけ。
+/// 脳死カウントダウンはキャンペーン側が保持し、残り秒(remaining: ValueListenable)を購読して表示するだけ。
 /// デモ用途では gameState/onCleared を省略でき、その場合は脱出でタイトルへ戻る。
 class DeepRoomScreen extends StatefulWidget {
   final Map<String, dynamic> room;
   final GameState? gameState;
   final String mode; // normal | hard | timer
   final bool timed; // 脳死クロックを表示するか
-  final int globalRemaining; // 脳死までの残り秒（キャンペーン保持）
-  final int globalTotal; // 同・総秒
+  final ValueListenable<int>? remaining; // 脳死までの残り秒（キャンペーン保持・通知）
   final VoidCallback? onCleared;
   final List<String> litGlyphs; // これまで点灯したトラウマ文字（点灯順＝不規則）
 
@@ -22,8 +22,7 @@ class DeepRoomScreen extends StatefulWidget {
     this.gameState,
     this.mode = 'normal',
     this.timed = false,
-    this.globalRemaining = 0,
-    this.globalTotal = 0,
+    this.remaining,
     this.onCleared,
     this.litGlyphs = const [],
   });
@@ -196,9 +195,9 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('やめる')),
           FilledButton(
             onPressed: () {
-              final ok = ctrl.text.trim().toLowerCase() ==
-                  (lock['answer'] as String).toLowerCase();
+              final ok = _norm(ctrl.text) == _norm(lock['answer'] as String);
               Navigator.pop(ctx);
+              if (!mounted) return;
               if (!ok) {
                 setState(() => _msg = '違うようだ…');
                 return;
@@ -286,6 +285,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             FilledButton(
               onPressed: () {
                 Navigator.pop(ctx);
+                if (!mounted) return;
                 _clear(o);
               },
               child: Text(o['label'] as String),
@@ -327,6 +327,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           FilledButton(
             onPressed: () {
               Navigator.pop(ctx);
+              if (!mounted) return;
               if (widget.onCleared != null) {
                 widget.onCleared!();
               } else {
@@ -346,6 +347,21 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     return '$m:$sec';
   }
 
+  /// 全角→半角・トリム・小文字化で錠前判定を頑健に（全角数字「０４１５」対策）。
+  String _norm(String s) {
+    final b = StringBuffer();
+    for (final r in s.runes) {
+      if (r >= 0xFF01 && r <= 0xFF5E) {
+        b.writeCharCode(r - 0xFEE0); // 全角英数記号 → 半角
+      } else if (r == 0x3000) {
+        b.write(' '); // 全角空白 → 半角
+      } else {
+        b.writeCharCode(r);
+      }
+    }
+    return b.toString().trim().toLowerCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final inSub = _subStack.isNotEmpty;
@@ -353,18 +369,21 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       appBar: AppBar(
         title: Text('${_room['name']}  ［$_placeLabel］'),
         actions: [
-          if (widget.timed)
+          if (widget.timed && widget.remaining != null)
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                    _fmt(widget.globalRemaining < 0 ? 0 : widget.globalRemaining),
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: widget.globalRemaining <= 30
-                            ? Colors.redAccent
-                            : Colors.white)),
+                child: ValueListenableBuilder<int>(
+                  valueListenable: widget.remaining!,
+                  builder: (_, v, __) {
+                    final r = v < 0 ? 0 : v;
+                    return Text(_fmt(r),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: r <= 30 ? Colors.redAccent : Colors.white));
+                  },
+                ),
               ),
             ),
           if (inSub)

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import '../models.dart';
 
@@ -10,16 +11,14 @@ class FinalJudgmentScreen extends StatefulWidget {
   final Map<String, dynamic> data;
   final GameState gameState;
   final VoidCallback onComplete;
-  final int globalRemaining;
-  final int globalTotal;
+  final ValueListenable<int>? remaining; // 脳死までの残り秒
 
   const FinalJudgmentScreen({
     super.key,
     required this.data,
     required this.gameState,
     required this.onComplete,
-    this.globalRemaining = 0,
-    this.globalTotal = 0,
+    this.remaining,
   });
 
   @override
@@ -83,23 +82,25 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
   @override
   Widget build(BuildContext context) {
     final questions = _questions;
-    final showClock = widget.globalTotal > 0;
-    final low = widget.globalRemaining <= 30;
     return Scaffold(
       backgroundColor: const Color(0xFF0E0C14),
       appBar: AppBar(
         backgroundColor: const Color(0xFF15131C),
         title: Text(widget.data['name'] as String? ?? '最後の審判'),
         actions: [
-          if (showClock)
+          if (widget.remaining != null)
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text(_fmt(widget.globalRemaining),
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: low ? Colors.redAccent : Colors.white70)),
+                child: ValueListenableBuilder<int>(
+                  valueListenable: widget.remaining!,
+                  builder: (_, v, __) => Text(_fmt(v),
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color:
+                              v <= 30 ? Colors.redAccent : Colors.white70)),
+                ),
               ),
             ),
         ],

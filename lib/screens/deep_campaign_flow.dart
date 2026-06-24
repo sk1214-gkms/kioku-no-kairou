@@ -38,7 +38,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   // 脳死カウントダウン（全モード共通）
   Timer? _ticker;
   int _total = 0;
-  int _remaining = 0;
+  final ValueNotifier<int> _remaining = ValueNotifier<int>(0); // 通知のみ→部屋全体の再描画を避ける
   int _tAtJudgment = 0; // 審判時点の残り秒（I 算出用に固定）
   int _earnedLetters = 0; // 結末時点で点灯できた GEDÄCHTNIS 文字数
   bool _brainDead = false;
@@ -64,6 +64,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   @override
   void dispose() {
     _ticker?.cancel();
+    _remaining.dispose();
     super.dispose();
   }
 
@@ -103,7 +104,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
         meters: {},
       );
       _total = dur;
-      _remaining = dur;
+      _remaining.value = dur;
       _brainDead = false;
       _ending = null;
       _phase = _Phase.room;
@@ -123,8 +124,8 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
         t.cancel();
         return;
       }
-      setState(() => _remaining -= 1);
-      if (_remaining <= 0) {
+      _remaining.value -= 1; // 通知のみ。クロックだけ再描画され、部屋は再構築されない
+      if (_remaining.value <= 0) {
         t.cancel();
         _onBrainDeath();
       }
@@ -132,6 +133,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   }
 
   void _onBrainDeath() {
+    if (_phase == _Phase.ending) return;
     _brainDead = true;
     // 部屋途中で脳死なら点灯済みのみ。R13収束以降(reveal/judgment)は全10文字。
     _earnedLetters = _phase == _Phase.room ? _litCount(_idx) : 10;
@@ -143,6 +145,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   }
 
   void _advance() {
+    if (_phase == _Phase.ending) return;
     setState(() {
       if (_idx < _rooms.length - 1) {
         _idx++;
@@ -153,12 +156,14 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   }
 
   void _onRevealDone() {
+    if (_phase == _Phase.ending) return;
     setState(() => _phase = _Phase.judgment);
   }
 
   void _onJudged() {
+    if (_phase == _Phase.ending) return;
     _ticker?.cancel();
-    _tAtJudgment = _remaining < 0 ? 0 : _remaining;
+    _tAtJudgment = _remaining.value < 0 ? 0 : _remaining.value;
     _earnedLetters = 10; // R13収束で抑圧されたHも露見＝GEDÄCHTNIS全10文字
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: false);
     setState(() {
@@ -201,8 +206,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
           gameState: _gs,
           mode: widget.mode,
           timed: true,
-          globalRemaining: _remaining,
-          globalTotal: _total,
+          remaining: _remaining,
           litGlyphs: _litGlyphs(_idx),
           onCleared: _advance,
         );
@@ -215,8 +219,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
         return FinalJudgmentScreen(
           data: _judgment,
           gameState: _gs,
-          globalRemaining: _remaining,
-          globalTotal: _total,
+          remaining: _remaining,
           onComplete: _onJudged,
         );
       case _Phase.ending:

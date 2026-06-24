@@ -108,14 +108,16 @@ class _TitleScreenState extends State<TitleScreen> {
                     child: CircularProgressIndicator(),
                   )
                 else ...[
-                  if (_saved != null) ...[
+                  // ===== 本編（深い部屋・作話システム）=====
+                  if (_deepSaved != null) ...[
                     SizedBox(
                       width: 320,
                       child: OutlinedButton(
-                        onPressed: _continue,
+                        onPressed: _deepContinue,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 14),
-                          child: Text(_savedSummary(_saved!),
+                          child: Text(
+                              'つづきから（記憶の回廊・第${_deepSaved!.idx + 1}室）',
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
@@ -126,38 +128,26 @@ class _TitleScreenState extends State<TitleScreen> {
                         style: TextStyle(color: Colors.white38)),
                     const SizedBox(height: 8),
                   ],
-                  _modeButton('ノーマル', 'じっくり解く。ヒントあり。', 'normal'),
+                  _modeButton('ノーマル', '深い部屋を解き、作話を完成させる。ヒントあり。', 'normal'),
+                  _modeButton('タイマー', '脳死まで15分。時間に追われながら解く。', 'timer'),
                   _modeButton(
-                      'タイマー', '1部屋90秒。時間切れで記憶が虫食いに。結末が変わる。', 'timer'),
-                  _modeButton(
-                      'ハード', '謎の言語「回廊文字」＋暗号解読書で解く上級モード。', 'hard'),
-                  const SizedBox(height: 16),
-                  if (_deepSaved != null) ...[
-                    SizedBox(
-                      width: 320,
-                      child: OutlinedButton(
-                        onPressed: _deepContinue,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Text(
-                              'つづきから（記憶の回廊・第${_deepSaved!.idx + 1}室）',
-                              style: const TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.bold)),
-                        ),
-                      ),
+                      'ハード', '手がかりの説明を削りミスリードを足した最難。ヒント制限。', 'hard'),
+                  const SizedBox(height: 24),
+                  // ===== 旧30部屋ゲーム（参考・legacy）=====
+                  const Text('― 旧30部屋ゲーム（参考・legacy）―',
+                      style: TextStyle(color: Colors.white24, fontSize: 11)),
+                  const SizedBox(height: 4),
+                  if (_saved != null)
+                    TextButton(
+                      onPressed: _continue,
+                      child: Text('（旧）${_savedSummary(_saved!)}',
+                          style: const TextStyle(
+                              color: Colors.white38, fontSize: 12)),
                     ),
-                    const SizedBox(height: 8),
-                  ],
-                  SizedBox(
-                    width: 320,
-                    child: OutlinedButton(
-                      onPressed: () => _deepNew('normal'),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Text('🆕 本編・再設計（深い部屋／開発中・第1章）',
-                            style: TextStyle(fontSize: 13)),
-                      ),
-                    ),
+                  TextButton(
+                    onPressed: () => _newGame('normal'),
+                    child: const Text('旧版をプレイ（ノーマル）',
+                        style: TextStyle(color: Colors.white38, fontSize: 12)),
                   ),
                 ],
               ],
@@ -173,7 +163,7 @@ class _TitleScreenState extends State<TitleScreen> {
       width: 320,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: FilledButton(
-        onPressed: () => _newGame(mode),
+        onPressed: () => _deepNew(mode),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14),
           child: Column(

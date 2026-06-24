@@ -4,27 +4,111 @@
   "memory_id": "mem_r2",
   "letter": "S",
   "intro": "準備室。断片を組み合わせて通行証を作れ。（仮）",
-  "item_labels": { "item_frag_a": "紙片（左）", "item_frag_b": "紙片（右）", "item_pass": "通行証" },
+  "item_labels": {
+    "item_frag_a": "紙片（左）",
+    "item_frag_b": "紙片（右）",
+    "item_pass": "通行証"
+  },
   "combines": [
-    { "a": "item_frag_a", "b": "item_frag_b", "result": "item_pass", "msg": "二枚の紙片を合わせ、通行証が完成した。" }
+    {
+      "a": "item_frag_a",
+      "b": "item_frag_b",
+      "result": "item_pass",
+      "msg": "二枚の紙片を合わせ、通行証が完成した。"
+    }
   ],
   "clear_text": "──［ S ］が網膜に染み出す。耳鳴りが酷い。薬品を調合する私の手は、決して震えていなかった。教授は私を息子のように信頼していた。私は彼の知性を守る盾だった。あの夜、白慈館に『招かれざる悪意』──遺産を狙うあの凶悪な甥が、闇から這い寄ってくるまでは。",
-  "hints": ["通行証は一枚では完成しない。", "紙片が2か所にある（薬棚の奥／作業台）。", "紙片を2つ選んで「合成」→通行証で南の扉。"],
+  "hints": [
+    "通行証は一枚では完成しない。",
+    "紙片が2か所にある（薬棚の奥／作業台）。",
+    "紙片を2つ選んで「合成」→通行証で南の扉。"
+  ],
   "views": {
-    "north": { "label": "北：薬棚", "objects": [
-      { "id": "cabinet", "rect": [110, 160, 150, 160], "label": "薬棚", "reveal": "薬棚。引き出しの奥に何か挟まっている。",
-        "subview": { "label": "薬棚の奥", "objects": [
-          { "id": "fa", "rect": [120, 180, 110, 110], "label": "破れた紙片（左）", "gives": "item_frag_a", "reveal": "紙片の左半分を入手。" }
-        ] } }
-    ] },
-    "east": { "label": "東：作業台", "objects": [
-      { "id": "fb", "rect": [80, 200, 130, 100], "label": "作業台の紙片（右）", "gives": "item_frag_b", "reveal": "作業台に紙片の右半分。" }
-    ] },
-    "south": { "label": "南：扉", "objects": [
-      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉（通行証式）", "requires_item": "item_pass", "win": true, "reveal": "通行証をかざす式の扉。" }
-    ] },
-    "west": { "label": "西：ロッカー", "objects": [
-      { "id": "locker", "rect": [110, 150, 140, 170], "label": "ロッカー", "reveal": "鍵が掛かって開かない。（仮）" }
-    ] }
+    "north": {
+      "label": "北：薬棚",
+      "objects": [
+        {
+          "id": "cabinet",
+          "rect": [
+            110,
+            160,
+            150,
+            160
+          ],
+          "label": "薬棚",
+          "reveal": "薬棚。引き出しの奥に何か挟まっている。",
+          "subview": {
+            "label": "薬棚の奥",
+            "objects": [
+              {
+                "id": "fa",
+                "rect": [
+                  120,
+                  180,
+                  110,
+                  110
+                ],
+                "label": "破れた紙片（左）",
+                "gives": "item_frag_a",
+                "reveal": "紙片の左半分を入手。",
+                "reveal_hard": "紙片の断片。"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "east": {
+      "label": "東：作業台",
+      "objects": [
+        {
+          "id": "fb",
+          "rect": [
+            80,
+            200,
+            130,
+            100
+          ],
+          "label": "作業台の紙片（右）",
+          "gives": "item_frag_b",
+          "reveal": "作業台に紙片の右半分。",
+          "reveal_hard": "もう一つの断片。"
+        }
+      ]
+    },
+    "south": {
+      "label": "南：扉",
+      "objects": [
+        {
+          "id": "door",
+          "rect": [
+            140,
+            110,
+            120,
+            260
+          ],
+          "label": "扉（通行証式）",
+          "requires_item": "item_pass",
+          "win": true,
+          "reveal": "通行証をかざす式の扉。"
+        }
+      ]
+    },
+    "west": {
+      "label": "西：ロッカー",
+      "objects": [
+        {
+          "id": "locker",
+          "rect": [
+            110,
+            150,
+            140,
+            170
+          ],
+          "label": "ロッカー",
+          "reveal": "鍵が掛かって開かない。（仮）"
+        }
+      ]
+    }
   }
 }

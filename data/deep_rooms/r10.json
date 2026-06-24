@@ -5,23 +5,98 @@
   "letter": "E",
   "intro": "（仮）通電し、複数モニターの断片を組み合わせよ。",
   "clear_text": "──［ E ］の針が、狂ったように加速する。時間が足りない。視界に走る赤い文字化け。脳細胞（ニューロン）の壊死が始まっている。はやく、はやく私の『美しい推理』を出力しなければ、空白の恐怖に耐えかねた脳が、最悪のバグ（真実）を強制起動させてしまう！",
-  "hints": ["モニターは電源が要る。", "西の主電源ON→北と東のモニターを読む。", "6_7_ と _2_1 を合わせて『6271』。"],
+  "hints": [
+    "モニターは電源が要る。",
+    "西の主電源ON→北と東のモニターを読む。",
+    "6_7_ と _2_1 を合わせて『6271』。"
+  ],
   "views": {
-    "west": { "label": "西：主電源", "objects": [
-      { "id": "power", "rect": [280, 120, 55, 90], "label": "主電源", "toggle": true, "states": ["off", "on"] }
-    ] },
-    "north": { "label": "北：モニターA", "objects": [
-      { "id": "m1", "rect": [100, 150, 170, 150], "label": "モニターA",
-        "requires_state": [ { "interactable": "power", "state": "on" } ],
-        "reveal": "通電。映像コードの一部『6 _ 7 _』。" }
-    ] },
-    "east": { "label": "東：モニターB", "objects": [
-      { "id": "m2", "rect": [90, 150, 160, 150], "label": "モニターB",
-        "requires_state": [ { "interactable": "power", "state": "on" } ],
-        "reveal": "通電。欠けた桁『_ 2 _ 1』。合わせて 6271。" }
-    ] },
-    "south": { "label": "南：扉", "objects": [
-      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉（数字錠）", "lock": { "type": "number", "answer": "6271", "win": true }, "reveal": "4桁の数字錠。" }
-    ] }
+    "west": {
+      "label": "西：主電源",
+      "objects": [
+        {
+          "id": "power",
+          "rect": [
+            280,
+            120,
+            55,
+            90
+          ],
+          "label": "主電源",
+          "toggle": true,
+          "states": [
+            "off",
+            "on"
+          ]
+        }
+      ]
+    },
+    "north": {
+      "label": "北：モニターA",
+      "objects": [
+        {
+          "id": "m1",
+          "rect": [
+            100,
+            150,
+            170,
+            150
+          ],
+          "label": "モニターA",
+          "requires_state": [
+            {
+              "interactable": "power",
+              "state": "on"
+            }
+          ],
+          "reveal": "通電。映像コードの一部『6 _ 7 _』。",
+          "reveal_hard": "映像コードの一部『6 _ 7 _』。"
+        }
+      ]
+    },
+    "east": {
+      "label": "東：モニターB",
+      "objects": [
+        {
+          "id": "m2",
+          "rect": [
+            90,
+            150,
+            160,
+            150
+          ],
+          "label": "モニターB",
+          "requires_state": [
+            {
+              "interactable": "power",
+              "state": "on"
+            }
+          ],
+          "reveal": "通電。欠けた桁『_ 2 _ 1』。合わせて 6271。",
+          "reveal_hard": "欠けた桁『_ 2 _ 1』。"
+        }
+      ]
+    },
+    "south": {
+      "label": "南：扉",
+      "objects": [
+        {
+          "id": "door",
+          "rect": [
+            140,
+            110,
+            120,
+            260
+          ],
+          "label": "扉（数字錠）",
+          "lock": {
+            "type": "number",
+            "answer": "6271",
+            "win": true
+          },
+          "reveal": "4桁の数字錠。"
+        }
+      ]
+    }
   }
 }

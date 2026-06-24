@@ -11,28 +11,124 @@
     "item_culprit_evidence": "金属製の筒"
   },
   "combines": [
-    { "a": "item_syringe_empty", "b": "item_vial", "result": "item_syringe_full", "msg": "シリンジに薬液を充填した。" }
+    {
+      "a": "item_syringe_empty",
+      "b": "item_vial",
+      "result": "item_syringe_full",
+      "msg": "シリンジに薬液を充填した。"
+    }
   ],
   "clear_text": "──［ G ］のホルマリンが、脳の深層を満たしていく。硝子瓶の脳の横に隠されていた『金属製の筒』。これこそが、すべての謎を解く鍵。甥の知らない、私と教授だけの秘密の術式。これを開ければ、現実の警察の追及など恐れるに足りない。",
-  "hints": ["扉の穴には“満たした”注射器が要る。", "空シリンジ（標本棚の奥）＋薬液（作業台）を合成。", "西の隠し戸棚の奥に重要な証拠（金属製の筒）。忘れず調べよ。"],
+  "hints": [
+    "扉の穴には“満たした”注射器が要る。",
+    "空シリンジ（標本棚の奥）＋薬液（作業台）を合成。",
+    "西の隠し戸棚の奥に重要な証拠（金属製の筒）。忘れず調べよ。"
+  ],
   "views": {
-    "north": { "label": "北：標本棚", "objects": [
-      { "id": "shelf", "rect": [110, 160, 150, 160], "label": "標本棚", "reveal": "棚の奥に注射器。",
-        "subview": { "label": "棚の奥", "objects": [
-          { "id": "se", "rect": [120, 180, 110, 110], "label": "空のシリンジ", "gives": "item_syringe_empty", "reveal": "空のシリンジを入手。" }
-        ] } }
-    ] },
-    "east": { "label": "東：作業台", "objects": [
-      { "id": "vial", "rect": [80, 200, 120, 90], "label": "薬液の瓶", "gives": "item_vial", "reveal": "薬液の瓶を入手。" }
-    ] },
-    "west": { "label": "西：隠し戸棚", "objects": [
-      { "id": "cab", "rect": [110, 150, 150, 170], "label": "隠し戸棚", "reveal": "奥に細長い何かが見える…",
-        "subview": { "label": "戸棚の奥", "objects": [
-          { "id": "tube", "rect": [120, 180, 110, 110], "label": "金属製の筒", "gives": "item_culprit_evidence", "set_flag": "has_culprit_evidence", "reveal": "金属製の筒（毒薬シリンジ）を手に入れた。…これは重要な証拠かもしれない。（Cルートの鍵）" }
-        ] } }
-    ] },
-    "south": { "label": "南：扉", "objects": [
-      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉", "requires_item": "item_syringe_full", "win": true, "reveal": "扉の機構に、注射器を挿す穴がある。" }
-    ] }
+    "north": {
+      "label": "北：標本棚",
+      "objects": [
+        {
+          "id": "shelf",
+          "rect": [
+            110,
+            160,
+            150,
+            160
+          ],
+          "label": "標本棚",
+          "reveal": "棚の奥に注射器。",
+          "subview": {
+            "label": "棚の奥",
+            "objects": [
+              {
+                "id": "se",
+                "rect": [
+                  120,
+                  180,
+                  110,
+                  110
+                ],
+                "label": "空のシリンジ",
+                "gives": "item_syringe_empty",
+                "reveal": "空のシリンジを入手。",
+                "reveal_hard": "空のシリンジ。"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "east": {
+      "label": "東：作業台",
+      "objects": [
+        {
+          "id": "vial",
+          "rect": [
+            80,
+            200,
+            120,
+            90
+          ],
+          "label": "薬液の瓶",
+          "gives": "item_vial",
+          "reveal": "薬液の瓶を入手。"
+        }
+      ]
+    },
+    "west": {
+      "label": "西：隠し戸棚",
+      "objects": [
+        {
+          "id": "cab",
+          "rect": [
+            110,
+            150,
+            150,
+            170
+          ],
+          "label": "隠し戸棚",
+          "reveal": "奥に細長い何かが見える…",
+          "subview": {
+            "label": "戸棚の奥",
+            "objects": [
+              {
+                "id": "tube",
+                "rect": [
+                  120,
+                  180,
+                  110,
+                  110
+                ],
+                "label": "金属製の筒",
+                "gives": "item_culprit_evidence",
+                "set_flag": "has_culprit_evidence",
+                "reveal": "金属製の筒（毒薬シリンジ）を手に入れた。…これは重要な証拠かもしれない。（Cルートの鍵）",
+                "reveal_hard": "金属製の筒。用途は分からない。"
+              }
+            ]
+          },
+          "reveal_hard": "奥に細長い影。"
+        }
+      ]
+    },
+    "south": {
+      "label": "南：扉",
+      "objects": [
+        {
+          "id": "door",
+          "rect": [
+            140,
+            110,
+            120,
+            260
+          ],
+          "label": "扉",
+          "requires_item": "item_syringe_full",
+          "win": true,
+          "reveal": "扉の機構に、注射器を挿す穴がある。"
+        }
+      ]
+    }
   }
 }

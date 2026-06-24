@@ -44,7 +44,18 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
 
   Map<String, dynamic> get _room => widget.room;
 
+  bool get _hard => widget.mode == 'hard';
+
   List<String> get _hints => ((_room['hints'] as List?) ?? []).cast<String>();
+  // ハードは最終（答え直結）ヒントを伏せる＝説明を減らす難化
+  int get _maxHint =>
+      _hard ? (_hints.length - 1).clamp(0, _hints.length) : _hints.length;
+
+  /// ハードでは reveal_hard（あれば）を使い、親切な説明を伏せる。
+  String _reveal(Map<String, dynamic> o) =>
+      (_hard && o['reveal_hard'] != null)
+          ? o['reveal_hard'] as String
+          : (o['reveal'] as String? ?? '特に何もないようだ。');
 
   @override
   void initState() {
@@ -62,6 +73,8 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         : ((_room['views'] as Map)[_dirs[_dirIdx]] as Map);
     return ((src['objects'] as List?) ?? [])
         .map((e) => (e as Map).cast<String, dynamic>())
+        // hard_only=ハードのみ表示（ミスリード等）／normal_only=ノーマルのみ表示
+        .where((o) => _hard ? o['normal_only'] != true : o['hard_only'] != true)
         .toList();
   }
 
@@ -164,7 +177,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       });
       return;
     }
-    _zoom(o['label'] as String? ?? '', o['reveal'] as String? ?? '特に何もないようだ。');
+    _zoom(o['label'] as String? ?? '', _reveal(o));
   }
 
   void _zoom(String title, String body) {
@@ -264,19 +277,20 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   // ---- ヒント／スキップ（詰み防止）----
   void _showHint() {
     final hints = _hints;
-    if (hints.isEmpty) {
-      setState(() => _msg = 'この部屋にヒントは無いようだ…');
+    final max = _maxHint;
+    if (hints.isEmpty || max <= 0) {
+      setState(() => _msg = 'この部屋にヒントは無い……自力で解け。');
       return;
     }
-    if (_hintLevel >= hints.length) {
-      _zoom('ヒント ${hints.length}/${hints.length}', hints.last);
+    if (_hintLevel >= max) {
+      _zoom('ヒント $max / $max', hints[max - 1]);
       return;
     }
     final next = _hintLevel + 1;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('ヒント $next / ${hints.length}'),
+        title: Text('ヒント $next / $max'),
         content: const Text('広告を見て、次のヒントを表示しますか？'),
         actions: [
           TextButton(
@@ -590,14 +604,14 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 icon: const Icon(Icons.lightbulb_outline,
                     size: 16, color: Colors.amberAccent),
                 label: Text(
-                  _hints.isEmpty
+                  _hints.isEmpty || _maxHint <= 0
                       ? 'ヒント'
-                      : 'ヒント（$_hintLevel/${_hints.length}・広告）',
+                      : 'ヒント（$_hintLevel/$_maxHint・広告）',
                   style: const TextStyle(color: Colors.amberAccent, fontSize: 12),
                 ),
               ),
               const Spacer(),
-              if (_hints.isNotEmpty && _hintLevel >= _hints.length)
+              if (_hints.isNotEmpty && _hintLevel >= _maxHint)
                 TextButton(
                   onPressed: _skip,
                   child: const Text('……諦めて先へ進む',

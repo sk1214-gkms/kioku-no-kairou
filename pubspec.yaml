@@ -23,3 +23,14 @@ flutter:
     - data/
     - data/stages/
     - data/deep_rooms/
+
+  # 亜簪文字（黒文字体）フォント。HUD / 結末 / R13収束の符号を亀甲文字にする。
+  # 有効化手順（自宅PCで）:
+  #   1) Google Fonts「UnifrakturMaguntia」(OFL) の .ttf を入手
+  #   2) assets/fonts/UnifrakturMaguntia-Regular.ttf として配置
+  #   3) 下の fonts: ブロックのコメントを外す
+  # ※ 未配置でもコードは fontFamily:'Blackletter' を標準フォントにフォールバックしビルドは通る。
+  # fonts:
+  #   - family: Blackletter
+  #     fonts:
+  #       - asset: assets/fonts/UnifrakturMaguntia-Regular.ttf

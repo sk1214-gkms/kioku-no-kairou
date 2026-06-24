@@ -14,7 +14,7 @@ class DeepRoomScreen extends StatefulWidget {
   final int globalRemaining; // 脳死までの残り秒（キャンペーン保持）
   final int globalTotal; // 同・総秒
   final VoidCallback? onCleared;
-  final int litCount; // この部屋に入る時点で点灯済みの GEDÄCHTNIS 文字数
+  final List<String> litGlyphs; // これまで点灯したトラウマ文字（点灯順＝不規則）
 
   const DeepRoomScreen({
     super.key,
@@ -25,10 +25,8 @@ class DeepRoomScreen extends StatefulWidget {
     this.globalRemaining = 0,
     this.globalTotal = 0,
     this.onCleared,
-    this.litCount = 0,
+    this.litGlyphs = const [],
   });
-
-  static const String memTarget = 'GEDÄCHTNIS'; // 記憶の符号化（脳内インフラ）
 
   @override
   State<DeepRoomScreen> createState() => _DeepRoomScreenState();
@@ -407,20 +405,19 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       color: const Color(0xFF0E0C14),
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: SizedBox(
-        height: 20,
-        // 点灯した文字だけを中央に表示。未点灯は枠ごと出さず、単語の存在を伏せる。
+        height: 22,
+        // 点灯したトラウマ文字だけを点灯順（不規則）に表示。未点灯は出さず単語を伏せる。
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (var i = 0;
-                i < widget.litCount && i < DeepRoomScreen.memTarget.length;
-                i++)
+            for (final g in widget.litGlyphs)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: Text(
-                  DeepRoomScreen.memTarget[i],
+                  g,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontFamily: 'Blackletter', // 黒文字体（未配置時は標準にフォールバック）
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1,
                     color: Colors.amberAccent,

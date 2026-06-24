@@ -96,6 +96,7 @@ class VerdictScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 2),
                 child: Text(target[i],
                     style: TextStyle(
+                        fontFamily: 'Blackletter',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1,
@@ -108,6 +109,7 @@ class VerdictScreen extends StatelessWidget {
             padding: EdgeInsets.only(top: 4),
             child: Text('V E R L U S T',
                 style: TextStyle(
+                    fontFamily: 'Blackletter',
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 4,

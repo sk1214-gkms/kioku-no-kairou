@@ -8,8 +8,9 @@ import '../models.dart';
 import 'deep_room_screen.dart';
 import 'final_judgment_screen.dart';
 import 'verdict_screen.dart';
+import 'verlust_reveal_screen.dart';
 
-enum _Phase { loading, room, judgment, ending }
+enum _Phase { loading, room, reveal, judgment, ending }
 
 /// 深い部屋キャンペーン：13部屋 → 30号室（最後の審判）→ 8結末。
 /// 全モード共通で『脳細胞の壊死』カウントダウンを保持し、0で Ending D（精神の死）。
@@ -132,9 +133,8 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
 
   void _onBrainDeath() {
     _brainDead = true;
-    // 部屋途中で脳死なら点灯済みのみ、審判中なら全点灯。
-    _earnedLetters =
-        _phase == _Phase.judgment ? _litCount(_rooms.length) : _litCount(_idx);
+    // 部屋途中で脳死なら点灯済みのみ。R13収束以降(reveal/judgment)は全10文字。
+    _earnedLetters = _phase == _Phase.room ? _litCount(_idx) : 10;
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: true);
     setState(() {
       _ending = res;
@@ -147,15 +147,19 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
       if (_idx < _rooms.length - 1) {
         _idx++;
       } else {
-        _phase = _Phase.judgment;
+        _phase = _Phase.reveal; // R13クリア → アナグラム収束演出へ
       }
     });
+  }
+
+  void _onRevealDone() {
+    setState(() => _phase = _Phase.judgment);
   }
 
   void _onJudged() {
     _ticker?.cancel();
     _tAtJudgment = _remaining < 0 ? 0 : _remaining;
-    _earnedLetters = _litCount(_rooms.length); // 全部屋通過＝全点灯
+    _earnedLetters = 10; // R13収束で抑圧されたHも露見＝GEDÄCHTNIS全10文字
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: false);
     setState(() {
       _ending = res;
@@ -171,13 +175,16 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
     }
   }
 
-  int _litCount(int idx) {
-    var c = 0;
-    for (var i = 0; i < idx; i++) {
+  int _litCount(int idx) => _litGlyphs(idx).length;
+
+  /// idx 番目の部屋に入る時点で点灯済みのトラウマ文字（点灯順＝不規則）。
+  List<String> _litGlyphs(int idx) {
+    final out = <String>[];
+    for (var i = 0; i < idx && i < _rooms.length; i++) {
       final l = _rooms[i]['letter'] as String?;
-      if (l != null && l.isNotEmpty) c++;
+      if (l != null && l.isNotEmpty) out.add(l);
     }
-    return c;
+    return out;
   }
 
   @override
@@ -196,8 +203,13 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
           timed: true,
           globalRemaining: _remaining,
           globalTotal: _total,
-          litCount: _litCount(_idx),
+          litGlyphs: _litGlyphs(_idx),
           onCleared: _advance,
+        );
+      case _Phase.reveal:
+        return VerlustRevealScreen(
+          earnedGlyphs: _litGlyphs(_rooms.length),
+          onDone: _onRevealDone,
         );
       case _Phase.judgment:
         return FinalJudgmentScreen(

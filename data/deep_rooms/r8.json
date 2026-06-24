@@ -2,7 +2,6 @@
   "id": "r8",
   "name": "R8 鏡の間",
   "memory_id": "mem_r8",
-  "letter": "T",
   "intro": "（仮）ツイスト：暗がりの鏡を見よ。",
   "branch": {
     "meter": "confront",

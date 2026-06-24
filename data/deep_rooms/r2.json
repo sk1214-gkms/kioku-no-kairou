@@ -2,12 +2,13 @@
   "id": "r2",
   "name": "R2 準備室",
   "memory_id": "mem_r2",
+  "letter": "E",
   "intro": "準備室。断片を組み合わせて通行証を作れ。（仮）",
   "item_labels": { "item_frag_a": "紙片（左）", "item_frag_b": "紙片（右）", "item_pass": "通行証" },
   "combines": [
     { "a": "item_frag_a", "b": "item_frag_b", "result": "item_pass", "msg": "二枚の紙片を合わせ、通行証が完成した。" }
   ],
-  "clear_text": "通行証で扉が開いた。（仮）",
+  "clear_text": "認知症の進行を阻むためのメマンチン、塩酸ドネペジル。薬品を調合する私の手は、決して震えていなかった。教授は私を息子のように信頼していた。私は彼の尊厳を守る盾だった。あの嵐の夜、白慈館に『招かれざる悪意』が這い寄ってくるまでは。［符号 E──点灯］",
   "views": {
     "north": { "label": "北：薬棚", "objects": [
       { "id": "cabinet", "rect": [110, 160, 150, 160], "label": "薬棚", "reveal": "薬棚。引き出しの奥に何か挟まっている。",

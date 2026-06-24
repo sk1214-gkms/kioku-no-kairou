@@ -93,6 +93,15 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
 
   void _toTitle() => Navigator.of(context).maybePop();
 
+  int _litCount(int idx) {
+    var c = 0;
+    for (var i = 0; i < idx; i++) {
+      final l = _rooms[i]['letter'] as String?;
+      if (l != null && l.isNotEmpty) c++;
+    }
+    return c;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_phase == _Phase.loading || _repo == null) {
@@ -108,6 +117,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
           mode: widget.mode,
           timed: _timed,
           seconds: roomSeconds,
+          litCount: _litCount(_idx),
           onCleared: _advance,
           onTimedOut: _advance,
         );

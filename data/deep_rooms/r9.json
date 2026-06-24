@@ -2,6 +2,7 @@
   "id": "r9",
   "name": "R9 標本室",
   "memory_id": "mem_r9",
+  "letter": "N",
   "intro": "（仮）合成チェーン：道具を組み合わせよ。隠し要素あり。",
   "item_labels": {
     "item_syringe_empty": "空のシリンジ",
@@ -12,7 +13,7 @@
   "combines": [
     { "a": "item_syringe_empty", "b": "item_vial", "result": "item_syringe_full", "msg": "シリンジに薬液を充填した。" }
   ],
-  "clear_text": "扉の機構が外れた。（仮）",
+  "clear_text": "硝子瓶の脳の横に隠されていた『金属製の筒』。これこそが、すべての謎を解く鍵。甥の知らない、私と教授だけの秘密の術式。これを開ければ、現実の警察の追及など恐れるに足りない。［符号 N──点灯］",
   "views": {
     "north": { "label": "北：標本棚", "objects": [
       { "id": "shelf", "rect": [110, 160, 150, 160], "label": "標本棚", "reveal": "棚の奥に注射器。",

@@ -14,6 +14,7 @@ class DeepRoomScreen extends StatefulWidget {
   final int seconds;
   final VoidCallback? onCleared;
   final VoidCallback? onTimedOut;
+  final int litCount; // この部屋に入る時点で点灯済みの GEDÄCHTNIS 文字数
 
   const DeepRoomScreen({
     super.key,
@@ -24,7 +25,10 @@ class DeepRoomScreen extends StatefulWidget {
     this.seconds = 240,
     this.onCleared,
     this.onTimedOut,
+    this.litCount = 0,
   });
+
+  static const String memTarget = 'GEDÄCHTNIS'; // 記憶の符号化（脳内インフラ）
 
   @override
   State<DeepRoomScreen> createState() => _DeepRoomScreenState();
@@ -338,11 +342,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     final txt = choice?['text'] as String? ??
         _room['clear_text'] as String? ??
         '——四方の謎を解き、扉を開けた。';
+    final verlust = _room['verlust'] == true;
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        title: const Text('脱出'),
+        title: Text(verlust ? 'GEDÄCHTNIS → VERLUST' : '脱出',
+            style: TextStyle(
+                color: verlust ? Colors.redAccent : null,
+                fontWeight: verlust ? FontWeight.bold : null)),
         content: SingleChildScrollView(child: Text(txt)),
         actions: [
           FilledButton(
@@ -433,6 +441,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       ),
       body: Column(
         children: [
+          _letterHud(),
           Expanded(
             child: Container(
               color: const Color(0xFF15131C),
@@ -442,6 +451,34 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             ),
           ),
           _statusBar(),
+        ],
+      ),
+    );
+  }
+
+  Widget _letterHud() {
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF0E0C14),
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (var i = 0; i < DeepRoomScreen.memTarget.length; i++)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: Text(
+                DeepRoomScreen.memTarget[i],
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                  color: i < widget.litCount
+                      ? Colors.amberAccent
+                      : Colors.white12,
+                ),
+              ),
+            ),
         ],
       ),
     );

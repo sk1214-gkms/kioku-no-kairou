@@ -1,11 +1,11 @@
 <mxfile host="app.diagrams.net" type="device">
-  <diagram id="kioku_confab_flow" name="記憶の回廊 作話システムフロー(現行)">
+  <diagram id="kioku_confab_flow" name="アムネジィ・ケース 作話システムフロー(現行)">
     <mxGraphModel dx="900" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1120" pageHeight="1360" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <mxCell id="note_title" value="記憶の回廊 ― 作話（Confabulation）システム フロー〔現行実装版 2026-06〕" style="text;html=1;fontStyle=1;fontSize=15;align=left;verticalAlign=middle" vertex="1" parent="1"><mxGeometry x="40" y="20" width="980" height="28" as="geometry" /></mxCell>
+        <mxCell id="note_title" value="アムネジィ・ケース ──教授の不完全な安楽── 作話システム フロー〔現行実装版 2026-06〕" style="text;html=1;fontStyle=1;fontSize=15;align=left;verticalAlign=middle" vertex="1" parent="1"><mxGeometry x="40" y="20" width="980" height="28" as="geometry" /></mxCell>
 
         <mxCell id="note_score" value="採点：作話完全度&#10;I = (T × M) × (1 + E/3)&#10;T=生存度(脳死タイマー残)／M=作話正解数(0-3)／E=逃避数(0-3)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="40" y="56" width="320" height="74" as="geometry" /></mxCell>
         <mxCell id="note_glyph" value="符号化：各部屋でトラウマ順に文字を“不規則”点灯&#10;T·S·Ä·C·N·I·G·E·D（9文字／誤認の罠）&#10;→ R13でアナグラム収束 → Gedächtnis（抑圧されたHが嵌まる）→ VERLUST" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="372" y="56" width="360" height="74" as="geometry" /></mxCell>

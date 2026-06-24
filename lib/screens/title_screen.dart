@@ -93,14 +93,14 @@ class _TitleScreenState extends State<TitleScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('記憶の回廊',
+                const Text('アムネジィ・ケース',
                     style: TextStyle(
-                        fontSize: 34,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 6)),
+                        letterSpacing: 3)),
                 const SizedBox(height: 8),
-                const Text('― 1画面完結 脱出ミステリー ―',
-                    style: TextStyle(color: Colors.white54)),
+                const Text('── 教授の不完全な安楽 ──',
+                    style: TextStyle(color: Colors.white54, letterSpacing: 1)),
                 const SizedBox(height: 40),
                 if (_loading)
                   const Padding(
@@ -117,7 +117,7 @@ class _TitleScreenState extends State<TitleScreen> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           child: Text(
-                              'つづきから（記憶の回廊・第${_deepSaved!.idx + 1}室）',
+                              'つづきから（第${_deepSaved!.idx + 1}室）',
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                         ),

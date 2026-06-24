@@ -14,7 +14,7 @@ class KiokuApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '記憶の回廊',
+      title: 'アムネジィ・ケース',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

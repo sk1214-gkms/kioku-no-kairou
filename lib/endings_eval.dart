@@ -140,13 +140,15 @@ EndingResult evaluateConfabEnding(
   final m = gs.meters['confab'] ?? 0; // 作話（嘘）を選んだ数 0..3
   final allTruth = gs.flags['all_truth'] == true; // 全問で真実を選んだ
   final syringe = gs.flags['syringe_chosen'] == true;
+  final hasEvidence = gs.flags['has_culprit_evidence'] == true; // R9の金属製の筒
   final allEvade = countEvade(gs) >= 3;
   final allConfront = countConfront(gs) >= 3;
 
   String code;
   if (brainDead) {
     code = 'D';
-  } else if (syringe) {
+  } else if (syringe && hasEvidence) {
+    // 隠し条件：凶器＝シリンジ かつ R9で金属製の筒を所持していた時のみ深淵が開く
     code = 'S';
   } else if (allTruth && allConfront) {
     code = 'True';

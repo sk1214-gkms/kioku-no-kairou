@@ -98,3 +98,71 @@ dynamic _resolve(String token, Map<String, dynamic> vars) {
   if (token == 'false') return false;
   return num.tryParse(token) ?? token;
 }
+
+// =====================================================================
+// 深い部屋キャンペーン：作話完全度（Confabulation Integrity）と8結末
+// =====================================================================
+
+/// 生存度 T（0..100）。脳死カウントダウンの残り割合。
+int survivalT(int tRemaining, int tTotal) =>
+    tTotal > 0 ? (tRemaining / tTotal * 100).round().clamp(0, 100) : 100;
+
+/// 作話完全度 I = (T × M) × (1 + E/3)。
+/// T=生存度(0..100)、M=作話（嘘）を選んだ推理数、E=逃避を選んだ回数。
+int confabIntegrity({
+  required int correct,
+  required int evade,
+  required int tRemaining,
+  required int tTotal,
+}) {
+  final t = survivalT(tRemaining, tTotal);
+  final i = (t * correct) * (1 + evade / 3);
+  return i.round();
+}
+
+/// 逃避/直面フラグの集計（s_r4/r8/r12）。
+int countEvade(GameState gs) => ['s_r4_evade', 's_r8_evade', 's_r12_evade']
+    .where((k) => gs.flags[k] == true)
+    .length;
+int countConfront(GameState gs) =>
+    ['s_r4_confront', 's_r8_confront', 's_r12_confront']
+        .where((k) => gs.flags[k] == true)
+        .length;
+
+/// 深い部屋キャンペーンの結末を、離散決定木で確定する。
+/// 優先順位：脳死(D) > 隠しシリンジ(S) > 全真実+全直面(True) >
+///           全作話(A+/A) > 作話ミス(B/C)。
+EndingResult evaluateConfabEnding(
+  GameState gs,
+  ContentRepository repo, {
+  required bool brainDead,
+}) {
+  final m = gs.meters['confab'] ?? 0; // 作話（嘘）を選んだ数 0..3
+  final allTruth = gs.flags['all_truth'] == true; // 全問で真実を選んだ
+  final syringe = gs.flags['syringe_chosen'] == true;
+  final allEvade = countEvade(gs) >= 3;
+  final allConfront = countConfront(gs) >= 3;
+
+  String code;
+  if (brainDead) {
+    code = 'D';
+  } else if (syringe) {
+    code = 'S';
+  } else if (allTruth && allConfront) {
+    code = 'True';
+  } else if (m >= 3) {
+    code = allEvade ? 'A+' : 'A';
+  } else {
+    code = allEvade ? 'B' : 'C';
+  }
+
+  final map =
+      ((repo.endings['confab_endings'] as Map?) ?? {}).cast<String, dynamic>();
+  final e = (map[code] as Map?)?.cast<String, dynamic>() ?? {};
+  return EndingResult(
+    ending: code,
+    title: e['title'] as String? ?? code,
+    text: repo.text(e['text'] as String? ?? ''),
+    loopToStage: e['loop_to_stage'] as int?,
+  );
+}

@@ -1,4 +1,15 @@
 {
+  "_confab_note": "深い部屋キャンペーン用。作話完全度 I=(T×M)(1+E/3)。結末は endings_eval.dart の離散ツリーが (M=作話正解数 / E=逃避数 / 直面数 / シリンジ選択 / 脳死) から決定。下の rules/thresholds は旧30部屋ゲーム用で未使用化せず残置。",
+  "confab_endings": {
+    "A+":   { "title": "完璧な偽物",        "type": "good_evil",   "text": "t_end_A" },
+    "A":    { "title": "作話の綻び",        "type": "true_bitter", "text": "t_end_A_true" },
+    "B":    { "title": "忘却の揺り籠",      "type": "loop",        "text": "t_end_B", "loop_to_stage": 1 },
+    "C":    { "title": "断罪の重圧",        "type": "delusion",    "text": "t_end_A2" },
+    "D":    { "title": "精神の死",          "type": "death",       "text": "t_end_D" },
+    "S":    { "title": "Gedächtnisverlust", "type": "hidden",      "text": "t_end_S" },
+    "True": { "title": "白慈の審判",        "type": "truth",       "text": "t_end_true" }
+  },
+
   "thresholds": {
     "memory_high": 70,
     "memory_low": 40

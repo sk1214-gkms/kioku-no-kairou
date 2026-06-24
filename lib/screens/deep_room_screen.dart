@@ -1,19 +1,19 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models.dart';
 import '../widgets/design_canvas.dart';
 
 /// 深い部屋（東西南北4視点 × ネスト調査 × アイテム合成 × 多段ロック）。
-/// キャンペーンから room データ＋GameState を注入して使う（onCleared/onTimedOut を呼ぶ）。
+/// キャンペーンから room データ＋GameState を注入して使う（onCleared を呼ぶ）。
+/// 脳死カウントダウンはキャンペーン側が保持し、残り秒(globalRemaining)を受け取り表示するだけ。
 /// デモ用途では gameState/onCleared を省略でき、その場合は脱出でタイトルへ戻る。
 class DeepRoomScreen extends StatefulWidget {
   final Map<String, dynamic> room;
   final GameState? gameState;
   final String mode; // normal | hard | timer
-  final bool timed;
-  final int seconds;
+  final bool timed; // 脳死クロックを表示するか
+  final int globalRemaining; // 脳死までの残り秒（キャンペーン保持）
+  final int globalTotal; // 同・総秒
   final VoidCallback? onCleared;
-  final VoidCallback? onTimedOut;
   final int litCount; // この部屋に入る時点で点灯済みの GEDÄCHTNIS 文字数
 
   const DeepRoomScreen({
@@ -22,9 +22,9 @@ class DeepRoomScreen extends StatefulWidget {
     this.gameState,
     this.mode = 'normal',
     this.timed = false,
-    this.seconds = 240,
+    this.globalRemaining = 0,
+    this.globalTotal = 0,
     this.onCleared,
-    this.onTimedOut,
     this.litCount = 0,
   });
 
@@ -42,8 +42,6 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   final List<String> _items = [];
   final List<String> _selected = [];
   String _msg = '';
-  Timer? _timer;
-  int _remaining = 0;
   bool _done = false;
 
   Map<String, dynamic> get _room => widget.room;
@@ -52,30 +50,6 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   void initState() {
     super.initState();
     _msg = _room['intro'] as String? ?? '四方の壁を調べよう。';
-    if (widget.timed) {
-      _remaining = widget.seconds;
-      _startTimer();
-    }
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (!mounted) {
-        t.cancel();
-        return;
-      }
-      setState(() => _remaining -= 1);
-      if (_remaining <= 0) {
-        t.cancel();
-        _timeout();
-      }
-    });
   }
 
   Map<String, String> get _itemLabels =>
@@ -291,7 +265,6 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   void _win() {
     if (_done) return;
     _done = true;
-    _timer?.cancel();
     final branch = _room['branch'] as Map?;
     if (branch != null) {
       _showBranch(branch.cast<String, dynamic>());
@@ -369,36 +342,6 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     );
   }
 
-  void _timeout() {
-    if (_done) return;
-    _done = true;
-    final gs = widget.gameState;
-    final mid = _room['memory_id'] as String?;
-    if (gs != null && mid != null) gs.memories[mid] = 'corrupted';
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        title: const Text('― 時間切れ ―'),
-        content: Text(_room['timeout_text'] as String? ??
-            '時間切れ。記憶が虫食いのまま、次へ流される。'),
-        actions: [
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              if (widget.onTimedOut != null) {
-                widget.onTimedOut!();
-              } else {
-                Navigator.of(context).maybePop();
-              }
-            },
-            child: const Text('次へ進む'),
-          ),
-        ],
-      ),
-    );
-  }
-
   String _fmt(int s) {
     final m = (s ~/ 60).toString();
     final sec = (s % 60).toString().padLeft(2, '0');
@@ -416,12 +359,14 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(_fmt(_remaining < 0 ? 0 : _remaining),
+                child: Text(
+                    _fmt(widget.globalRemaining < 0 ? 0 : widget.globalRemaining),
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color:
-                            _remaining <= 15 ? Colors.redAccent : Colors.white)),
+                        color: widget.globalRemaining <= 30
+                            ? Colors.redAccent
+                            : Colors.white)),
               ),
             ),
           if (inSub)

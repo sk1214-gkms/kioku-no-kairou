@@ -413,14 +413,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 3),
               child: Text(
-                DeepRoomScreen.memTarget[i],
+                // 点灯済みのみ文字を見せ、未点灯は空欄(▢)で単語を伏せる
+                i < widget.litCount ? DeepRoomScreen.memTarget[i] : '▢',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1,
                   color: i < widget.litCount
                       ? Colors.amberAccent
-                      : Colors.white12,
+                      : Colors.white24,
                 ),
               ),
             ),

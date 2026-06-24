@@ -1,111 +1,69 @@
 <mxfile host="app.diagrams.net" type="device">
-  <diagram name="記憶の回廊 再設計(深い部屋)フロー">
-    <mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1040" pageHeight="1820" math="0" shadow="0">
+  <diagram id="kioku_confab_flow" name="記憶の回廊 作話システムフロー(現行)">
+    <mxGraphModel dx="900" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1120" pageHeight="1360" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <mxCell id="legend" value="凡例：青=深い部屋 / 黄=章ボス・分岐 / 緑=Aエンド / 赤=Bエンド / 橙=Cエンド / 紫=スコア判定 ★=難易度" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left" vertex="1" parent="1"><mxGeometry x="30" y="20" width="600" height="28" as="geometry" /></mxCell>
+        <mxCell id="note_title" value="記憶の回廊 ― 作話（Confabulation）システム フロー〔現行実装版 2026-06〕" style="text;html=1;fontStyle=1;fontSize=15;align=left;verticalAlign=middle" vertex="1" parent="1"><mxGeometry x="40" y="20" width="980" height="28" as="geometry" /></mxCell>
 
-        <mxCell id="start" value="スタート / タイトル" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1"><mxGeometry x="430" y="60" width="200" height="38" as="geometry" /></mxCell>
-        <mxCell id="modeSel" value="モード選択" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1"><mxGeometry x="450" y="110" width="160" height="60" as="geometry" /></mxCell>
-        <mxCell id="note_mode" value="ノーマル/ハード：記憶=full／タイマー：時間切れで虫食い→記憶充足度↓（“殺人鬼”解釈へ）" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="650" y="105" width="330" height="70" as="geometry" /></mxCell>
+        <mxCell id="note_score" value="採点：作話完全度&#10;I = (T × M) × (1 + E/3)&#10;T=生存度(脳死タイマー残)／M=作話正解数(0-3)／E=逃避数(0-3)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="40" y="56" width="320" height="74" as="geometry" /></mxCell>
+        <mxCell id="note_glyph" value="符号化：各部屋でトラウマ順に文字を“不規則”点灯&#10;T·S·Ä·C·N·I·G·E·D（9文字／誤認の罠）&#10;→ R13でアナグラム収束 → Gedächtnis（抑圧されたHが嵌まる）→ VERLUST" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="372" y="56" width="360" height="74" as="geometry" /></mxCell>
+        <mxCell id="note_branch" value="分岐 ①R4 ②R8 ③R12：&#10;直面(confront+1) か 逃避(evade+1) を蓄積。&#10;結末の振り分けに使用（扉の明示選択は無し＝創発）。" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="744" y="56" width="276" height="74" as="geometry" /></mxCell>
 
-        <mxCell id="ch1" value="第1章 目覚め（易→中・教える）" style="text;html=1;align=left;fontStyle=1;fontColor=#555555" vertex="1" parent="1"><mxGeometry x="30" y="190" width="200" height="20" as="geometry" /></mxCell>
-        <mxCell id="r1" value="R1 白い部屋 ★☆☆☆☆&#10;教：調べる・拾う・使う" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="210" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r2" value="R2 準備室 ★★☆☆☆&#10;教：アイテム合成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="262" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r3" value="R3 暗室 ★★☆☆☆&#10;教：隠し（暗転/ブラックライト）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="314" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r4" value="R4 書斎【章ボス・分岐①】 ★★★☆☆&#10;クロス視点結合＋多段ロック" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="420" y="366" width="230" height="64" as="geometry" /></mxCell>
-        <mxCell id="b4h" value="隠す（逃避 −1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="190" y="380" width="170" height="36" as="geometry" /></mxCell>
-        <mxCell id="b4e" value="調べる（直面 +1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="700" y="380" width="180" height="36" as="geometry" /></mxCell>
+        <mxCell id="start" value="覚醒：白い部屋／両手が赤い（蓮見鏡介の脳内）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666" vertex="1" parent="1"><mxGeometry x="330" y="150" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r1" value="R1 白い部屋　［T 点灯］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="200" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r2" value="R2 準備室　［S］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="250" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r3" value="R3 暗室　［Ä］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="300" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r4" value="R4 書斎　◆分岐①（直面／逃避）　※文字なし" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1"><mxGeometry x="330" y="350" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r5" value="R5 診察室　［C］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="400" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r6" value="R6 記録室　［N］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="450" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r7" value="R7 廊下　［I］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="500" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r8" value="R8 鏡の間　◆分岐②（直面／逃避）　※文字なし" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1"><mxGeometry x="330" y="550" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r9" value="R9 標本室　［G］＋隠し：金属製の筒(has_culprit_evidence)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="600" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r10" value="R10 監視室　［E］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="650" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r11" value="R11 手術室　［D］断片ほぼ出揃う…一つ欠けている" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="700" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r12" value="R12 証拠保管室　◆分岐③（直面／逃避）　※文字なし" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1"><mxGeometry x="330" y="750" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="r13" value="R13 最後の扉（収束演出へ）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="800" width="300" height="38" as="geometry" /></mxCell>
+        <mxCell id="reveal" value="アナグラム収束：断片 → Gedächtnis（抑圧Hが血色で嵌まる）→ VERLUST" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2d2540;strokeColor=#000000;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1"><mxGeometry x="320" y="852" width="320" height="42" as="geometry" /></mxCell>
+        <mxCell id="judge" value="30号室 確定の儀式&#10;推理3問（真犯人／凶器／あの夜の真相）→ 結論を直視 →［この記憶を、確定する］" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" vertex="1" parent="1"><mxGeometry x="310" y="912" width="340" height="56" as="geometry" /></mxCell>
 
-        <mxCell id="ch2" value="第2章 綻び（中→難・組み合わせる）" style="text;html=1;align=left;fontStyle=1;fontColor=#555555" vertex="1" parent="1"><mxGeometry x="30" y="446" width="220" height="20" as="geometry" /></mxCell>
-        <mxCell id="r5" value="R5 診察室 ★★★☆☆&#10;教：解釈層（数→文字）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="464" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r6" value="R6 記録室 ★★★☆☆&#10;教：論理／消去法" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="516" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r7" value="R7 廊下 ★★★★☆&#10;教：レッドヘリング（ミスリード）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="568" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r8" value="R8 鏡の間【章ボス・分岐②】 ★★★★☆&#10;ツイスト：肖像＝自分の顔（館＝記憶）" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="415" y="620" width="240" height="70" as="geometry" /></mxCell>
-        <mxCell id="b8d" value="否定（逃避 −1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="190" y="636" width="170" height="36" as="geometry" /></mxCell>
-        <mxCell id="b8a" value="受容（直面 +1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="700" y="636" width="180" height="36" as="geometry" /></mxCell>
-        <mxCell id="r9" value="R9 標本室 ★★★★☆&#10;合成チェーン（筒＝Cの鍵）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="700" width="210" height="42" as="geometry" /></mxCell>
+        <mxCell id="note_timer" value="脳死カウントダウン（全モード共通・全部屋で進行）&#10;ノーマル1500／タイマー900／ハード720秒&#10;0 になった瞬間 → Ending D（推理に到達できず）" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="20" y="1110" width="300" height="78" as="geometry" /></mxCell>
 
-        <mxCell id="ch3" value="第3章 真実（難・メタ／最小ヒント／時間圧）" style="text;html=1;align=left;fontStyle=1;fontColor=#555555" vertex="1" parent="1"><mxGeometry x="30" y="754" width="260" height="20" as="geometry" /></mxCell>
-        <mxCell id="r10" value="R10 監視室 ★★★★☆&#10;クロス結合＋タイマー" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="772" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r11" value="R11 手術室 ★★★★★&#10;メタ（部屋全体が暗号）＋最小ヒント" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="430" y="824" width="210" height="42" as="geometry" /></mxCell>
-        <mxCell id="r12" value="R12 証拠保管室【章ボス・分岐③】 ★★★★★&#10;全手がかり統合" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="415" y="876" width="240" height="70" as="geometry" /></mxCell>
-        <mxCell id="b12a" value="目を背ける（逃避 −1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="190" y="893" width="170" height="36" as="geometry" /></mxCell>
-        <mxCell id="b12c" value="暴く（直面 +1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="700" y="893" width="180" height="36" as="geometry" /></mxCell>
-        <mxCell id="r13" value="R13 最後の扉 ★★★★★&#10;超メタ（各章の鍵を結集）→『MEMORY』" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="425" y="956" width="220" height="42" as="geometry" /></mxCell>
+        <mxCell id="e_ap" value="A＋ 完璧な偽物（最も幸福で邪悪）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1"><mxGeometry x="730" y="896" width="300" height="40" as="geometry" /></mxCell>
+        <mxCell id="e_a" value="A 作話の綻び（無罪だが幻覚に苛まれる）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="730" y="948" width="300" height="40" as="geometry" /></mxCell>
+        <mxCell id="e_b" value="B 忘却の揺り籠（緊張病性昏睡・R1へループ）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="1"><mxGeometry x="730" y="1000" width="300" height="40" as="geometry" /></mxCell>
+        <mxCell id="e_c" value="C 断罪の重圧（真の告白が妄想扱い）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="730" y="1052" width="300" height="40" as="geometry" /></mxCell>
+        <mxCell id="e_s" value="S 深淵の白〔隠し〕（教授自殺・死体損壊・自らの目を潰す）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1"><mxGeometry x="730" y="1104" width="300" height="40" as="geometry" /></mxCell>
+        <mxCell id="e_true" value="True 白慈の審判〔隠し〕（罪を引き受け自首・人間への回帰）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1"><mxGeometry x="730" y="1156" width="300" height="40" as="geometry" /></mxCell>
+        <mxCell id="e_d" value="D 精神の死（脳死＝完全な喪失）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1"><mxGeometry x="730" y="1208" width="300" height="40" as="geometry" /></mxCell>
 
-        <mxCell id="final" value="最終室30 玄関ホール" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1"><mxGeometry x="430" y="1016" width="210" height="40" as="geometry" /></mxCell>
+        <mxCell id="ed_s_r1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="start" target="r1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_1_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r1" target="r2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_2_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r2" target="r3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_3_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r3" target="r4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_4_5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r4" target="r5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_5_6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r5" target="r6"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_6_7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r6" target="r7"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_7_8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r7" target="r8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_8_9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r8" target="r9"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_9_10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r9" target="r10"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_10_11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r10" target="r11"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_11_12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r11" target="r12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_12_13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r12" target="r13"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_13_rev" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="r13" target="reveal"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_rev_j" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1" edge="1" parent="1" source="reveal" target="judge"><mxGeometry relative="1" as="geometry" /></mxCell>
 
-        <mxCell id="dq1" value="推理① 犯人＝甥（注射器はミスリード）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="410" y="1074" width="250" height="34" as="geometry" /></mxCell>
-        <mxCell id="dq2" value="推理② 殺害時刻＝03:45" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="410" y="1112" width="250" height="34" as="geometry" /></mxCell>
-        <mxCell id="dq3" value="推理③ 凶器＝ナイフ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="410" y="1150" width="250" height="34" as="geometry" /></mxCell>
-        <mxCell id="dok" value="3問正解 → deduction_correct" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1"><mxGeometry x="410" y="1190" width="250" height="38" as="geometry" /></mxCell>
-        <mxCell id="choice" value="3つの選択肢" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1"><mxGeometry x="440" y="1248" width="160" height="64" as="geometry" /></mxCell>
+        <mxCell id="ej_ap" value="全作話正解＋逃避×3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82b366" edge="1" parent="1" source="judge" target="e_ap"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ej_a" value="全作話正解＋直面あり" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82b366" edge="1" parent="1" source="judge" target="e_a"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ej_b" value="作話ミス＋逃避×3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#b85450" edge="1" parent="1" source="judge" target="e_b"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ej_c" value="作話ミス＋直面あり" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d79b00" edge="1" parent="1" source="judge" target="e_c"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ej_s" value="凶器=シリンジ＋筒所持" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#9673a6" edge="1" parent="1" source="judge" target="e_s"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ej_true" value="全問=真実(自分)＋直面×3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#6c8ebf" edge="1" parent="1" source="judge" target="e_true"><mxGeometry relative="1" as="geometry" /></mxCell>
 
-        <mxCell id="memsc" value="記憶充足度 score（0〜100）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="30" y="1020" width="210" height="40" as="geometry" /></mxCell>
-        <mxCell id="confm" value="confront メーター（−3〜+3）&#10;R4 / R8 / R12 の選択合計" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="30" y="1070" width="210" height="56" as="geometry" /></mxCell>
-        <mxCell id="effsc" value="実効スコア = 記憶 + confront×5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1"><mxGeometry x="30" y="1136" width="210" height="46" as="geometry" /></mxCell>
-        <mxCell id="note_ev" value="R9標本室『金属製の筒』＝遺留品 → Cの条件" style="shape=note;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;align=left;verticalAlign=top" vertex="1" parent="1"><mxGeometry x="30" y="1192" width="210" height="56" as="geometry" /></mxCell>
+        <mxCell id="ed_timer_d" value="0 で発動" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;strokeColor=#b85450" edge="1" parent="1" source="note_timer" target="e_d"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed_loop" value="記憶初期化ループ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;strokeColor=#b85450" edge="1" parent="1" source="e_b" target="r1"><mxGeometry relative="1" as="geometry" /></mxCell>
 
-        <mxCell id="c1" value="① 警察に通報" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="360" y="1340" width="160" height="34" as="geometry" /></mxCell>
-        <mxCell id="c2" value="② 暖炉へ逃げる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="360" y="1500" width="160" height="34" as="geometry" /></mxCell>
-        <mxCell id="c3" value="③ 裏口から出る" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="360" y="1640" width="160" height="34" as="geometry" /></mxCell>
-
-        <mxCell id="eAp" value="A＋ 真・無実の証明（明晰な監獄）&#10;通報＋推理正解＋実効70以上" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1"><mxGeometry x="640" y="1320" width="300" height="46" as="geometry" /></mxCell>
-        <mxCell id="eA" value="A 無実の証明（完璧な偽物）&#10;通報＋実効70以上" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="640" y="1372" width="300" height="40" as="geometry" /></mxCell>
-        <mxCell id="eAd" value="A' 疑惑の保護&#10;通報＋実効70未満" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="640" y="1414" width="300" height="40" as="geometry" /></mxCell>
-        <mxCell id="eB" value="B 終わらない逃亡（ループ→R1）&#10;暖炉＋実効40未満" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="1"><mxGeometry x="640" y="1480" width="300" height="46" as="geometry" /></mxCell>
-        <mxCell id="eBd" value="B' 逃亡の代償&#10;暖炉＋実効40以上" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbe0df;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="640" y="1532" width="300" height="40" as="geometry" /></mxCell>
-        <mxCell id="eC" value="C 共犯者の告発&#10;裏口＋遺留品(筒)あり" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" vertex="1" parent="1"><mxGeometry x="640" y="1620" width="300" height="40" as="geometry" /></mxCell>
-        <mxCell id="eCd" value="C' ただの逃走&#10;裏口＋遺留品なし" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0de;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="640" y="1664" width="300" height="40" as="geometry" /></mxCell>
-
-        <mxCell id="p1" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="start" target="modeSel"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p2" value="決定" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="modeSel" target="r1"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p3" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r1" target="r2"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p4" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r2" target="r3"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p5" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r3" target="r4"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p6" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r4" target="b4h"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p7" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r4" target="b4e"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p8" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r4" target="r5"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p9" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r5" target="r6"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p10" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r6" target="r7"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p11" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r7" target="r8"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p12" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r8" target="b8d"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p13" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r8" target="b8a"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p14" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r8" target="r9"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p15" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r9" target="r10"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p16" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r10" target="r11"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p17" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r11" target="r12"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p18" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r12" target="b12a"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p19" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r12" target="b12c"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p20" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r12" target="r13"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p21" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="r13" target="final"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p22" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="final" target="dq1"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p23" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="dq1" target="dq2"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p24" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="dq2" target="dq3"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p25" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="dq3" target="dok"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p26" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="dok" target="choice"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p27" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="choice" target="c1"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p28" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="choice" target="c2"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="p29" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="choice" target="c3"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="x1" value="推理正解+実効70+" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="c1" target="eAp"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="x2" value="実効70+" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="c1" target="eA"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="x3" value="実効70未満" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="c1" target="eAd"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="x4" value="実効40未満" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="c2" target="eB"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="x5" value="実効40+" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="c2" target="eBd"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="x6" value="筒あり" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="c3" target="eC"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="x7" value="筒なし" style="edgeStyle=orthogonalEdgeStyle;html=1" edge="1" parent="1" source="c3" target="eCd"><mxGeometry relative="1" as="geometry" /></mxCell>
-
-        <mxCell id="cf1" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#9673a6" edge="1" parent="1" source="b4h" target="confm"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="cf2" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#9673a6" edge="1" parent="1" source="b8d" target="confm"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="cf3" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#9673a6" edge="1" parent="1" source="b12a" target="confm"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="cf4" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#9673a6" edge="1" parent="1" source="confm" target="effsc"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="cf5" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#9673a6" edge="1" parent="1" source="memsc" target="effsc"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="cf6" value="判定に使用" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#9673a6" edge="1" parent="1" source="effsc" target="choice"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="loop" value="ループ：R1へ" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#b85450" edge="1" parent="1" source="eB" target="r1"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="evedge" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#d79b00" edge="1" parent="1" source="note_ev" target="c3"><mxGeometry relative="1" as="geometry" /></mxCell>
       </root>
     </mxGraphModel>
   </diagram>

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../content_repository.dart';
+import '../deep_save_service.dart';
 import '../endings_eval.dart';
 import '../models.dart';
 import 'deep_room_screen.dart';
@@ -17,13 +18,17 @@ enum _Phase { loading, room, reveal, judgment, ending }
 /// 結末は evaluateConfabEnding（離散ツリー）で決定し、作話完全度 I を VerdictScreen に表示。
 class DeepCampaignFlow extends StatefulWidget {
   final String mode;
-  const DeepCampaignFlow({super.key, this.mode = 'normal'});
+  final DeepSavedRun? resume; // 中断からの再開（null＝新規）
+  const DeepCampaignFlow({super.key, this.mode = 'normal', this.resume});
 
   @override
   State<DeepCampaignFlow> createState() => _DeepCampaignFlowState();
 }
 
-class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
+class _DeepCampaignFlowState extends State<DeepCampaignFlow>
+    with WidgetsBindingObserver {
+  final DeepSaveService _saveService = DeepSaveService();
+
   static const _manifest = 'data/deep_rooms/campaign.json';
   static const _judgmentPath = 'data/deep_rooms/judgment.json';
 
@@ -58,17 +63,47 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _boot();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _ticker?.cancel();
     _remaining.dispose();
     super.dispose();
   }
 
-  Future<void> _boot() async {
+  /// バックグラウンド遷移＝タイマー停止＋オートセーブ。復帰＝タイマー再開。
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (mounted &&
+          _phase != _Phase.ending &&
+          _phase != _Phase.loading &&
+          _repo != null) {
+        _startTicker();
+      }
+    } else {
+      _ticker?.cancel();
+      _autosave();
+    }
+  }
+
+  /// 部屋境界チェックポイントを保存（room フェーズのみ）。fire-and-forget。
+  void _autosave() {
+    if (_repo == null || _phase != _Phase.room) return;
+    _saveService.save(
+      mode: widget.mode,
+      idx: _idx,
+      total: _total,
+      remaining: _remaining.value,
+      gameState: _gs,
+    );
+  }
+
+  Future<void> _boot({bool fresh = false}) async {
     final repo = await ContentRepository.load();
     final man = jsonDecode(await rootBundle.loadString(_manifest))
         as Map<String, dynamic>;
@@ -86,30 +121,39 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
       if (id != null) mem[id] = 'unknown';
     }
     final dur = _durationFor(widget.mode);
+    final r = fresh ? null : widget.resume; // ループ(B)再起動時は resume を無視して頭から
     setState(() {
       _repo = repo;
       _rooms = rooms;
       _judgment = judgment;
-      _gs = GameState(
-        mode: widget.mode,
-        memories: mem,
-        items: [],
-        flags: {
-          'has_culprit_evidence': false,
-          'deduction_correct': false,
-          'deduction_answered': false,
-          'all_truth': false,
-          'syringe_chosen': false,
-        },
-        meters: {},
-      );
-      _total = dur;
-      _remaining.value = dur;
+      if (r != null) {
+        _gs = r.gameState;
+        _total = r.total;
+        _remaining.value = r.remaining;
+        _idx = r.idx.clamp(0, rooms.length - 1);
+      } else {
+        _gs = GameState(
+          mode: widget.mode,
+          memories: mem,
+          items: [],
+          flags: {
+            'has_culprit_evidence': false,
+            'deduction_correct': false,
+            'deduction_answered': false,
+            'all_truth': false,
+            'syringe_chosen': false,
+          },
+          meters: {},
+        );
+        _total = dur;
+        _remaining.value = dur;
+        _idx = 0;
+      }
       _brainDead = false;
       _ending = null;
       _phase = _Phase.room;
-      _idx = 0;
     });
+    _autosave();
     _startTicker();
   }
 
@@ -134,6 +178,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
 
   void _onBrainDeath() {
     if (_phase == _Phase.ending) return;
+    _saveService.clear(); // 結末到達＝セーブ破棄
     _brainDead = true;
     // 部屋途中で脳死なら点灯済みのみ。R13収束以降(reveal/judgment)は全10文字。
     _earnedLetters = _phase == _Phase.room ? _litCount(_idx) : 10;
@@ -153,6 +198,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
         _phase = _Phase.reveal; // R13クリア → アナグラム収束演出へ
       }
     });
+    _autosave(); // 次の部屋頭でチェックポイント（reveal遷移時は no-op）
   }
 
   void _onRevealDone() {
@@ -162,6 +208,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
 
   void _onJudged() {
     if (_phase == _Phase.ending) return;
+    _saveService.clear(); // 結末到達＝セーブ破棄
     _ticker?.cancel();
     _tAtJudgment = _remaining.value < 0 ? 0 : _remaining.value;
     _earnedLetters = 10; // R13収束で抑圧されたHも露見＝GEDÄCHTNIS全10文字
@@ -174,7 +221,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
 
   void _restartOrTitle() {
     if (_ending?.loopToStage != null) {
-      _boot(); // 忘却の揺り籠：回廊の最初へ戻る
+      _boot(fresh: true); // 忘却の揺り籠：resumeを無視して回廊の最初へ
     } else {
       Navigator.of(context).maybePop();
     }

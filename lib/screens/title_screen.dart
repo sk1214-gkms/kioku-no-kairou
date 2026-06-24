@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../deep_save_service.dart';
 import '../save_service.dart';
 import 'deep_campaign_flow.dart';
 import 'game_flow.dart';
@@ -14,7 +15,9 @@ class TitleScreen extends StatefulWidget {
 
 class _TitleScreenState extends State<TitleScreen> {
   final SaveService _save = SaveService();
+  final DeepSaveService _deepSave = DeepSaveService();
   SavedRun? _saved;
+  DeepSavedRun? _deepSaved;
   bool _loading = true;
 
   @override
@@ -25,11 +28,29 @@ class _TitleScreenState extends State<TitleScreen> {
 
   Future<void> _reload() async {
     final s = await _save.load();
+    final d = await _deepSave.load();
     if (!mounted) return;
     setState(() {
       _saved = s;
+      _deepSaved = d;
       _loading = false;
     });
+  }
+
+  Future<void> _deepNew(String mode) async {
+    await _deepSave.clear();
+    if (!mounted) return;
+    await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => DeepCampaignFlow(mode: mode)));
+    _reload();
+  }
+
+  Future<void> _deepContinue() async {
+    final s = _deepSaved;
+    if (s == null) return;
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => DeepCampaignFlow(mode: s.mode, resume: s)));
+    _reload();
   }
 
   Future<void> _newGame(String mode) async {
@@ -111,13 +132,26 @@ class _TitleScreenState extends State<TitleScreen> {
                   _modeButton(
                       'ハード', '謎の言語「回廊文字」＋暗号解読書で解く上級モード。', 'hard'),
                   const SizedBox(height: 16),
+                  if (_deepSaved != null) ...[
+                    SizedBox(
+                      width: 320,
+                      child: OutlinedButton(
+                        onPressed: _deepContinue,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                              'つづきから（記憶の回廊・第${_deepSaved!.idx + 1}室）',
+                              style: const TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   SizedBox(
                     width: 320,
                     child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  const DeepCampaignFlow(mode: 'normal'))),
+                      onPressed: () => _deepNew('normal'),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 12),
                         child: Text('🆕 本編・再設計（深い部屋／開発中・第1章）',

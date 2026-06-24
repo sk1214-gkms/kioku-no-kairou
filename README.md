@@ -13,6 +13,7 @@
 - [アセット仕様書](docs/アセット仕様書.md) … **必要な画像/イラスト/音の詳細一覧（13室4方向）**
 - [テスト手順（解答キー付き）](docs/テスト手順_第1章.md)
 - [**iPhone配信手順（Windows＋iPhoneのみ・Mac不要）**](docs/iPhone配信手順_Windowsのみ.md) … TestFlight配信の段取り
+- [**Stable Diffusion（ローカル）生成手順**](docs/StableDiffusion_ローカル生成手順.md) … 画像アセットをローカルSDで作る（Windows）
 
 ## データ（Flutter の assets/data/ に配置して読み込む想定）
 | ファイル | 役割 |

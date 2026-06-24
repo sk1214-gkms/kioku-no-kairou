@@ -14,6 +14,7 @@
 - [テスト手順（解答キー付き）](docs/テスト手順_第1章.md)
 - [**iPhone配信手順（Windows＋iPhoneのみ・Mac不要）**](docs/iPhone配信手順_Windowsのみ.md) … TestFlight配信の段取り
 - [**Stable Diffusion（ローカル）生成手順**](docs/StableDiffusion_ローカル生成手順.md) … 画像アセットをローカルSDで作る（Windows）
+- [**Adobe Firefly 生成手順**](docs/AdobeFirefly_生成手順.md) … 商用安全なFirefly＋Photoshopで作る（流血表現の回避策つき）
 
 ## データ（Flutter の assets/data/ に配置して読み込む想定）
 | ファイル | 役割 |

@@ -40,8 +40,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   final List<String> _selected = [];
   String _msg = '';
   bool _done = false;
+  int _hintLevel = 0; // 公開済みヒント段数（最大3）
 
   Map<String, dynamic> get _room => widget.room;
+
+  List<String> get _hints => ((_room['hints'] as List?) ?? []).cast<String>();
 
   @override
   void initState() {
@@ -256,6 +259,51 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       }
     }
     setState(() => _msg = 'この2つは組み合わせられないようだ。');
+  }
+
+  // ---- ヒント／スキップ（詰み防止）----
+  void _showHint() {
+    final hints = _hints;
+    if (hints.isEmpty) {
+      setState(() => _msg = 'この部屋にヒントは無いようだ…');
+      return;
+    }
+    if (_hintLevel >= hints.length) {
+      _zoom('ヒント ${hints.length}/${hints.length}', hints.last);
+      return;
+    }
+    final next = _hintLevel + 1;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('ヒント $next / ${hints.length}'),
+        content: const Text('広告を見て、次のヒントを表示しますか？'),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: const Text('やめる')),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              if (!mounted) return;
+              // 広告はスタブ（no-op）。視聴完了とみなしてヒントを解放。
+              setState(() => _hintLevel = next);
+              _zoom('ヒント $next / ${hints.length}', hints[next - 1]);
+            },
+            child: const Text('見る'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _skip() {
+    if (_done) return;
+    _done = true;
+    if (widget.onCleared != null) {
+      widget.onCleared!();
+    } else {
+      Navigator.of(context).maybePop();
+    }
   }
 
   // ---- クリア／時間切れ／分岐 ----
@@ -534,6 +582,28 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             padding: EdgeInsets.only(top: 2),
             child: Text('アイテムをタップで選択 → 対象に使う／2つ選んで「合成」',
                 style: TextStyle(color: Colors.white38, fontSize: 10)),
+          ),
+          Row(
+            children: [
+              TextButton.icon(
+                onPressed: _showHint,
+                icon: const Icon(Icons.lightbulb_outline,
+                    size: 16, color: Colors.amberAccent),
+                label: Text(
+                  _hints.isEmpty
+                      ? 'ヒント'
+                      : 'ヒント（$_hintLevel/${_hints.length}・広告）',
+                  style: const TextStyle(color: Colors.amberAccent, fontSize: 12),
+                ),
+              ),
+              const Spacer(),
+              if (_hints.isNotEmpty && _hintLevel >= _hints.length)
+                TextButton(
+                  onPressed: _skip,
+                  child: const Text('……諦めて先へ進む',
+                      style: TextStyle(color: Colors.white38, fontSize: 12)),
+                ),
+            ],
           ),
         ],
       ),

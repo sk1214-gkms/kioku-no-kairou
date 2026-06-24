@@ -1,51 +1,87 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import '../models.dart';
 import '../widgets/design_canvas.dart';
 
-/// 「深い部屋」試作：東西南北の4視点 × ネスト調査（サブ画面）× アイテム合成 × 多段ロック。
-/// 既存の30部屋とは独立。タイトルから単体で起動して手触りを確認する。
+/// 深い部屋（東西南北4視点 × ネスト調査 × アイテム合成 × 多段ロック）。
+/// キャンペーンから room データ＋GameState を注入して使う（onCleared/onTimedOut を呼ぶ）。
+/// デモ用途では gameState/onCleared を省略でき、その場合は脱出でタイトルへ戻る。
 class DeepRoomScreen extends StatefulWidget {
-  final String path;
-  const DeepRoomScreen({super.key, this.path = 'data/deep_rooms/study.json'});
+  final Map<String, dynamic> room;
+  final GameState? gameState;
+  final String mode; // normal | hard | timer
+  final bool timed;
+  final int seconds;
+  final VoidCallback? onCleared;
+  final VoidCallback? onTimedOut;
+
+  const DeepRoomScreen({
+    super.key,
+    required this.room,
+    this.gameState,
+    this.mode = 'normal',
+    this.timed = false,
+    this.seconds = 240,
+    this.onCleared,
+    this.onTimedOut,
+  });
 
   @override
   State<DeepRoomScreen> createState() => _DeepRoomScreenState();
 }
 
 class _DeepRoomScreenState extends State<DeepRoomScreen> {
-  Map<String, dynamic>? _room;
   static const _dirs = ['north', 'east', 'south', 'west'];
   int _dirIdx = 0;
-  final List<Map<String, dynamic>> _subStack = []; // ネスト中のサブ画面
-  final Map<String, String> _states = {}; // 全画面共通の状態（lamp=on, safe=open 等）
+  final List<Map<String, dynamic>> _subStack = [];
+  final Map<String, String> _states = {};
   final List<String> _items = [];
-  final List<String> _selected = []; // 選択中アイテム（最大2／使用・合成用）
+  final List<String> _selected = [];
   String _msg = '';
+  Timer? _timer;
+  int _remaining = 0;
+  bool _done = false;
+
+  Map<String, dynamic> get _room => widget.room;
 
   @override
   void initState() {
     super.initState();
-    _load();
+    _msg = _room['intro'] as String? ?? '四方の壁を調べよう。';
+    if (widget.timed) {
+      _remaining = widget.seconds;
+      _startTimer();
+    }
   }
 
-  Future<void> _load() async {
-    final raw = await rootBundle.loadString(widget.path);
-    final m = jsonDecode(raw) as Map<String, dynamic>;
-    setState(() {
-      _room = m;
-      _msg = m['intro'] as String? ?? '';
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
+      setState(() => _remaining -= 1);
+      if (_remaining <= 0) {
+        t.cancel();
+        _timeout();
+      }
     });
   }
 
   Map<String, String> get _itemLabels =>
-      ((_room!['item_labels'] as Map?)?.cast<String, String>()) ?? {};
+      ((_room['item_labels'] as Map?)?.cast<String, String>()) ?? {};
   String _itemLabel(String id) => _itemLabels[id] ?? id;
 
   List<Map<String, dynamic>> get _objects {
     final src = _subStack.isNotEmpty
         ? _subStack.last
-        : ((_room!['views'] as Map)[_dirs[_dirIdx]] as Map);
+        : ((_room['views'] as Map)[_dirs[_dirIdx]] as Map);
     return ((src['objects'] as List?) ?? [])
         .map((e) => (e as Map).cast<String, dynamic>())
         .toList();
@@ -53,7 +89,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
 
   String get _placeLabel {
     if (_subStack.isNotEmpty) return _subStack.last['label'] as String? ?? '拡大';
-    final v = (_room!['views'] as Map)[_dirs[_dirIdx]] as Map;
+    final v = (_room['views'] as Map)[_dirs[_dirIdx]] as Map;
     return v['label'] as String? ?? _dirs[_dirIdx];
   }
 
@@ -66,16 +102,13 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     return true;
   }
 
-  void _rotate(int d) {
-    setState(() {
-      _dirIdx = (_dirIdx + d) % 4;
-      if (_dirIdx < 0) _dirIdx += 4;
-    });
-  }
+  void _rotate(int d) => setState(() {
+        _dirIdx = (_dirIdx + d) % 4;
+        if (_dirIdx < 0) _dirIdx += 4;
+      });
 
   void _tap(Map<String, dynamic> o) {
     final id = o['id'] as String;
-    // 1) トグル（常に操作可）
     if (o['toggle'] == true) {
       final st = (o['states'] as List).cast<String>();
       final cur = _states[id] ?? st.first;
@@ -86,12 +119,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       });
       return;
     }
-    // 2) 前提状態のゲート
     if (!_stateOk(o['requires_state'] as List?)) {
-      setState(() => _msg = '今は反応しないようだ…（何かが足りない）');
+      setState(() => _msg = '今は反応しないようだ…');
       return;
     }
-    // 3) 脱出（win）：必要アイテムを選んで使う
     if (o['win'] == true) {
       final need = o['requires_item'] as String?;
       if (need != null && !_selected.contains(need)) {
@@ -101,7 +132,6 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       _win();
       return;
     }
-    // 4) ネスト（サブ画面へ）
     if (o['subview'] != null) {
       setState(() {
         _subStack.add((o['subview'] as Map).cast<String, dynamic>());
@@ -109,17 +139,16 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       });
       return;
     }
-    // 5) ロック（暗証）
     if (o['lock'] != null) {
-      final solved = _states[id] == (o['lock']['on_solve_state'] ?? 'open');
+      final lock = (o['lock'] as Map).cast<String, dynamic>();
+      final solved = _states[id] == (lock['on_solve_state'] ?? 'open');
       if (solved) {
-        _zoom(o['label'] as String, o['lock']['reveal'] as String? ?? '開いている。');
+        _zoom(o['label'] as String, lock['reveal'] as String? ?? '開いている。');
       } else {
-        _showLock(o);
+        _showLock(o, lock);
       }
       return;
     }
-    // 6) アイテムを使う
     final need = o['requires_item'] as String?;
     if (need != null) {
       final usedState = o['on_use_state'] as String?;
@@ -136,11 +165,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           _msg = o['on_use_reveal'] as String? ?? '${_itemLabel(need)} を使った。';
         });
       } else {
-        setState(() => _msg = '${_itemLabel(need)} が必要だ（下のアイテムを選んでからタップ）。');
+        setState(() => _msg = '${_itemLabel(need)} が必要だ（下で選んでからタップ）。');
       }
       return;
     }
-    // 7) アイテム入手
     final g = o['gives'] as String?;
     if (g != null) {
       setState(() {
@@ -153,7 +181,6 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       });
       return;
     }
-    // 8) 調査
     _zoom(o['label'] as String? ?? '', o['reveal'] as String? ?? '特に何もないようだ。');
   }
 
@@ -171,8 +198,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     );
   }
 
-  void _showLock(Map<String, dynamic> o) {
-    final lock = (o['lock'] as Map).cast<String, dynamic>();
+  void _showLock(Map<String, dynamic> o, Map<String, dynamic> lock) {
     final ctrl = TextEditingController();
     final isNum = (lock['type'] as String? ?? 'number') == 'number';
     showDialog<void>(
@@ -192,18 +218,22 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
               final ok = ctrl.text.trim().toLowerCase() ==
                   (lock['answer'] as String).toLowerCase();
               Navigator.pop(ctx);
-              if (ok) {
-                setState(() {
-                  _states[o['id'] as String] =
-                      lock['on_solve_state'] as String? ?? 'open';
-                  final g = lock['on_solve_gives'] as String?;
-                  if (g != null && !_items.contains(g)) _items.add(g);
-                  _msg = lock['reveal'] as String? ?? '開いた。';
-                });
-                _zoom(o['label'] as String, lock['reveal'] as String? ?? '開いた。');
-              } else {
+              if (!ok) {
                 setState(() => _msg = '違うようだ…');
+                return;
               }
+              if (lock['win'] == true) {
+                _win();
+                return;
+              }
+              setState(() {
+                _states[o['id'] as String] =
+                    lock['on_solve_state'] as String? ?? 'open';
+                final g = lock['on_solve_gives'] as String?;
+                if (g != null && !_items.contains(g)) _items.add(g);
+                _msg = lock['reveal'] as String? ?? '開いた。';
+              });
+              _zoom(o['label'] as String, lock['reveal'] as String? ?? '開いた。');
             },
             child: const Text('決定'),
           ),
@@ -228,11 +258,12 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       setState(() => _msg = '合成するアイテムを2つ選ぼう。');
       return;
     }
-    final recipes = (_room!['combines'] as List?) ?? [];
-    for (final r0 in recipes) {
+    for (final r0 in (_room['combines'] as List?) ?? []) {
       final r = (r0 as Map).cast<String, dynamic>();
       final pair = {r['a'], r['b']};
-      if (pair.containsAll(_selected) && _selected.toSet().containsAll(pair)) {
+      if (pair.length == 2 &&
+          _selected.toSet().containsAll(pair) &&
+          pair.containsAll(_selected)) {
         setState(() {
           _items.remove(r['a']);
           _items.remove(r['b']);
@@ -247,37 +278,139 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     setState(() => _msg = 'この2つは組み合わせられないようだ。');
   }
 
+  // ---- クリア／時間切れ／分岐 ----
   void _win() {
+    if (_done) return;
+    _done = true;
+    _timer?.cancel();
+    final branch = _room['branch'] as Map?;
+    if (branch != null) {
+      _showBranch(branch.cast<String, dynamic>());
+    } else {
+      _clear(null);
+    }
+  }
+
+  void _showBranch(Map<String, dynamic> b) {
+    final opts = (b['options'] as List)
+        .map((e) => (e as Map).cast<String, dynamic>())
+        .toList();
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        title: const Text('― 脱出成功 ―'),
-        content: const Text(
-            '四方の謎を解き、道具を組み合わせ、扉を開けた。\n（これは「深い部屋」試作のクリアです）'),
+        title: const Text('扉の前で'),
+        content: Text(b['prompt'] as String? ?? 'どうする？'),
+        actions: [
+          for (final o in opts)
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                _clear(o);
+              },
+              child: Text(o['label'] as String),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _clear(Map<String, dynamic>? choice) {
+    final gs = widget.gameState;
+    if (gs != null) {
+      final mid = _room['memory_id'] as String?;
+      if (mid != null) gs.memories[mid] = 'full';
+      (_room['grants_flags'] as Map?)
+          ?.forEach((k, v) => gs.flags[k.toString()] = v as bool);
+      if (choice != null) {
+        final meter = (_room['branch']?['meter'] as String?) ?? 'confront';
+        gs.meters[meter] =
+            (gs.meters[meter] ?? 0) + ((choice['delta'] as num?)?.toInt() ?? 0);
+        final fl = choice['flag'] as String?;
+        if (fl != null) gs.flags[fl] = true;
+      }
+    }
+    final txt = choice?['text'] as String? ??
+        _room['clear_text'] as String? ??
+        '——四方の謎を解き、扉を開けた。';
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text('脱出'),
+        content: SingleChildScrollView(child: Text(txt)),
         actions: [
           FilledButton(
             onPressed: () {
               Navigator.pop(ctx);
-              Navigator.of(context).maybePop();
+              if (widget.onCleared != null) {
+                widget.onCleared!();
+              } else {
+                Navigator.of(context).maybePop();
+              }
             },
-            child: const Text('タイトルへ'),
+            child: const Text('次へ'),
           ),
         ],
       ),
     );
   }
 
+  void _timeout() {
+    if (_done) return;
+    _done = true;
+    final gs = widget.gameState;
+    final mid = _room['memory_id'] as String?;
+    if (gs != null && mid != null) gs.memories[mid] = 'corrupted';
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text('― 時間切れ ―'),
+        content: Text(_room['timeout_text'] as String? ??
+            '時間切れ。記憶が虫食いのまま、次へ流される。'),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              if (widget.onTimedOut != null) {
+                widget.onTimedOut!();
+              } else {
+                Navigator.of(context).maybePop();
+              }
+            },
+            child: const Text('次へ進む'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _fmt(int s) {
+    final m = (s ~/ 60).toString();
+    final sec = (s % 60).toString().padLeft(2, '0');
+    return '$m:$sec';
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (_room == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
     final inSub = _subStack.isNotEmpty;
     return Scaffold(
       appBar: AppBar(
-        title: Text('${_room!['name']}  ［$_placeLabel］'),
+        title: Text('${_room['name']}  ［$_placeLabel］'),
         actions: [
+          if (widget.timed)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(_fmt(_remaining < 0 ? 0 : _remaining),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            _remaining <= 15 ? Colors.redAccent : Colors.white)),
+              ),
+            ),
           if (inSub)
             TextButton(
               onPressed: () => setState(() => _subStack.removeLast()),
@@ -286,12 +419,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           else ...[
             IconButton(
                 onPressed: () => _rotate(-1),
-                icon: const Icon(Icons.chevron_left),
-                tooltip: '左を向く'),
+                icon: const Icon(Icons.chevron_left)),
             IconButton(
                 onPressed: () => _rotate(1),
-                icon: const Icon(Icons.chevron_right),
-                tooltip: '右を向く'),
+                icon: const Icon(Icons.chevron_right)),
           ],
         ],
       ),
@@ -389,10 +520,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 ),
               ),
               const SizedBox(width: 8),
-              FilledButton.tonal(
-                onPressed: _combine,
-                child: const Text('合成'),
-              ),
+              FilledButton.tonal(onPressed: _combine, child: const Text('合成')),
             ],
           ),
           const Padding(

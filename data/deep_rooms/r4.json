@@ -1,0 +1,34 @@
+{
+  "id": "r4",
+  "name": "R4 書斎",
+  "memory_id": "mem_r4",
+  "intro": "書斎。複数の壁の手がかりを組み合わせ、金庫を開けて脱出せよ。（仮）",
+  "item_labels": { "item_knob": "ドアノブ" },
+  "branch": {
+    "meter": "confront",
+    "prompt": "外でサイレンが鳴る。証拠をどうする？",
+    "options": [
+      { "label": "隠す（逃避）", "delta": -1, "flag": "s_r4_evade", "text": "証拠を隠し、私は先へ進んだ。（仮）" },
+      { "label": "調べる（直面）", "delta": 1, "flag": "s_r4_confront", "text": "恐怖を抑え、私は証拠を調べた。（仮）" }
+    ]
+  },
+  "clear_text": "ドアノブを取り付け、扉が開いた。（仮）",
+  "views": {
+    "north": { "label": "北：肖像画", "objects": [
+      { "id": "portrait", "rect": [110, 120, 140, 150], "label": "氷室の肖像", "reveal": "獣の数字：熊=3 鷲=1 狼=8。額の裏に金庫がありそうだ。",
+        "subview": { "label": "肖像の裏", "objects": [
+          { "id": "safe", "rect": [110, 160, 140, 150], "label": "金庫",
+            "lock": { "type": "number", "answer": "831", "on_solve_state": "open", "on_solve_gives": "item_knob", "reveal": "金庫が開き、ドアノブを入手。" } }
+        ] } }
+    ] },
+    "west": { "label": "西：暗号パネル", "objects": [
+      { "id": "order", "rect": [80, 160, 160, 120], "label": "暗号パネル", "reveal": "並びの指示：[狼][熊][鷲]。（北の数字と組み合わせよ）" }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉の取付部", "requires_item": "item_knob", "win": true, "reveal": "ドアノブの無い扉。取り付ければ開きそうだ。" }
+    ] },
+    "east": { "label": "東：本棚", "objects": [
+      { "id": "books", "rect": [80, 160, 150, 200], "label": "本棚", "reveal": "蔵書がびっしり。（仮）" }
+    ] }
+  }
+}

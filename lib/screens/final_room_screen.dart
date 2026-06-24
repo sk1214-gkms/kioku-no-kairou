@@ -119,8 +119,10 @@ class _FinalRoomScreenState extends State<FinalRoomScreen> {
 
   List<Widget> _optionsFor(Map<String, dynamic> q) {
     final reqs = ((q['requires_memories'] as List?) ?? []).cast<String>();
+    final mems = widget.gameState.memories;
+    // そのmemoryが本キャンペーンに存在しない場合はゲートしない（深い部屋キャンペーン互換）
     final available =
-        reqs.every((m) => widget.gameState.memories[m] == 'full');
+        reqs.every((m) => !mems.containsKey(m) || mems[m] == 'full');
     final options =
         (q['options'] as List).map((e) => (e as Map).cast<String, dynamic>());
     return options.map((o) {

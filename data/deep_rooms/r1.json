@@ -1,0 +1,26 @@
+{
+  "id": "r1",
+  "name": "R1 白い部屋",
+  "memory_id": "mem_r1",
+  "intro": "白い部屋で目覚めた。両手が赤い。四方を調べて脱出せよ。（物語は仮）",
+  "item_labels": { "item_r1_key": "小さな鍵" },
+  "clear_text": "扉が開いた。薄暗い廊下が続く。（仮）",
+  "timeout_text": "時間切れ。何も掴めぬまま、次へ流される。（仮）",
+  "views": {
+    "north": { "label": "北：洗面台", "objects": [
+      { "id": "washstand", "rect": [110, 170, 140, 150], "label": "洗面台", "reveal": "古い洗面台。下の扉が少し開いている。",
+        "subview": { "label": "洗面台の下", "objects": [
+          { "id": "r1key", "rect": [120, 180, 110, 110], "label": "奥の小箱", "gives": "item_r1_key", "reveal": "奥に小さな鍵が落ちていた。" }
+        ] } }
+    ] },
+    "east": { "label": "東：ベッド", "objects": [
+      { "id": "bed", "rect": [80, 200, 200, 140], "label": "ベッド", "reveal": "簡素なベッド。シーツに点々と血の染み。（仮）" }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉", "requires_item": "item_r1_key", "win": true, "reveal": "鍵のかかった扉。鍵が要る。" }
+    ] },
+    "west": { "label": "西：窓", "objects": [
+      { "id": "window", "rect": [110, 150, 140, 160], "label": "鉄格子の窓", "reveal": "窓は鉄格子。外は深い霧。（仮）" }
+    ] }
+  }
+}

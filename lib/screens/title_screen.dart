@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../save_service.dart';
-import 'deep_room_screen.dart';
+import 'deep_campaign_flow.dart';
 import 'game_flow.dart';
 
 /// タイトル＋モード選択。ここで選んだモードが体験（記憶・結末）を変える。
@@ -116,11 +116,12 @@ class _TitleScreenState extends State<TitleScreen> {
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (_) => const DeepRoomScreen())),
+                              builder: (_) =>
+                                  const DeepCampaignFlow(mode: 'normal'))),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Text('🔍 深い部屋（試作）',
-                            style: TextStyle(fontSize: 14)),
+                        child: Text('🆕 本編・再設計（深い部屋／開発中・第1章）',
+                            style: TextStyle(fontSize: 13)),
                       ),
                     ),
                   ),

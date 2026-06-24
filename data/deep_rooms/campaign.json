@@ -1,0 +1,10 @@
+{
+  "title": "記憶の回廊（再設計・深い部屋キャンペーン）",
+  "rooms": [
+    "data/deep_rooms/r1.json",
+    "data/deep_rooms/r2.json",
+    "data/deep_rooms/r3.json",
+    "data/deep_rooms/r4.json"
+  ],
+  "_note": "第1章(R1-R4)のみ。R5-R13は順次追加。memory_id から記憶を構築し、最終室→7エンディングへ接続。"
+}

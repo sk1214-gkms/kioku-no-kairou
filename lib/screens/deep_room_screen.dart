@@ -178,6 +178,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         } else {
           _msg = 'もう手に入れた。';
         }
+        // 永続フラグ（例：隠しの筒→has_culprit_evidence）を立てる
+        final sf = o['set_flag'] as String?;
+        if (sf != null && widget.gameState != null) {
+          widget.gameState!.flags[sf] = true;
+        }
       });
       return;
     }

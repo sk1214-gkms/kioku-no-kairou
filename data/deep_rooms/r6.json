@@ -1,0 +1,21 @@
+{
+  "id": "r6",
+  "name": "R6 記録室",
+  "memory_id": "mem_r6",
+  "intro": "（仮）論理：証言から消去法で犯人を絞れ。",
+  "clear_text": "数字錠が外れた。（仮）",
+  "views": {
+    "north": { "label": "北：容疑者表", "objects": [
+      { "id": "list", "rect": [100, 140, 180, 160], "label": "容疑者表", "reveal": "容疑者の暗証：甲=7263 ／ 乙=4150 ／ 丙=9982。" }
+    ] },
+    "east": { "label": "東：証言A", "objects": [
+      { "id": "t1", "rect": [90, 170, 150, 120], "label": "証言A", "reveal": "『甲は19時、別室にいた』＝甲は除外。" }
+    ] },
+    "west": { "label": "西：証言B", "objects": [
+      { "id": "t2", "rect": [100, 170, 150, 120], "label": "証言B", "reveal": "『乙は厨房で目撃された』＝乙は除外。" }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉（数字錠）", "lock": { "type": "number", "answer": "9982", "win": true }, "reveal": "残った容疑者の暗証を入れよ。" }
+    ] }
+  }
+}

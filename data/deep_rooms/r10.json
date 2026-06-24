@@ -1,0 +1,25 @@
+{
+  "id": "r10",
+  "name": "R10 監視室",
+  "memory_id": "mem_r10",
+  "intro": "（仮）通電し、複数モニターの断片を組み合わせよ。",
+  "clear_text": "数字錠が外れた。（仮）",
+  "views": {
+    "west": { "label": "西：主電源", "objects": [
+      { "id": "power", "rect": [280, 120, 55, 90], "label": "主電源", "toggle": true, "states": ["off", "on"] }
+    ] },
+    "north": { "label": "北：モニターA", "objects": [
+      { "id": "m1", "rect": [100, 150, 170, 150], "label": "モニターA",
+        "requires_state": [ { "interactable": "power", "state": "on" } ],
+        "reveal": "通電。映像コードの一部『6 _ 7 _』。" }
+    ] },
+    "east": { "label": "東：モニターB", "objects": [
+      { "id": "m2", "rect": [90, 150, 160, 150], "label": "モニターB",
+        "requires_state": [ { "interactable": "power", "state": "on" } ],
+        "reveal": "通電。欠けた桁『_ 2 _ 1』。合わせて 6271。" }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉（数字錠）", "lock": { "type": "number", "answer": "6271", "win": true }, "reveal": "4桁の数字錠。" }
+    ] }
+  }
+}

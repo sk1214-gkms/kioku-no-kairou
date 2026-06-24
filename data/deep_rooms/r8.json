@@ -1,0 +1,30 @@
+{
+  "id": "r8",
+  "name": "R8 鏡の間",
+  "memory_id": "mem_r8",
+  "intro": "（仮）ツイスト：暗がりの鏡を見よ。",
+  "branch": {
+    "meter": "confront",
+    "prompt": "鏡に映るのは自分の顔。この館は私の記憶だと——？",
+    "options": [
+      { "label": "否定する（逃避）", "delta": -1, "flag": "s_r8_evade", "text": "そんなはずはない、と目を背けた。（仮）" },
+      { "label": "受け入れる（直面）", "delta": 1, "flag": "s_r8_confront", "text": "これは私の記憶だ、と受け入れた。（仮）" }
+    ]
+  },
+  "views": {
+    "west": { "label": "西：照明", "objects": [
+      { "id": "lamp", "rect": [280, 120, 55, 90], "label": "照明スイッチ", "toggle": true, "states": ["on", "off"] }
+    ] },
+    "north": { "label": "北：肖像", "objects": [
+      { "id": "portrait", "rect": [110, 120, 140, 160], "label": "肖像画", "reveal": "穏やかな氷室の肖像。だが…明かりを消すと？" }
+    ] },
+    "east": { "label": "東：鏡", "objects": [
+      { "id": "mirror", "rect": [110, 150, 150, 170], "label": "鏡",
+        "requires_state": [ { "interactable": "lamp", "state": "off" } ],
+        "reveal": "暗がりの鏡に映るのは——自分の顔。壁の数字が反転して映る：8012。戻せば2108。" }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉（数字錠）", "lock": { "type": "number", "answer": "2108", "win": true }, "reveal": "4桁の数字錠。" }
+    ] }
+  }
+}

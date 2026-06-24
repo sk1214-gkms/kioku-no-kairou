@@ -4,7 +4,16 @@
     "data/deep_rooms/r1.json",
     "data/deep_rooms/r2.json",
     "data/deep_rooms/r3.json",
-    "data/deep_rooms/r4.json"
+    "data/deep_rooms/r4.json",
+    "data/deep_rooms/r5.json",
+    "data/deep_rooms/r6.json",
+    "data/deep_rooms/r7.json",
+    "data/deep_rooms/r8.json",
+    "data/deep_rooms/r9.json",
+    "data/deep_rooms/r10.json",
+    "data/deep_rooms/r11.json",
+    "data/deep_rooms/r12.json",
+    "data/deep_rooms/r13.json"
   ],
-  "_note": "第1章(R1-R4)のみ。R5-R13は順次追加。memory_id から記憶を構築し、最終室→7エンディングへ接続。"
+  "_note": "全13部屋（3章）。R4/R8/R12=分岐(confront)。R9=金属製の筒でCルート。memory_id から記憶を構築し最終室→7エンディングへ。"
 }

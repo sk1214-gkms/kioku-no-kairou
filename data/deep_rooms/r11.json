@@ -1,0 +1,21 @@
+{
+  "id": "r11",
+  "name": "R11 手術室",
+  "memory_id": "mem_r11",
+  "intro": "（仮）メタ：部屋全体が暗号。手がかりは説明されない。",
+  "clear_text": "数字錠が外れた。（仮）",
+  "views": {
+    "north": { "label": "北", "objects": [
+      { "id": "a", "rect": [110, 150, 140, 140], "label": "無影灯", "reveal": "灯っているのは 1 つ。" }
+    ] },
+    "east": { "label": "東", "objects": [
+      { "id": "b", "rect": [90, 160, 150, 130], "label": "カルテの束", "reveal": "束は 1 つ。" }
+    ] },
+    "west": { "label": "西", "objects": [
+      { "id": "c", "rect": [100, 160, 150, 130], "label": "トレイの器具", "reveal": "器具は 2 本。最後の欠けた桁は 9（壁の引っ掻き傷）。" }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉（数字錠）", "lock": { "type": "number", "answer": "1129", "win": true }, "reveal": "4桁。部屋の“数”を 北→東→西→欠落 の順に。" }
+    ] }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "r9",
+  "name": "R9 標本室",
+  "memory_id": "mem_r9",
+  "intro": "（仮）合成チェーン：道具を組み合わせよ。隠し要素あり。",
+  "item_labels": {
+    "item_syringe_empty": "空のシリンジ",
+    "item_vial": "薬液",
+    "item_syringe_full": "薬液入りシリンジ",
+    "item_culprit_evidence": "金属製の筒"
+  },
+  "combines": [
+    { "a": "item_syringe_empty", "b": "item_vial", "result": "item_syringe_full", "msg": "シリンジに薬液を充填した。" }
+  ],
+  "clear_text": "扉の機構が外れた。（仮）",
+  "views": {
+    "north": { "label": "北：標本棚", "objects": [
+      { "id": "shelf", "rect": [110, 160, 150, 160], "label": "標本棚", "reveal": "棚の奥に注射器。",
+        "subview": { "label": "棚の奥", "objects": [
+          { "id": "se", "rect": [120, 180, 110, 110], "label": "空のシリンジ", "gives": "item_syringe_empty", "reveal": "空のシリンジを入手。" }
+        ] } }
+    ] },
+    "east": { "label": "東：作業台", "objects": [
+      { "id": "vial", "rect": [80, 200, 120, 90], "label": "薬液の瓶", "gives": "item_vial", "reveal": "薬液の瓶を入手。" }
+    ] },
+    "west": { "label": "西：隠し戸棚", "objects": [
+      { "id": "cab", "rect": [110, 150, 150, 170], "label": "隠し戸棚", "reveal": "奥に細長い何かが見える…",
+        "subview": { "label": "戸棚の奥", "objects": [
+          { "id": "tube", "rect": [120, 180, 110, 110], "label": "金属製の筒", "gives": "item_culprit_evidence", "set_flag": "has_culprit_evidence", "reveal": "金属製の筒（毒薬シリンジ）を手に入れた。…これは重要な証拠かもしれない。（Cルートの鍵）" }
+        ] } }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉", "requires_item": "item_syringe_full", "win": true, "reveal": "扉の機構に、注射器を挿す穴がある。" }
+    ] }
+  }
+}

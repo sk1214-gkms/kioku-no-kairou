@@ -1,0 +1,21 @@
+{
+  "id": "r13",
+  "name": "R13 最後の扉",
+  "memory_id": "mem_r13",
+  "intro": "（仮）超メタ：これまでの全てが、一つの言葉を指している。",
+  "clear_text": "最後の扉が、音もなく開いた。（仮）",
+  "views": {
+    "north": { "label": "北", "objects": [
+      { "id": "a", "rect": [110, 150, 140, 140], "label": "刻印①", "reveal": "刻印『ME』。" }
+    ] },
+    "east": { "label": "東", "objects": [
+      { "id": "b", "rect": [90, 160, 150, 130], "label": "刻印②", "reveal": "刻印『MO』。" }
+    ] },
+    "west": { "label": "西", "objects": [
+      { "id": "c", "rect": [100, 160, 150, 130], "label": "刻印③", "reveal": "刻印『RY』。北→東→西 で繋げよ。" }
+    ] },
+    "south": { "label": "南：最後の扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "最後の扉（文字錠）", "lock": { "type": "text", "answer": "MEMORY", "win": true }, "reveal": "英単語を刻む錠。『この館とは、何だったのか』。" }
+    ] }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "r7",
+  "name": "R7 廊下",
+  "memory_id": "mem_r7",
+  "intro": "（仮）ミスリード：本物の手がかりを見抜け。罠に注意。",
+  "clear_text": "数字錠が外れた。（仮）",
+  "views": {
+    "north": { "label": "北：白い足跡", "objects": [
+      { "id": "white", "rect": [100, 150, 170, 150], "label": "白い足跡", "reveal": "あなた自身の白い足跡が示す数字：4 8 2 1。" }
+    ] },
+    "east": { "label": "東：血の足跡", "objects": [
+      { "id": "blood", "rect": [90, 170, 150, 120], "label": "血の足跡", "decoy": true, "reveal": "血の足跡：9 9 9 9。…引きずった罠の跡だ。辿ってはいけない。" }
+    ] },
+    "west": { "label": "西：泥の足跡", "objects": [
+      { "id": "mud", "rect": [100, 170, 150, 120], "label": "泥の足跡", "decoy": true, "reveal": "泥の足跡：0 0 0 0。…庭師のものか。関係なさそうだ。" }
+    ] },
+    "south": { "label": "南：扉", "objects": [
+      { "id": "door", "rect": [140, 110, 120, 260], "label": "扉（数字錠）", "lock": { "type": "number", "answer": "4821", "win": true }, "reveal": "4桁の数字錠。" }
+    ] }
+  }
+}

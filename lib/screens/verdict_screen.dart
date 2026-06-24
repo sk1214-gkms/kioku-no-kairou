@@ -36,6 +36,8 @@ class VerdictScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Ending D（精神の死）はスコア盤も符号も出さず、灰色の虚無＝純粋な暗転で見せる。
+    if (result.ending == 'D') return _deathView();
     return Scaffold(
       backgroundColor: const Color(0xFF0E0C14),
       body: SafeArea(
@@ -73,6 +75,35 @@ class VerdictScreen extends StatelessWidget {
                         ? '回廊の最初へ戻される……'
                         : 'タイトルへ戻る'),
                   ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Ending D 専用：灰色の虚無。スコア盤・符号モチーフを出さず、診断書だけが浮かぶ。
+  Widget _deathView() {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(result.text,
+                    style: const TextStyle(
+                        color: Colors.white54, fontSize: 14, height: 2.0),
+                    textAlign: TextAlign.left),
+                const SizedBox(height: 36),
+                TextButton(
+                  onPressed: onRestart,
+                  child: const Text('── タイトルへ ──',
+                      style: TextStyle(color: Colors.white24, letterSpacing: 2)),
                 ),
               ],
             ),

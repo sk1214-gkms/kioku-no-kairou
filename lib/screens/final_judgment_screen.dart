@@ -32,13 +32,15 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
   int _truth = 0;
   bool _syringe = false;
   bool _answered = false;
+  final List<Map<String, String>> _conclusion = []; // 確定の儀式で見せる結論
 
   List<Map<String, dynamic>> get _questions =>
       ((widget.data['questions'] as List?) ?? [])
           .map((e) => (e as Map).cast<String, dynamic>())
           .toList();
 
-  void _pick(String tag) {
+  void _pick(Map<String, dynamic> opt, String qLabel) {
+    final tag = opt['tag'] as String? ?? 'decoy';
     switch (tag) {
       case 'lie':
         _lie++;
@@ -50,6 +52,10 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
         _syringe = true;
         break;
     }
+    _conclusion.add({
+      'label': qLabel,
+      'summary': opt['summary'] as String? ?? (opt['text'] as String),
+    });
     if (_qIndex + 1 < _questions.length) {
       setState(() => _qIndex++);
     } else {
@@ -122,7 +128,8 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
                   .map((o) => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         child: OutlinedButton(
-                          onPressed: () => _pick(o['tag'] as String? ?? 'decoy'),
+                          onPressed: () => _pick(
+                              o, questions[_qIndex]['label'] as String? ?? ''),
                           style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Colors.white24),
                               padding: const EdgeInsets.all(14)),
@@ -135,19 +142,55 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
                         ),
                       ))),
             ] else ...[
-              const Text('――推理を確定した。',
-                  style: TextStyle(color: Colors.greenAccent, fontSize: 15)),
-              const SizedBox(height: 8),
-              const Text('扉の向こうで、脳が下した“結論”が現実と照合される。',
-                  style: TextStyle(color: Colors.white54, fontSize: 13)),
-              const SizedBox(height: 28),
+              const Text('── あなたが現実へ出力しようとしている「結論」',
+                  style: TextStyle(color: Colors.white70, fontSize: 14)),
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF15131C),
+                  border: Border.all(color: Colors.white24),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final c in _conclusion)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 84,
+                              child: Text(c['label'] ?? '',
+                                  style: const TextStyle(
+                                      color: Colors.white38, fontSize: 13)),
+                            ),
+                            Expanded(
+                              child: Text(c['summary'] ?? '',
+                                  style: const TextStyle(
+                                      color: Colors.amberAccent,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              const Text('一度確定すれば、この「記憶」が現実として出力される。もう、戻れない。',
+                  style: TextStyle(color: Colors.white38, fontSize: 12, height: 1.5)),
+              const SizedBox(height: 16),
               FilledButton(
                 onPressed: widget.onComplete,
                 style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFFB8860B)),
+                    backgroundColor: const Color(0xFF7A1620)),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 14),
-                  child: Text('最後の扉を開ける', style: TextStyle(fontSize: 16)),
+                  child: Text('この記憶を、確定する', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],

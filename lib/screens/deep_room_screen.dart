@@ -406,26 +406,29 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       width: double.infinity,
       color: const Color(0xFF0E0C14),
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (var i = 0; i < DeepRoomScreen.memTarget.length; i++)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: Text(
-                // 点灯済みのみ文字を見せ、未点灯は空欄(▢)で単語を伏せる
-                i < widget.litCount ? DeepRoomScreen.memTarget[i] : '▢',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1,
-                  color: i < widget.litCount
-                      ? Colors.amberAccent
-                      : Colors.white24,
+      child: SizedBox(
+        height: 20,
+        // 点灯した文字だけを中央に表示。未点灯は枠ごと出さず、単語の存在を伏せる。
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (var i = 0;
+                i < widget.litCount && i < DeepRoomScreen.memTarget.length;
+                i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3),
+                child: Text(
+                  DeepRoomScreen.memTarget[i],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1,
+                    color: Colors.amberAccent,
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

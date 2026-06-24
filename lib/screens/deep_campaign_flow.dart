@@ -39,6 +39,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   int _total = 0;
   int _remaining = 0;
   int _tAtJudgment = 0; // 審判時点の残り秒（I 算出用に固定）
+  int _earnedLetters = 0; // 結末時点で点灯できた GEDÄCHTNIS 文字数
   bool _brainDead = false;
 
   /// モード別の総制限時間（秒）。ハードほど短い。
@@ -131,6 +132,9 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
 
   void _onBrainDeath() {
     _brainDead = true;
+    // 部屋途中で脳死なら点灯済みのみ、審判中なら全点灯。
+    _earnedLetters =
+        _phase == _Phase.judgment ? _litCount(_rooms.length) : _litCount(_idx);
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: true);
     setState(() {
       _ending = res;
@@ -151,6 +155,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
   void _onJudged() {
     _ticker?.cancel();
     _tAtJudgment = _remaining < 0 ? 0 : _remaining;
+    _earnedLetters = _litCount(_rooms.length); // 全部屋通過＝全点灯
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: false);
     setState(() {
       _ending = res;
@@ -219,6 +224,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow> {
           brainDead: _brainDead,
           syringeChosen: _gs.flags['syringe_chosen'] ?? false,
           allTruth: _gs.flags['all_truth'] ?? false,
+          earned: _earnedLetters,
           onRestart: _restartOrTitle,
         );
       case _Phase.loading:

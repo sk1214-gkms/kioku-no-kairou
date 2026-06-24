@@ -13,6 +13,7 @@ class VerdictScreen extends StatelessWidget {
   final bool brainDead;
   final bool syringeChosen;
   final bool allTruth;
+  final int earned; // 実際に点灯できた GEDÄCHTNIS の文字数
   final VoidCallback onRestart;
 
   const VerdictScreen({
@@ -26,6 +27,7 @@ class VerdictScreen extends StatelessWidget {
     required this.brainDead,
     required this.syringeChosen,
     required this.allTruth,
+    required this.earned,
     required this.onRestart,
   });
 
@@ -82,12 +84,14 @@ class VerdictScreen extends StatelessWidget {
 
   Widget _motif() {
     const target = 'GEDÄCHTNIS';
+    final lit = earned.clamp(0, target.length);
     return Column(
       children: [
         Wrap(
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < target.length; i++)
+            // 実際に点灯できた分だけを表示（脳死で途中なら符号も途中まで）
+            for (var i = 0; i < lit; i++)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2),
                 child: Text(target[i],

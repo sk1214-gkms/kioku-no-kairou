@@ -166,6 +166,8 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         _showSequence(o, lock);
       } else if (lock['type'] == 'dial') {
         _showDial(o, lock);
+      } else if (lock['type'] == 'scrub') {
+        _showScrub(o, lock);
       } else {
         _showLock(o, lock);
       }
@@ -445,6 +447,114 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // ---- 別動詞：記憶再生（映像スクラブ）----
+  void _showScrub(Map<String, dynamic> o, Map<String, dynamic> lock) {
+    int parse(String? s) {
+      final p = (s ?? '0:00').split(':');
+      return (int.tryParse(p[0]) ?? 0) * 60 +
+          (int.tryParse(p.length > 1 ? p[1] : '0') ?? 0);
+    }
+
+    final start = parse(lock['start'] as String?);
+    final end = parse(lock['end'] as String?);
+    final tgt = parse(lock['answer'] as String?);
+    final tol = (lock['tol'] as num?)?.toInt() ?? 1;
+    final frames = ((lock['frames'] as List?) ?? [])
+        .map((e) => (e as Map).cast<String, dynamic>())
+        .map((f) => {
+              'at': parse(f['at'] as String?),
+              'cap': f['cap'] as String? ?? '',
+              'key': f['key'] == true,
+            })
+        .toList();
+    var cur = start;
+    String two(int n) => n.toString().padLeft(2, '0');
+    String hhmm(int t) => '${two(t ~/ 60)}:${two(t % 60)}';
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) {
+          var cap = '……砂嵐。判別できる像はない。';
+          var isKey = false;
+          if (frames.isNotEmpty) {
+            var bi = 0, best = 1 << 30;
+            for (var i = 0; i < frames.length; i++) {
+              final d = (cur - (frames[i]['at'] as int)).abs();
+              if (d < best) {
+                best = d;
+                bi = i;
+              }
+            }
+            if (best <= 8) {
+              cap = frames[bi]['cap'] as String;
+              isKey = frames[bi]['key'] == true;
+            }
+          }
+          final canSave = (cur - tgt).abs() <= tol;
+          return AlertDialog(
+            title: Text('${o['label']}：記録再生'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(lock['prompt'] as String? ?? '記録を再生し、決定的瞬間を探せ。',
+                    style: const TextStyle(fontSize: 13)),
+                const SizedBox(height: 8),
+                Text(hhmm(cur),
+                    style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amberAccent,
+                        letterSpacing: 2)),
+                Slider(
+                  value: cur.toDouble(),
+                  min: start.toDouble(),
+                  max: end.toDouble(),
+                  onChanged: (v) => setLocal(() => cur = v.round()),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+                  color: Colors.black26,
+                  child: Text(
+                    cap,
+                    style: TextStyle(
+                        fontSize: 13,
+                        height: 1.4,
+                        color: isKey ? Colors.redAccent : Colors.white70),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('やめる')),
+              FilledButton(
+                onPressed: canSave
+                    ? () {
+                        Navigator.pop(ctx);
+                        if (!mounted) return;
+                        AudioService.instance.sfx('lock_open');
+                        if (lock['win'] == true) {
+                          _win();
+                          return;
+                        }
+                        setState(() {
+                          _states[o['id'] as String] =
+                              lock['on_solve_state'] as String? ?? 'open';
+                          _msg = lock['reveal'] as String? ?? '決定的瞬間を保存した。';
+                        });
+                      }
+                    : null,
+                child: const Text('この瞬間を保存'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

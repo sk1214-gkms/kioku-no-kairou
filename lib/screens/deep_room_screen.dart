@@ -114,6 +114,17 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       setState(() => _msg = '今は反応しないようだ…');
       return;
     }
+    if (o['editable_memory'] != null) {
+      final em = (o['editable_memory'] as Map).cast<String, dynamic>();
+      if (_states[id] == 'faced') {
+        final t = (em['truth'] as Map?)?.cast<String, dynamic>();
+        _zoom(o['label'] as String? ?? '',
+            (t?['reveal'] as String?) ?? '私は、もう直視した。');
+      } else {
+        _showEditableMemory(o, em);
+      }
+      return;
+    }
     if (o['win'] == true) {
       final need = o['requires_item'] as String?;
       if (need != null && !_selected.contains(need)) {
@@ -272,6 +283,69 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       }
     }
     setState(() => _msg = 'この2つは組み合わせられないようだ。');
+  }
+
+  // ---- ① 記憶の上書き（直視 vs 書き換え）----
+  void _showEditableMemory(Map<String, dynamic> o, Map<String, dynamic> em) {
+    final truth = (em['truth'] as Map?)?.cast<String, dynamic>() ?? const {};
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(o['label'] as String? ?? '記憶'),
+        content: SingleChildScrollView(
+            child: Text((truth['reveal'] as String?) ??
+                (em['prompt'] as String?) ??
+                '')),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              if (!mounted) return;
+              _faceMemory(o, em);
+            },
+            child: const Text('直視する'),
+          ),
+          FilledButton(
+            style:
+                FilledButton.styleFrom(backgroundColor: const Color(0xFF7A1620)),
+            onPressed: () {
+              Navigator.pop(ctx);
+              if (!mounted) return;
+              _overwriteMemory(o, em);
+            },
+            child: const Text('記憶を書き換える'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _faceMemory(Map<String, dynamic> o, Map<String, dynamic> em) {
+    final factId = em['fact_id'] as String? ?? '';
+    final truth = (em['truth'] as Map?)?.cast<String, dynamic>() ?? const {};
+    setState(() {
+      final gs = widget.gameState;
+      if (gs != null && factId.isNotEmpty) gs.flags['kept_$factId'] = true;
+      _states[o['id'] as String] = 'faced';
+      _msg = (truth['after'] as String?) ?? '私は、直視した。';
+    });
+  }
+
+  void _overwriteMemory(Map<String, dynamic> o, Map<String, dynamic> em) {
+    if (_done) return;
+    final factId = em['fact_id'] as String? ?? '';
+    final ow = (em['overwrite'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final gs = widget.gameState;
+    if (gs != null) {
+      if (factId.isNotEmpty) gs.flags['ow_$factId'] = true; // 真実の記憶を喪失
+      gs.meters['overwrite'] = (gs.meters['overwrite'] ?? 0) + 1; // 作話完全度↑
+    }
+    if (ow['opens'] == true) {
+      _done = true;
+      _clear({'text': ow['reveal'] as String?}); // 書き換えで楽に突破
+    } else {
+      setState(() => _msg = (ow['reveal'] as String?) ?? '記憶を書き換えた。');
+    }
   }
 
   // ---- ヒント／スキップ（詰み防止）----

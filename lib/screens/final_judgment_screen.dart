@@ -126,22 +126,35 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
               const SizedBox(height: 16),
               ...((questions[_qIndex]['options'] as List)
                   .map((e) => (e as Map).cast<String, dynamic>())
-                  .map((o) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: OutlinedButton(
-                          onPressed: () => _pick(
-                              o, questions[_qIndex]['label'] as String? ?? ''),
-                          style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Colors.white24),
-                              padding: const EdgeInsets.all(14)),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(o['text'] as String,
-                                style: const TextStyle(
-                                    fontSize: 15, height: 1.4)),
-                          ),
-                        ),
-                      ))),
+                  .map((o) {
+                final qid = questions[_qIndex]['id'] as String? ?? '';
+                // ① 道中で書き換えた事実は、真実の記憶が失われ選べない（■■）
+                final erased = o['tag'] == 'truth' &&
+                    widget.gameState.flags['ow_$qid'] == true;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: OutlinedButton(
+                    onPressed: erased
+                        ? null
+                        : () => _pick(
+                            o, questions[_qIndex]['label'] as String? ?? ''),
+                    style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.white24),
+                        padding: const EdgeInsets.all(14)),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                          erased
+                              ? '■■■■（書き換えた記憶——もう思い出せない）'
+                              : o['text'] as String,
+                          style: TextStyle(
+                              fontSize: 15,
+                              height: 1.4,
+                              color: erased ? Colors.white24 : null)),
+                    ),
+                  ),
+                );
+              })),
             ] else ...[
               const Text('── あなたが現実へ出力しようとしている「結論」',
                   style: TextStyle(color: Colors.white70, fontSize: 14)),

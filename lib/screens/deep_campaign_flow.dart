@@ -271,7 +271,9 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
         );
       case _Phase.ending:
         final m = _gs.meters['confab'] ?? 0;
-        final e = countEvade(_gs);
+        // ① 記憶の上書き回数も“逃避（作話）”として E に合算（0..3にclamp）
+        final ow = _gs.meters['overwrite'] ?? 0;
+        final e = (countEvade(_gs) + ow).clamp(0, 3);
         final conf = countConfront(_gs);
         final tRem = _brainDead ? 0 : _tAtJudgment;
         final integrity = confabIntegrity(

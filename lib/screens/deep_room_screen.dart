@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
+import '../audio_service.dart';
 import '../models.dart';
 import '../widgets/design_canvas.dart';
 
@@ -191,6 +192,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           widget.gameState!.flags[sf] = true;
         }
       });
+      AudioService.instance.sfx('pickup');
       return;
     }
     _zoom(o['label'] as String? ?? '', _reveal(o));
@@ -231,9 +233,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
               Navigator.pop(ctx);
               if (!mounted) return;
               if (!ok) {
+                AudioService.instance.sfx('wrong');
                 setState(() => _msg = '違うようだ…');
                 return;
               }
+              AudioService.instance.sfx('lock_open');
               if (lock['win'] == true) {
                 _win();
                 return;
@@ -326,6 +330,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   }
 
   void _faceMemory(Map<String, dynamic> o, Map<String, dynamic> em) {
+    AudioService.instance.sfx('face');
     final factId = em['fact_id'] as String? ?? '';
     final truth = (em['truth'] as Map?)?.cast<String, dynamic>() ?? const {};
     setState(() {
@@ -338,6 +343,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
 
   void _overwriteMemory(Map<String, dynamic> o, Map<String, dynamic> em) {
     if (_done) return;
+    AudioService.instance.sfx('overwrite');
     final factId = em['fact_id'] as String? ?? '';
     final ow = (em['overwrite'] as Map?)?.cast<String, dynamic>() ?? const {};
     final gs = widget.gameState;
@@ -440,6 +446,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   }
 
   void _clear(Map<String, dynamic>? choice) {
+    AudioService.instance.sfx('glyph_light');
     final gs = widget.gameState;
     if (gs != null) {
       final mid = _room['memory_id'] as String?;

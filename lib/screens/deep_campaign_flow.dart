@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import '../audio_service.dart';
 import '../collection_service.dart';
 import '../content_repository.dart';
 import '../deep_save_service.dart';
@@ -157,6 +158,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     });
     _autosave();
     _startTicker();
+    AudioService.instance.bgm(_idx < 4 ? 'ch1' : (_idx < 9 ? 'ch2' : 'ch3'));
   }
 
   void _startTicker() {
@@ -171,6 +173,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
         return;
       }
       _remaining.value -= 1; // 通知のみ。クロックだけ再描画され、部屋は再構築されない
+      if (_remaining.value <= 60) AudioService.instance.sfx('heartbeat'); // 脳死接近
       if (_remaining.value <= 0) {
         t.cancel();
         _onBrainDeath();
@@ -186,6 +189,8 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     _earnedLetters = _phase == _Phase.room ? _litCount(_idx) : 10;
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: true);
     _collection.markSeen(res.ending); // 結末コレクションに記録
+    AudioService.instance.sfx('flatline');
+    AudioService.instance.bgm('ending');
     setState(() {
       _ending = res;
       _phase = _Phase.ending;
@@ -202,10 +207,14 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
       }
     });
     _autosave(); // 次の部屋頭でチェックポイント（reveal遷移時は no-op）
+    if (_phase == _Phase.room) {
+      AudioService.instance.bgm(_idx < 4 ? 'ch1' : (_idx < 9 ? 'ch2' : 'ch3'));
+    }
   }
 
   void _onRevealDone() {
     if (_phase == _Phase.ending) return;
+    AudioService.instance.bgm('finale');
     setState(() => _phase = _Phase.judgment);
   }
 
@@ -217,6 +226,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     _earnedLetters = 10; // R13収束で抑圧されたHも露見＝GEDÄCHTNIS全10文字
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: false);
     _collection.markSeen(res.ending); // 結末コレクションに記録
+    AudioService.instance.bgm('ending');
     setState(() {
       _ending = res;
       _phase = _Phase.ending;

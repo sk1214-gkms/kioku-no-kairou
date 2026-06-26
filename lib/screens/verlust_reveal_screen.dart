@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../audio_service.dart';
 
 /// R13収束演出。点灯したトラウマ文字（不規則）が、スロットのように
 /// GEDÄCHTNIS へ並び替わり（抑圧されていた H が嵌まる）、最後に VERLUST が割り込む。
@@ -40,7 +41,10 @@ class _VerlustRevealScreenState extends State<VerlustRevealScreen> {
   }
 
   void _set(int p) {
-    if (mounted) setState(() => _phase = p);
+    if (!mounted) return;
+    if (p == 1) AudioService.instance.sfx('anagram');
+    if (p == 2) AudioService.instance.sfx('verlust');
+    setState(() => _phase = p);
   }
 
   void _skip() {

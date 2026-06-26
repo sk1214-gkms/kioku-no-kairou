@@ -137,6 +137,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       }
       return;
     }
+    if (o['dialogue'] != null) {
+      _showDialogue(o, (o['dialogue'] as Map).cast<String, dynamic>());
+      return;
+    }
     if (o['win'] == true) {
       final need = o['requires_item'] as String?;
       if (need != null && !_selected.contains(need)) {
@@ -547,6 +551,127 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         _msg = (ow['reveal'] as String?) ?? '記憶を書き換えた。';
       });
     }
+  }
+
+  // ---- 別動詞：対峙（突きつけ尋問）----
+  // 突きつけられる“記憶”のラベル（所持＝gs.flags がtrue）。
+  static const Map<String, String> _memoryLabels = {
+    'kept_culprit': '残るのは私、という結論',
+    'kept_weapon': 'ペーパーナイフの感触',
+    'kept_truth': 'この手が動いた記憶',
+    'has_culprit_evidence': '金属製の筒',
+  };
+
+  void _showDialogue(Map<String, dynamic> o, Map<String, dynamic> dlg) {
+    final lines = ((dlg['lines'] as List?) ?? [])
+        .map((e) => (e as Map).cast<String, dynamic>())
+        .toList();
+    if (lines.isEmpty) return;
+    var idx = 0;
+    var rebutted = false;
+    var feedback = '——突きつける“記憶”を選べ。';
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) {
+          final line = lines[idx];
+          final held = _memoryLabels.keys
+              .where((f) => widget.gameState?.flags[f] == true)
+              .toList();
+          final last = idx >= lines.length - 1;
+          return AlertDialog(
+            title: Text(dlg['speaker'] as String? ?? '対峙'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('「${line['say']}」',
+                      style: const TextStyle(fontSize: 15, height: 1.5)),
+                  const SizedBox(height: 10),
+                  Text(feedback,
+                      style: TextStyle(
+                          color: rebutted
+                              ? Colors.greenAccent
+                              : Colors.white54,
+                          fontSize: 13)),
+                  const Divider(height: 18),
+                  if (!rebutted)
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        if (held.isEmpty)
+                          const Text('突きつけられる記憶が無い……',
+                              style: TextStyle(
+                                  color: Colors.white38, fontSize: 12)),
+                        for (final f in held)
+                          OutlinedButton(
+                            onPressed: () {
+                              if (f == line['press']) {
+                                setLocal(() {
+                                  rebutted = true;
+                                  feedback = line['rebut'] as String? ?? '';
+                                });
+                              } else {
+                                setLocal(() => feedback =
+                                    line['fail'] as String? ?? '…それは違う。');
+                              }
+                            },
+                            child: Text(_memoryLabels[f]!),
+                          ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  if (!mounted) return;
+                  _dialogueOutcome(
+                      (dlg['on_yield'] as Map?)?.cast<String, dynamic>());
+                },
+                child: const Text('目を背ける'),
+              ),
+              if (rebutted)
+                FilledButton(
+                  onPressed: () {
+                    if (!last) {
+                      setLocal(() {
+                        idx++;
+                        rebutted = false;
+                        feedback = '——突きつける“記憶”を選べ。';
+                      });
+                    } else {
+                      Navigator.pop(ctx);
+                      if (!mounted) return;
+                      _dialogueOutcome(
+                          (dlg['on_break'] as Map?)?.cast<String, dynamic>());
+                    }
+                  },
+                  child: Text(last ? '突きつけ終える' : '次へ'),
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void _dialogueOutcome(Map<String, dynamic>? outcome) {
+    if (outcome == null || _done) return;
+    _done = true;
+    final gs = widget.gameState;
+    if (gs != null) {
+      final fl = outcome['flag'] as String?;
+      if (fl != null) gs.flags[fl] = true;
+      final d = (outcome['delta'] as num?)?.toInt() ?? 0;
+      gs.meters['confront'] = (gs.meters['confront'] ?? 0) + d;
+    }
+    _clear({'text': outcome['text'] as String?});
   }
 
   // ---- ヒント／スキップ（詰み防止）----

@@ -11,7 +11,8 @@
 - [構成案 v1（謎と物語）](docs/構成案_謎と物語_v1.md) … 館＝記憶の設計思想
 - [**構想：謎・推理の質を上げる設計案**](docs/構想_謎強化.md) … ①記憶の上書き ②証拠連結推理 ほか
 - [ストーリー分岐フロー図](docs/story_flow.drawio) … draw.io（GEDÄCHTNIS/作話完全度/7結末 現行版）
-- [アセット仕様書](docs/アセット仕様書.md) … **必要な画像/イラスト/音の詳細一覧（13室4方向）**
+- [アセット仕様書](docs/アセット仕様書.md) … **必要な画像/イラストの詳細一覧（13室4方向）＋生成プロンプト**
+- [音響仕様書（BGM・SE）](docs/音響仕様書_BGM_SE.md) … BGM/効果音の一覧・ムード・生成プロンプト・ツール
 - [テスト手順（解答キー付き）](docs/テスト手順_第1章.md)
 - [**iPhone配信手順（Windows＋iPhoneのみ・Mac不要）**](docs/iPhone配信手順_Windowsのみ.md) … TestFlight配信の段取り
 - [**Stable Diffusion（ローカル）生成手順**](docs/StableDiffusion_ローカル生成手順.md) … 画像アセットをローカルSDで作る（Windows）

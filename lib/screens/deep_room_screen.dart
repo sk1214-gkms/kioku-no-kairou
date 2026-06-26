@@ -867,8 +867,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     );
   }
 
-  void _clear(Map<String, dynamic>? choice) {
-    AudioService.instance.sfx('glyph_light');
+  Future<void> _clear(Map<String, dynamic>? choice) async {
     final gs = widget.gameState;
     if (gs != null) {
       final mid = _room['memory_id'] as String?;
@@ -887,6 +886,13 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         _room['clear_text'] as String? ??
         '——四方の謎を解き、扉を開けた。';
     final verlust = _room['verlust'] == true;
+    // この部屋でトラウマ文字が点灯するなら、脳内で発火する全画面フラッシュを先に。
+    final letter = _room['letter'] as String?;
+    if (letter != null && letter.trim().isNotEmpty) {
+      AudioService.instance.sfx('glyph_light');
+      await _glyphIgnite(letter.trim());
+      if (!mounted) return;
+    }
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -911,6 +917,47 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  /// トラウマ文字が脳の最深部で発火する一瞬の演出（赤→琥珀、拡大しながら明滅）。
+  Future<void> _glyphIgnite(String letter) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withValues(alpha: 0.88),
+      builder: (ctx) {
+        Future<void>.delayed(const Duration(milliseconds: 1150), () {
+          if (Navigator.of(ctx).canPop()) Navigator.of(ctx).pop();
+        });
+        return Center(
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (_, t, __) => Opacity(
+              opacity: t < 0.8 ? t / 0.8 : 1.0,
+              child: Transform.scale(
+                scale: 0.55 + t * 0.75,
+                child: Text(
+                  letter,
+                  style: TextStyle(
+                    fontFamily: 'Blackletter',
+                    fontSize: 130,
+                    fontWeight: FontWeight.bold,
+                    color: Color.lerp(Colors.redAccent, Colors.amberAccent, t),
+                    shadows: [
+                      Shadow(
+                          color: Colors.redAccent.withValues(alpha: 0.7 * t),
+                          blurRadius: 48),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -1019,12 +1066,17 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: Text(
                   g,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Blackletter', // 黒文字体（未配置時は標準にフォールバック）
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1,
                     color: Colors.amberAccent,
+                    shadows: [
+                      Shadow(
+                          color: Colors.amberAccent.withValues(alpha: 0.6),
+                          blurRadius: 8),
+                    ],
                   ),
                 ),
               ),

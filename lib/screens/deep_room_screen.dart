@@ -160,6 +160,8 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         _zoom(o['label'] as String, lock['reveal'] as String? ?? '開いている。');
       } else if (lock['type'] == 'sequence') {
         _showSequence(o, lock);
+      } else if (lock['type'] == 'dial') {
+        _showDial(o, lock);
       } else {
         _showLock(o, lock);
       }
@@ -346,6 +348,96 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                     }
                   : null,
               child: const Text('確定'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 時刻ダイヤル：針(HH:MM)を answer に合わせて解錠。lock.answer/"start"="HH:MM"。
+  void _showDial(Map<String, dynamic> o, Map<String, dynamic> lock) {
+    List<int> parse(String? s) {
+      final p = (s ?? '0:00').split(':');
+      return [int.tryParse(p[0]) ?? 0, int.tryParse(p.length > 1 ? p[1] : '0') ?? 0];
+    }
+
+    final tgt = parse(lock['answer'] as String?);
+    final st = parse(lock['start'] as String?);
+    var h = st[0], m = st[1];
+    String two(int n) => n.toString().padLeft(2, '0');
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) => AlertDialog(
+          title: Text('${o['label']}：時刻'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(lock['prompt'] as String? ?? '針を合わせよ。',
+                  style: const TextStyle(fontSize: 13)),
+              const SizedBox(height: 10),
+              Text('${two(h)} : ${two(m)}',
+                  style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amberAccent,
+                      letterSpacing: 2)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(children: [
+                    const Text('時', style: TextStyle(color: Colors.white54, fontSize: 11)),
+                    Row(mainAxisSize: MainAxisSize.min, children: [
+                      IconButton(
+                          onPressed: () => setLocal(() => h = (h + 23) % 24),
+                          icon: const Icon(Icons.remove)),
+                      IconButton(
+                          onPressed: () => setLocal(() => h = (h + 1) % 24),
+                          icon: const Icon(Icons.add)),
+                    ]),
+                  ]),
+                  Column(children: [
+                    const Text('分', style: TextStyle(color: Colors.white54, fontSize: 11)),
+                    Row(mainAxisSize: MainAxisSize.min, children: [
+                      IconButton(
+                          onPressed: () => setLocal(() => m = (m + 55) % 60),
+                          icon: const Icon(Icons.remove)),
+                      IconButton(
+                          onPressed: () => setLocal(() => m = (m + 5) % 60),
+                          icon: const Icon(Icons.add)),
+                    ]),
+                  ]),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('やめる')),
+            FilledButton(
+              onPressed: () {
+                final ok = h == tgt[0] && m == tgt[1];
+                Navigator.pop(ctx);
+                if (!mounted) return;
+                if (!ok) {
+                  AudioService.instance.sfx('wrong');
+                  setState(() => _msg = '違うようだ…針が合っていない。');
+                  return;
+                }
+                AudioService.instance.sfx('lock_open');
+                if (lock['win'] == true) {
+                  _win();
+                  return;
+                }
+                setState(() {
+                  _states[o['id'] as String] =
+                      lock['on_solve_state'] as String? ?? 'open';
+                  _msg = lock['reveal'] as String? ?? '針が噛み合い、開いた。';
+                });
+              },
+              child: const Text('合わせる'),
             ),
           ],
         ),

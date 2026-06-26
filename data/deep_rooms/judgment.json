@@ -2,32 +2,39 @@
   "id": "judgment",
   "name": "30号室 玄関ホール（最後の審判）",
   "prompt": "……思い、出した。これは真実を暴くためのゲームではない。自分が『恩師を滅多刺しにした怪物』であるという現実から逃れるために、私の脳（Gedächtnis）が死に物狂いででっち上げた、哀れな作話（うそ）の終着駅だ。扉の向こうは30号室、現実世界の玄関ホール。さあ、私が完成させたこの『美しい嘘』で現実の法廷を騙し切るか、それとも──。",
-  "intro": "（推理＝作話。嘘を選べば作話完全度が上がり、真実を選べば嘘は崩れる。隠された選択肢に触れた時、別の真相が口を開く）",
-  "_tags": "lie=作話（甥が犯人の物語） / truth=真実（蓮見が犯人） / syringe=隠し(→S) / decoy=どちらでもない",
-  "_evidence_note": "needs=その推理を選ぶのに要るフラグ。truth=各部屋で『直視』した記憶(kept_*)、syringe=R9の金属製の筒(has_culprit_evidence)。嘘/decoyは常に選べる（嘘はいつでもつける）。",
+  "intro": "（推理を選び、手元の“記憶の断片（証拠）”を連結して固定せよ。直視した記憶しか真実の証拠にはならない。嘘はいつでもつける）",
+  "_tags": "lie=作話 / truth=真実(蓮見) / syringe=隠し(→S) / decoy=どちらでもない。needs=その推理の固定に要する証拠ID。",
+  "evidence_pool": [
+    { "id": "ev_footage", "label": "03:45の防犯映像（侵入者の影）", "when": "always" },
+    { "id": "ev_testimony", "label": "三人をめぐる証言", "when": "always" },
+    { "id": "ev_self_culprit", "label": "『残るのは私だ』という結論", "when": "kept_culprit" },
+    { "id": "ev_paperknife", "label": "手に残る、ペーパーナイフの感触", "when": "kept_weapon" },
+    { "id": "ev_that_night", "label": "あの夜、この手が動いた記憶", "when": "kept_truth" },
+    { "id": "ev_tube", "label": "金属製の筒（毒薬シリンジ）", "when": "has_culprit_evidence" }
+  ],
   "questions": [
     {
       "id": "culprit", "q": "── 真犯人は、誰だ？", "label": "真犯人",
       "options": [
-        { "text": "氷室の甥。遺産目当てに押し入った、野蛮な侵入者だ。", "tag": "lie", "summary": "氷室の甥", "because": "甥は遺産目当てに館にいた——その姿は映像にも。", "needs": [] },
-        { "text": "私だ。蓮見鏡介。この手が、恩師を手にかけた。", "tag": "truth", "summary": "私自身（蓮見）", "because": "消去法の結論を、私は直視した（記録室）。", "needs": ["kept_culprit"] },
-        { "text": "館の使用人。物音に紛れて逃げた者がいたはずだ。", "tag": "decoy", "summary": "館の使用人", "because": "物音の証言。だが裏付けは無い。", "needs": [] }
+        { "text": "氷室の甥。遺産目当てに押し入った、野蛮な侵入者だ。", "tag": "lie", "summary": "氷室の甥", "needs": ["ev_footage"] },
+        { "text": "私だ。蓮見鏡介。この手が、恩師を手にかけた。", "tag": "truth", "summary": "私自身（蓮見）", "needs": ["ev_self_culprit"] },
+        { "text": "館の使用人。物音に紛れて逃げた者がいたはずだ。", "tag": "decoy", "summary": "館の使用人", "needs": [] }
       ]
     },
     {
       "id": "weapon", "q": "── 凶器は、何だ？", "label": "凶器",
       "options": [
-        { "text": "甥が握りしめていた、野蛮なナイフ。", "tag": "lie", "summary": "甥のナイフ", "because": "甥の手に凶器があった、という筋書き。", "needs": [] },
-        { "text": "私の手にあった、一本のペーパーナイフ。", "tag": "truth", "summary": "ペーパーナイフ", "because": "この手の感触を、私は直視した（廊下）。", "needs": ["kept_weapon"] },
-        { "text": "銀色のシリンジ。……あれは“凶器”では、なかったはずだ。", "tag": "syringe", "summary": "銀色のシリンジ", "because": "標本室の奥で見つけた金属製の筒。", "needs": ["has_culprit_evidence"] }
+        { "text": "甥が握りしめていた、野蛮なナイフ。", "tag": "lie", "summary": "甥のナイフ", "needs": ["ev_footage"] },
+        { "text": "私の手にあった、一本のペーパーナイフ。", "tag": "truth", "summary": "ペーパーナイフ", "needs": ["ev_paperknife"] },
+        { "text": "銀色のシリンジ。……あれは“凶器”では、なかったはずだ。", "tag": "syringe", "summary": "銀色のシリンジ", "needs": ["ev_tube"] }
       ]
     },
     {
       "id": "truth", "q": "── あの夜、本当は何が起きた？", "label": "あの夜",
       "options": [
-        { "text": "甥の凶行を、私はただ目撃しただけだ。私は無辜の証人だ。", "tag": "lie", "summary": "甥の犯行を目撃しただけ", "because": "私は無辜の証人だと信じた。", "needs": [] },
-        { "text": "発作のように、私がこの手で恩師の胸を貫いた。", "tag": "truth", "summary": "私がこの手で刺した", "because": "飛沫血痕の記憶を、私は直視した（暗室）。", "needs": ["kept_truth"] },
-        { "text": "取り乱して気を失った。何も、憶えていない。", "tag": "decoy", "summary": "何も憶えていない", "because": "空白。何も思い出せない。", "needs": [] }
+        { "text": "甥の凶行を、私はただ目撃しただけだ。私は無辜の証人だ。", "tag": "lie", "summary": "甥の犯行を目撃しただけ", "needs": ["ev_footage"] },
+        { "text": "発作のように、私がこの手で恩師の胸を貫いた。", "tag": "truth", "summary": "私がこの手で刺した", "needs": ["ev_that_night"] },
+        { "text": "取り乱して気を失った。何も、憶えていない。", "tag": "decoy", "summary": "何も憶えていない", "needs": [] }
       ]
     }
   ]

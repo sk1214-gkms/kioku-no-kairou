@@ -3,7 +3,7 @@
   "name": "R9 標本室",
   "memory_id": "mem_r9",
   "letter": "G",
-  "intro": "（仮）合成チェーン：道具を組み合わせよ。隠し要素あり。",
+  "intro": "ホルマリン標本の並ぶ部屋。道具を組み合わせろ。そして——奥に、隠されたものがある。",
   "item_labels": {
     "item_syringe_empty": "空のシリンジ",
     "item_vial": "薬液",

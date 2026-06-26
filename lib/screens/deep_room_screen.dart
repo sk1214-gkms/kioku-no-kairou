@@ -141,6 +141,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       _showDialogue(o, (o['dialogue'] as Map).cast<String, dynamic>());
       return;
     }
+    if (o['chase'] != null) {
+      if (_states[id] == 'cornered') {
+        _zoom(o['label'] as String? ?? '',
+            o['cornered_reveal'] as String? ?? 'すでに追い詰めた。');
+      } else {
+        _showChase(o, (o['chase'] as Map).cast<String, dynamic>());
+      }
+      return;
+    }
     if (o['win'] == true) {
       final need = o['requires_item'] as String?;
       if (need != null && !_selected.contains(need)) {
@@ -552,6 +561,95 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                     : null,
                 child: const Text('この瞬間を保存'),
               ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  // ---- 別動詞：追跡（気配を方向で追い詰める）----
+  void _showChase(Map<String, dynamic> o, Map<String, dynamic> chase) {
+    final rounds = ((chase['rounds'] as List?) ?? [])
+        .map((e) => (e as Map).cast<String, dynamic>())
+        .toList();
+    if (rounds.isEmpty) return;
+    const dirLabel = {'north': '北', 'east': '東', 'south': '南', 'west': '西'};
+    var idx = 0;
+    var feedback =
+        chase['prompt'] as String? ?? '気配を追え——逃げた方向を選べ。';
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) {
+          final r = rounds[idx];
+          return AlertDialog(
+            title: Text('影を追う（${idx + 1}/${rounds.length}）'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(r['tell'] as String? ?? '',
+                      style: const TextStyle(fontSize: 15, height: 1.5)),
+                  const SizedBox(height: 12),
+                  Text(feedback,
+                      style:
+                          const TextStyle(color: Colors.white54, fontSize: 13)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final d in const ['north', 'east', 'south', 'west'])
+                        OutlinedButton(
+                          onPressed: () {
+                            if (d == r['flee']) {
+                              if (idx >= rounds.length - 1) {
+                                Navigator.pop(ctx);
+                                if (!mounted) return;
+                                AudioService.instance.sfx('pickup');
+                                setState(() {
+                                  final g = chase['gives'] as String?;
+                                  if (g != null && !_items.contains(g)) {
+                                    _items.add(g);
+                                  }
+                                  final sf = chase['set_flag'] as String?;
+                                  if (sf != null && widget.gameState != null) {
+                                    widget.gameState!.flags[sf] = true;
+                                  }
+                                  _states[o['id'] as String] = 'cornered';
+                                  _msg = chase['corner_text'] as String? ??
+                                      '影を追い詰めた。';
+                                });
+                              } else {
+                                AudioService.instance.sfx('glyph_light');
+                                setLocal(() {
+                                  idx++;
+                                  feedback = '——追っている。さらに先へ。';
+                                });
+                              }
+                            } else {
+                              AudioService.instance.sfx('wrong');
+                              setLocal(() {
+                                idx = 0;
+                                feedback = chase['lost_text'] as String? ??
+                                    '——見失った。最初から追え。';
+                              });
+                            }
+                          },
+                          child: Text(dirLabel[d]!),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('やめる')),
             ],
           );
         },

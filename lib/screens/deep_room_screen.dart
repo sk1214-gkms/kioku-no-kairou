@@ -158,6 +158,8 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       final solved = _states[id] == (lock['on_solve_state'] ?? 'open');
       if (solved) {
         _zoom(o['label'] as String, lock['reveal'] as String? ?? '開いている。');
+      } else if (lock['type'] == 'sequence') {
+        _showSequence(o, lock);
       } else {
         _showLock(o, lock);
       }
@@ -260,6 +262,93 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             child: const Text('決定'),
           ),
         ],
+      ),
+    );
+  }
+
+  /// 順序パズル：要素を正しい順にタップして確定。lock.elements[{id,label}], lock.answer=[id...]。
+  void _showSequence(Map<String, dynamic> o, Map<String, dynamic> lock) {
+    final elements = ((lock['elements'] as List?) ?? [])
+        .map((e) => (e as Map).cast<String, dynamic>())
+        .toList();
+    final answer = (lock['answer'] as List?)?.cast<String>() ?? const [];
+    final chosen = <String>[];
+    String labelOf(String id) => elements.firstWhere((e) => e['id'] == id,
+        orElse: () => {'label': id})['label'] as String;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) => AlertDialog(
+          title: Text('${o['label']}：順序'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(lock['prompt'] as String? ?? '正しい順にタップせよ。',
+                    style: const TextStyle(fontSize: 13)),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    for (final el in elements)
+                      OutlinedButton(
+                        onPressed: chosen.contains(el['id'])
+                            ? null
+                            : () => setLocal(
+                                () => chosen.add(el['id'] as String)),
+                        child: Text(el['label'] as String),
+                      ),
+                  ],
+                ),
+                const Divider(height: 18),
+                Text(
+                    chosen.isEmpty
+                        ? '選んだ順：—'
+                        : '選んだ順：${chosen.map(labelOf).join(" → ")}',
+                    style:
+                        const TextStyle(color: Colors.amberAccent, fontSize: 12)),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => setLocal(chosen.clear),
+                child: const Text('やり直す')),
+            TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('やめる')),
+            FilledButton(
+              onPressed: chosen.length == answer.length
+                  ? () {
+                      var ok = true;
+                      for (var i = 0; i < answer.length; i++) {
+                        if (chosen[i] != answer[i]) ok = false;
+                      }
+                      Navigator.pop(ctx);
+                      if (!mounted) return;
+                      if (!ok) {
+                        AudioService.instance.sfx('wrong');
+                        setState(() => _msg = '順序が違うようだ…');
+                        return;
+                      }
+                      AudioService.instance.sfx('lock_open');
+                      if (lock['win'] == true) {
+                        _win();
+                        return;
+                      }
+                      setState(() {
+                        _states[o['id'] as String] =
+                            lock['on_solve_state'] as String? ?? 'open';
+                        _msg = lock['reveal'] as String? ?? '開いた。';
+                      });
+                    }
+                  : null,
+              child: const Text('確定'),
+            ),
+          ],
+        ),
       ),
     );
   }

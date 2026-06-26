@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import '../collection_service.dart';
 import '../content_repository.dart';
 import '../deep_save_service.dart';
 import '../endings_eval.dart';
@@ -28,6 +29,7 @@ class DeepCampaignFlow extends StatefulWidget {
 class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     with WidgetsBindingObserver {
   final DeepSaveService _saveService = DeepSaveService();
+  final CollectionService _collection = CollectionService();
 
   static const _manifest = 'data/deep_rooms/campaign.json';
   static const _judgmentPath = 'data/deep_rooms/judgment.json';
@@ -183,6 +185,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     // 部屋途中で脳死なら点灯済みのみ。R13収束以降(reveal/judgment)は全10文字。
     _earnedLetters = _phase == _Phase.room ? _litCount(_idx) : 10;
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: true);
+    _collection.markSeen(res.ending); // 結末コレクションに記録
     setState(() {
       _ending = res;
       _phase = _Phase.ending;
@@ -213,6 +216,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     _tAtJudgment = _remaining.value < 0 ? 0 : _remaining.value;
     _earnedLetters = 10; // R13収束で抑圧されたHも露見＝GEDÄCHTNIS全10文字
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: false);
+    _collection.markSeen(res.ending); // 結末コレクションに記録
     setState(() {
       _ending = res;
       _phase = _Phase.ending;

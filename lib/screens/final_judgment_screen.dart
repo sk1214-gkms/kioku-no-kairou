@@ -54,6 +54,22 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
     return id;
   }
 
+  /// その推理について、プレイヤーが“真実の証拠”を握っているか
+  /// （＝真実選択肢の必要証拠を全て所持）。嘘で固定すれば「自覚ある嘘」。
+  bool _knowsTruth(String qid) {
+    for (final q in _questions) {
+      if (q['id'] != qid) continue;
+      for (final o in (q['options'] as List)) {
+        final om = (o as Map).cast<String, dynamic>();
+        if (om['tag'] == 'truth') {
+          final needs = (om['needs'] as List?)?.cast<String>() ?? const [];
+          return needs.isNotEmpty && needs.every(_hasEv);
+        }
+      }
+    }
+    return false;
+  }
+
   void _selectOption(int i) => setState(() {
         _selOpt = i;
         _linked.clear();
@@ -182,12 +198,18 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
     final qid = q['id'] as String;
     final confirmed = _confirmed[qid];
     final isActive = _active == qid;
+    // 真実を握りながら嘘/逃げで固定＝自覚ある嘘
+    final knowingLie = confirmed != null &&
+        confirmed['tag'] != 'truth' &&
+        _knowsTruth(qid);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
         color: const Color(0xFF15131C),
         border: Border.all(
-            color: confirmed != null ? Colors.green : Colors.white24),
+            color: confirmed != null
+                ? (knowingLie ? Colors.redAccent : Colors.green)
+                : Colors.white24),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Column(
@@ -199,11 +221,11 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
                     color: Colors.amberAccent, fontWeight: FontWeight.bold)),
             subtitle: Text(
                 confirmed != null
-                    ? '確定：${confirmed['summary']}'
+                    ? '確定：${confirmed['summary']}${knowingLie ? '　— 自覚ある嘘' : ''}'
                     : (isActive ? '推理中…' : '未確定 — タップして推理'),
                 style: TextStyle(
                     color: confirmed != null
-                        ? Colors.greenAccent
+                        ? (knowingLie ? Colors.redAccent : Colors.greenAccent)
                         : Colors.white54)),
             trailing: Icon(
                 confirmed != null
@@ -274,6 +296,13 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (o['tag'] != 'truth' && _knowsTruth(qid))
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: Text('⚠ あなたは“真実”の証拠を握っている。これは、自覚ある嘘だ。',
+                          style:
+                              TextStyle(color: Colors.redAccent, fontSize: 12)),
+                    ),
                   const Text('必要な証拠を連結：',
                       style: TextStyle(color: Colors.white54, fontSize: 12)),
                   const SizedBox(height: 6),

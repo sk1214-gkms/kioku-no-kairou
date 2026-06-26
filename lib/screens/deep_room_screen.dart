@@ -85,6 +85,12 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     return v['label'] as String? ?? _dirs[_dirIdx];
   }
 
+  /// 方向ごとの背景画像パス（規約: assets/images/rooms/<id>_<dir>.png）。
+  /// subview(拡大)中は今は背景なし。未配置なら errorBuilder で暗色にフォールバック。
+  String? get _bgAsset => _subStack.isNotEmpty
+      ? null
+      : 'assets/images/rooms/${_room['id']}_${_dirs[_dirIdx]}.png';
+
   bool _stateOk(List? prs) {
     if (prs == null) return true;
     for (final p in prs) {
@@ -556,11 +562,23 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         children: [
           _letterHud(),
           Expanded(
-            child: Container(
-              color: const Color(0xFF15131C),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
-              child: DesignCanvas(children: _hotspots()),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // 背景画像（未配置なら暗色にフォールバック）
+                if (_bgAsset != null)
+                  Image.asset(_bgAsset!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          Container(color: const Color(0xFF15131C)))
+                else
+                  Container(color: const Color(0xFF15131C)),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(8),
+                  child: DesignCanvas(children: _hotspots()),
+                ),
+              ],
             ),
           ),
           _statusBar(),
@@ -666,12 +684,23 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                                     : Colors.white24),
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: Text(_itemLabel(id),
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: _selected.contains(id)
-                                      ? Colors.black
-                                      : Colors.white)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset('assets/images/items/$id.png',
+                                  width: 18,
+                                  height: 18,
+                                  errorBuilder: (_, __, ___) =>
+                                      const SizedBox.shrink()),
+                              const SizedBox(width: 4),
+                              Text(_itemLabel(id),
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: _selected.contains(id)
+                                          ? Colors.black
+                                          : Colors.white)),
+                            ],
+                          ),
                         ),
                       ),
                   ],

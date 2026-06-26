@@ -116,10 +116,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     }
     if (o['editable_memory'] != null) {
       final em = (o['editable_memory'] as Map).cast<String, dynamic>();
-      if (_states[id] == 'faced') {
+      final st = _states[id];
+      if (st == 'faced') {
         final t = (em['truth'] as Map?)?.cast<String, dynamic>();
         _zoom(o['label'] as String? ?? '',
             (t?['reveal'] as String?) ?? '私は、もう直視した。');
+      } else if (st == 'overwritten') {
+        final w = (em['overwrite'] as Map?)?.cast<String, dynamic>();
+        _zoom(o['label'] as String? ?? '',
+            (w?['reveal'] as String?) ?? '私は、記憶を書き換えた。');
       } else {
         _showEditableMemory(o, em);
       }
@@ -344,7 +349,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       _done = true;
       _clear({'text': ow['reveal'] as String?}); // 書き換えで楽に突破
     } else {
-      setState(() => _msg = (ow['reveal'] as String?) ?? '記憶を書き換えた。');
+      setState(() {
+        _states[o['id'] as String] = 'overwritten'; // 再選択不可（嘘は確定）
+        _msg = (ow['reveal'] as String?) ?? '記憶を書き換えた。';
+      });
     }
   }
 

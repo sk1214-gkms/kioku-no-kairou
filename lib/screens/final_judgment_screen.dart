@@ -131,26 +131,46 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
                 // ① 道中で書き換えた事実は、真実の記憶が失われ選べない（■■）
                 final erased = o['tag'] == 'truth' &&
                     widget.gameState.flags['ow_$qid'] == true;
+                // ② 証拠連結：needs のフラグが揃わないと選べない
+                final needs =
+                    (o['needs'] as List?)?.cast<String>() ?? const [];
+                final hasEvidence =
+                    needs.every((f) => widget.gameState.flags[f] == true);
+                final locked = erased || !hasEvidence;
+                final because = o['because'] as String?;
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: OutlinedButton(
-                    onPressed: erased
+                    onPressed: locked
                         ? null
                         : () => _pick(
                             o, questions[_qIndex]['label'] as String? ?? ''),
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.white24),
-                        padding: const EdgeInsets.all(14)),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                          erased
-                              ? '■■■■（書き換えた記憶——もう思い出せない）'
-                              : o['text'] as String,
-                          style: TextStyle(
-                              fontSize: 15,
-                              height: 1.4,
-                              color: erased ? Colors.white24 : null)),
+                        padding: const EdgeInsets.all(12)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            erased
+                                ? '■■■■（書き換えた記憶——もう思い出せない）'
+                                : (!hasEvidence
+                                    ? '${o['text']}（証拠が足りない）'
+                                    : o['text'] as String),
+                            style: TextStyle(
+                                fontSize: 15,
+                                height: 1.4,
+                                color: locked ? Colors.white24 : null)),
+                        if (because != null) ...[
+                          const SizedBox(height: 4),
+                          Text('∵ $because',
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: locked
+                                      ? Colors.white12
+                                      : Colors.white38)),
+                        ],
+                      ],
                     ),
                   ),
                 );

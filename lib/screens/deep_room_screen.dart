@@ -775,18 +775,26 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         .map((e) => (e as Map).cast<String, dynamic>())
         .toList();
     if (lines.isEmpty) return;
+    // terminal=false の対峙は脱出させず、論拠を突きつける“推理ビート”として使う（R6等）。
+    final terminal = dlg['terminal'] != false;
     var idx = 0;
     var rebutted = false;
-    var feedback = '——突きつける“記憶”を選べ。';
+    var feedback = '——突きつける論拠を選べ。';
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) {
           final line = lines[idx];
-          final held = _memoryLabels.keys
-              .where((f) => widget.gameState?.flags[f] == true)
-              .toList();
+          // 突きつける手札：dlg['cards']があれば部屋ローカルの論拠、無ければ所持記憶。
+          final cards = dlg['cards'] != null
+              ? ((dlg['cards'] as List)
+                  .map((e) => (e as Map).cast<String, dynamic>())
+                  .toList())
+              : _memoryLabels.keys
+                  .where((f) => widget.gameState?.flags[f] == true)
+                  .map((f) => <String, dynamic>{'id': f, 'label': _memoryLabels[f]})
+                  .toList();
           final last = idx >= lines.length - 1;
           return AlertDialog(
             title: Text(dlg['speaker'] as String? ?? '対峙'),
@@ -810,14 +818,14 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                       spacing: 6,
                       runSpacing: 6,
                       children: [
-                        if (held.isEmpty)
-                          const Text('突きつけられる記憶が無い……',
+                        if (cards.isEmpty)
+                          const Text('突きつけられる論拠が無い……',
                               style: TextStyle(
                                   color: Colors.white38, fontSize: 12)),
-                        for (final f in held)
+                        for (final c in cards)
                           OutlinedButton(
                             onPressed: () {
-                              if (f == line['press']) {
+                              if (c['id'] == line['press']) {
                                 setLocal(() {
                                   rebutted = true;
                                   feedback = line['rebut'] as String? ?? '';
@@ -827,7 +835,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                                     line['fail'] as String? ?? '…それは違う。');
                               }
                             },
-                            child: Text(_memoryLabels[f]!),
+                            child: Text(c['label'] as String? ?? '?'),
                           ),
                       ],
                     ),
@@ -839,8 +847,9 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 onPressed: () {
                   Navigator.pop(ctx);
                   if (!mounted) return;
-                  _dialogueOutcome(
-                      (dlg['on_yield'] as Map?)?.cast<String, dynamic>());
+                  final out =
+                      (dlg['on_yield'] as Map?)?.cast<String, dynamic>();
+                  terminal ? _dialogueOutcome(out) : _dialogueResult(out);
                 },
                 child: const Text('目を背ける'),
               ),
@@ -851,13 +860,14 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                       setLocal(() {
                         idx++;
                         rebutted = false;
-                        feedback = '——突きつける“記憶”を選べ。';
+                        feedback = '——突きつける論拠を選べ。';
                       });
                     } else {
                       Navigator.pop(ctx);
                       if (!mounted) return;
-                      _dialogueOutcome(
-                          (dlg['on_break'] as Map?)?.cast<String, dynamic>());
+                      final out =
+                          (dlg['on_break'] as Map?)?.cast<String, dynamic>();
+                      terminal ? _dialogueOutcome(out) : _dialogueResult(out);
                     }
                   },
                   child: Text(last ? '突きつけ終える' : '次へ'),
@@ -880,6 +890,19 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       gs.meters['confront'] = (gs.meters['confront'] ?? 0) + d;
     }
     _clear({'text': outcome['text'] as String?});
+  }
+
+  /// 非終端の対峙（推理ビート）。脱出させず、フラグ/メーターを反映し結果文を表示。
+  void _dialogueResult(Map<String, dynamic>? outcome) {
+    if (outcome == null) return;
+    final gs = widget.gameState;
+    if (gs != null) {
+      final fl = outcome['flag'] as String?;
+      if (fl != null) gs.flags[fl] = true;
+      final d = (outcome['delta'] as num?)?.toInt() ?? 0;
+      if (d != 0) gs.meters['confront'] = (gs.meters['confront'] ?? 0) + d;
+    }
+    setState(() => _msg = outcome['text'] as String? ?? '');
   }
 
   // ---- ヒント／スキップ（詰み防止）----

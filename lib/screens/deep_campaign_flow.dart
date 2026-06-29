@@ -325,6 +325,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
           playSeconds: playSeconds,
           totalHints: totalHints,
           floors: List<Map<String, dynamic>>.from(_floors),
+          mode: widget.mode,
           onRestart: _restartOrTitle,
         );
       case _Phase.loading:

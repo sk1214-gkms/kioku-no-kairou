@@ -18,6 +18,7 @@ class VerdictScreen extends StatelessWidget {
   final int playSeconds; // 実プレイ時間（秒）
   final int totalHints; // ヒント閲覧の総回数
   final List<Map<String, dynamic>> floors; // フロア別 {name, seconds, hints}
+  final String mode; // 'normal' / 'timer' / 'hard'
   final VoidCallback onRestart;
 
   const VerdictScreen({
@@ -35,8 +36,13 @@ class VerdictScreen extends StatelessWidget {
     this.playSeconds = 0,
     this.totalHints = 0,
     this.floors = const [],
+    this.mode = 'normal',
     required this.onRestart,
   });
+
+  String get _modeLabel =>
+      const {'normal': 'ノーマル', 'timer': 'タイマー', 'hard': 'ハード'}[mode] ??
+      mode;
 
   static String fmtTime(int s) {
     final m = (s ~/ 60).toString();
@@ -48,6 +54,7 @@ class VerdictScreen extends StatelessWidget {
   // 出すのはスコア／タイム／ヒント回数（数値）と、煽り文・タグ・URLのみ。
   String _shareText() =>
       '『アムネジィ・ケース』をクリア！\n'
+      'モード：$_modeLabel\n'
       'スコア：$integrity\n'
       'クリアタイム：${fmtTime(playSeconds)} ／ ヒント：$totalHints回\n'
       'あなたは、どんな“結末”に辿り着く？\n'
@@ -258,6 +265,7 @@ class VerdictScreen extends StatelessWidget {
       spacing: 10,
       runSpacing: 10,
       children: [
+        chip('モード', _modeLabel, Colors.cyanAccent),
         chip('クリアタイム', fmtTime(playSeconds), Colors.white),
         chip('スコア（作話完全度）', '$integrity', Colors.amberAccent),
         chip('ヒント閲覧', '$totalHints 回', Colors.white),

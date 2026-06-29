@@ -14,7 +14,7 @@ class DeepRoomScreen extends StatefulWidget {
   final String mode; // normal | hard | timer
   final bool timed; // 脳死クロックを表示するか
   final ValueListenable<int>? remaining; // 脳死までの残り秒（キャンペーン保持・通知）
-  final VoidCallback? onCleared;
+  final void Function(int hintsUsed)? onCleared;
   final List<String> litGlyphs; // これまで点灯したトラウマ文字（点灯順＝不規則）
 
   const DeepRoomScreen({
@@ -945,7 +945,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     if (_done) return;
     _done = true;
     if (widget.onCleared != null) {
-      widget.onCleared!();
+      widget.onCleared!(_hintLevel);
     } else {
       Navigator.of(context).maybePop();
     }
@@ -1029,7 +1029,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
               Navigator.pop(ctx);
               if (!mounted) return;
               if (widget.onCleared != null) {
-                widget.onCleared!();
+                widget.onCleared!(_hintLevel);
               } else {
                 Navigator.of(context).maybePop();
               }

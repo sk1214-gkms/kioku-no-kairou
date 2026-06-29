@@ -51,6 +51,10 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
   int _earnedLetters = 0; // 結末時点で点灯できた GEDÄCHTNIS 文字数
   bool _brainDead = false;
 
+  // 結果画面用：フロア別の所要秒・ヒント閲覧回数を集計
+  final List<Map<String, dynamic>> _floors = [];
+  int _roomStartRem = 0; // 現在フロアに入った時点の残り秒
+
   /// モード別の総制限時間（秒）。ハードほど短い。
   int _durationFor(String mode) {
     switch (mode) {
@@ -154,6 +158,8 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
       }
       _brainDead = false;
       _ending = null;
+      _floors.clear();
+      _roomStartRem = _remaining.value;
       _phase = _Phase.room;
     });
     _autosave();
@@ -197,8 +203,9 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     });
   }
 
-  void _advance() {
+  void _advance(int hintsUsed) {
     if (_phase == _Phase.ending) return;
+    _recordFloor(_rooms[_idx]['name'] as String? ?? 'R${_idx + 1}', hintsUsed);
     setState(() {
       if (_idx < _rooms.length - 1) {
         _idx++;
@@ -206,10 +213,17 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
         _phase = _Phase.reveal; // R13クリア → アナグラム収束演出へ
       }
     });
+    _roomStartRem = _remaining.value; // 次フロア（reveal/judgment含む）の起点
     _autosave(); // 次の部屋頭でチェックポイント（reveal遷移時は no-op）
     if (_phase == _Phase.room) {
       AudioService.instance.bgm(_idx < 4 ? 'ch1' : (_idx < 9 ? 'ch2' : 'ch3'));
     }
+  }
+
+  /// 直前フロアの所要秒・ヒント回数を記録（残り秒の差分＝実消費時間）。
+  void _recordFloor(String name, int hints) {
+    final secs = _roomStartRem - _remaining.value;
+    _floors.add({'name': name, 'seconds': secs < 0 ? 0 : secs, 'hints': hints});
   }
 
   void _onRevealDone() {
@@ -223,6 +237,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     _saveService.clear(); // 結末到達＝セーブ破棄
     _ticker?.cancel();
     _tAtJudgment = _remaining.value < 0 ? 0 : _remaining.value;
+    _recordFloor('30号室（最後の審判）', 0); // 推理フェーズの所要も記録
     _earnedLetters = 10; // R13収束で抑圧されたHも露見＝GEDÄCHTNIS全10文字
     final res = evaluateConfabEnding(_gs, _repo!, brainDead: false);
     _collection.markSeen(res.ending); // 結末コレクションに記録
@@ -292,6 +307,10 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
         final tRem = _brainDead ? 0 : _tAtJudgment;
         final integrity = confabIntegrity(
             correct: m, evade: e, tRemaining: tRem, tTotal: _total);
+        final remNow = _remaining.value < 0 ? 0 : _remaining.value;
+        final playSeconds = (_total - remNow).clamp(0, _total); // 実消費時間
+        final totalHints =
+            _floors.fold<int>(0, (s, f) => s + (f['hints'] as int));
         return VerdictScreen(
           result: _ending!,
           integrity: integrity,
@@ -303,6 +322,9 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
           syringeChosen: _gs.flags['syringe_chosen'] ?? false,
           allTruth: _gs.flags['all_truth'] ?? false,
           earned: _earnedLetters,
+          playSeconds: playSeconds,
+          totalHints: totalHints,
+          floors: List<Map<String, dynamic>>.from(_floors),
           onRestart: _restartOrTitle,
         );
       case _Phase.loading:

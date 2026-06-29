@@ -85,10 +85,12 @@ class _TitleScreenState extends State<TitleScreen> {
     _reload();
   }
 
+  // 時間のゆとり順のラダー：ストーリー(25分) > ノーマル(15分) > ハード(12分)。
+  // 内部キーは据え置き（normal=ストーリー / timer=ノーマル / hard=ハード）。
   static const Map<String, String> _modeLabels = {
-    'normal': 'ノーマル',
+    'normal': 'ストーリー',
     'hard': 'ハード',
-    'timer': 'タイマー',
+    'timer': 'ノーマル',
   };
 
   String _savedSummary(SavedRun s) {
@@ -144,10 +146,11 @@ class _TitleScreenState extends State<TitleScreen> {
                         style: TextStyle(color: Colors.white38)),
                     const SizedBox(height: 8),
                   ],
-                  _modeButton('ノーマル', '深い部屋を解き、作話を完成させる。ヒントあり。', 'normal'),
-                  _modeButton('タイマー', '脳死まで15分。時間に追われながら解く。', 'timer'),
-                  _modeButton(
-                      'ハード', '手がかりの説明を削りミスリードを足した最難。ヒント制限。', 'hard'),
+                  _modeButton('ストーリー',
+                      '時間にゆとり（脳死まで25分）。じっくり推理。ヒントあり。', 'normal'),
+                  _modeButton('ノーマル', '脳死まで15分。標準の緊張感で解く。', 'timer'),
+                  _modeButton('ハード',
+                      '脳死まで12分。手がかりの説明を削りミスリードを足した最難。ヒント制限。', 'hard'),
                   const SizedBox(height: 24),
                   _endingCollection(),
                   const SizedBox(height: 24),

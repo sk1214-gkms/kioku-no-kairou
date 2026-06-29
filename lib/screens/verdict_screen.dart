@@ -41,7 +41,7 @@ class VerdictScreen extends StatelessWidget {
   });
 
   String get _modeLabel =>
-      const {'normal': 'ノーマル', 'timer': 'タイマー', 'hard': 'ハード'}[mode] ??
+      const {'normal': 'ストーリー', 'timer': 'ノーマル', 'hard': 'ハード'}[mode] ??
       mode;
 
   static String fmtTime(int s) {

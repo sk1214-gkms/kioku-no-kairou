@@ -44,11 +44,13 @@ class VerdictScreen extends StatelessWidget {
     return '$m:$sec';
   }
 
+  // 共有文はネタバレ厳禁：結末名・結末記号・作話などの語は一切入れない。
+  // 出すのはスコア／タイム／ヒント回数（数値）と、煽り文・タグ・URLのみ。
   String _shareText() =>
-      '『アムネジィ・ケース ──教授の不完全な安楽──』\n'
-      '結末：${result.title}（ENDING ${result.ending}）\n'
-      'スコア（作話完全度）：$integrity\n'
+      '『アムネジィ・ケース』をクリア！\n'
+      'スコア：$integrity\n'
       'クリアタイム：${fmtTime(playSeconds)} ／ ヒント：$totalHints回\n'
+      'あなたは、どんな“結末”に辿り着く？\n'
       '#アムネジィケース\n'
       'https://sk1214-gkms.github.io/kioku-no-kairou/';
 
@@ -78,10 +80,6 @@ class VerdictScreen extends StatelessWidget {
               children: [
                 _motif(),
                 const SizedBox(height: 18),
-                Text('— ENDING ${result.ending} —',
-                    style: const TextStyle(
-                        color: Colors.white38, letterSpacing: 4)),
-                const SizedBox(height: 10),
                 Text(result.title,
                     style: TextStyle(
                         fontSize: 26,
@@ -227,7 +225,7 @@ class VerdictScreen extends StatelessWidget {
           const Divider(height: 18, color: Colors.white12),
           _row('作話完全度 I ＝ (T×M)(1+E/3)', formula),
           const SizedBox(height: 6),
-          Text('→ 結末 ${result.ending}：${result.title}',
+          Text('→ 結末：${result.title}',
               style: const TextStyle(color: Colors.white70, fontSize: 12)),
         ],
       ),

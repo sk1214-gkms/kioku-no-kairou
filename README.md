@@ -7,6 +7,7 @@
 
 ## ドキュメント
 - [**TODO（今後やること）**](docs/TODO.md) … ★残作業一覧（実プレイ→アセット→配信）。優先度付き
+- [**GitHub Pages で公開**](docs/GitHubPages公開.md) … push で自動ビルド→Web公開（スマホ可・社内ネット無関係）。URL: https://sk1214-gkms.github.io/kioku-no-kairou/
 - [**仕様書 v3（作話システム）**](docs/仕様書_v3_作話システム.md) … ★現行の正本。深い部屋13室＋作話完全度＋7結末＋設計原則
 - [仕様書 v2.0](docs/仕様書_v2.md) … 旧「30部屋ゲーム」仕様（legacy・参考）
 - [構成案 v1（謎と物語）](docs/構成案_謎と物語_v1.md) … 館＝記憶の設計思想

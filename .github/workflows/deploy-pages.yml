@@ -1,0 +1,57 @@
+name: Deploy web to GitHub Pages
+
+# main へ push すると GitHub 側でビルド→Pages公開（社内ネットの遮断は無関係）。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # プレースホルダ画像（非追跡）をCIで生成 → ビルドに同梱
+      - name: Install Pillow & CJK font
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y fonts-noto-cjk
+          python3 -m pip install --quiet Pillow
+      - name: Generate placeholder assets
+        run: |
+          python3 tools/gen_placeholders.py
+          python3 tools/gen_item_icons.py
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter --version
+      - run: flutter create --platforms=web .
+      - run: flutter pub get
+      # base-href はプロジェクトサイト（/<repo名>/）に合わせる
+      - run: flutter build web --release --base-href "/kioku-no-kairou/"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -27,9 +27,16 @@ BOTTOM = (9, 8, 11)
 RED = (150, 26, 26)
 
 def load_font(size):
-    for p in [r"C:/Windows/Fonts/YuGothB.ttc", r"C:/Windows/Fonts/meiryob.ttc",
+    for p in [  # Windows
+              r"C:/Windows/Fonts/YuGothB.ttc", r"C:/Windows/Fonts/meiryob.ttc",
               r"C:/Windows/Fonts/meiryo.ttc", r"C:/Windows/Fonts/msgothic.ttc",
-              r"C:/Windows/Fonts/YuGothM.ttc", r"C:/Windows/Fonts/yumin.ttf"]:
+              r"C:/Windows/Fonts/YuGothM.ttc", r"C:/Windows/Fonts/yumin.ttf",
+              # Linux（CI: fonts-noto-cjk）
+              "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+              "/usr/share/fonts/opentype/noto/NotoSansCJKjp-Bold.otf",
+              "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+              "/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc",
+              "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"]:
         try:
             return ImageFont.truetype(p, size)
         except Exception:

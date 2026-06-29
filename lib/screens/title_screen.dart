@@ -147,7 +147,7 @@ class _TitleScreenState extends State<TitleScreen> {
                     const SizedBox(height: 8),
                   ],
                   _modeButton('ストーリー',
-                      '時間にゆとり（脳死まで25分）。じっくり推理。ヒントあり。', 'normal'),
+                      '時間制限なし。砂時計に追われず、じっくり推理。ヒントあり。', 'normal'),
                   _modeButton('ノーマル', '脳死まで15分。標準の緊張感で解く。', 'timer'),
                   _modeButton('ハード',
                       '脳死まで12分。手がかりの説明を削りミスリードを足した最難。ヒント制限。', 'hard'),

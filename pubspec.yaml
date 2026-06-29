@@ -23,6 +23,8 @@ flutter:
     - data/
     - data/stages/
     - data/deep_rooms/
+    - assets/images/rooms/
+    - assets/images/items/
 
   # 亜簪文字（黒文字体）フォント。HUD / 結末 / R13収束の符号を亀甲文字にする。
   # 有効化手順（自宅PCで）:

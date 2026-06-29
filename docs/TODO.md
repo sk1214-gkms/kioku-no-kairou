@@ -36,7 +36,10 @@
 ## 2. 🟡 アセット制作（画像・フォント）
 エンジンは描画対応済。**画像を置けば即反映**（未配置でも errorBuilder でフォールバックし動く）。
 
-- ☐ 背景画像 13室 × 4方向（`assets/images/rooms/<id>_<dir>.png`）
+> 🧪 **仮画像で今すぐ“画像ありテスト”**：`python tools/gen_placeholders.py` を実行すると、一貫した雰囲気プレースホルダ背景52枚が `assets/images/rooms/` に生成される（コード生成＝画風が必ず揃う）。本番アートは**同じパスに上書き**すれば差し替わる。※PNGは非追跡(.gitignore)なので各PCで実行。
+> Fireflyで“部屋同士をつなげる”運用は [AdobeFirefly_生成手順.md §6](AdobeFirefly_生成手順.md) を参照（基準1枚をスタイル参照に固定→全部生成→Photoshopで色一括統一）。
+
+- ☐ 背景画像 13室 × 4方向（`assets/images/rooms/<id>_<dir>.png`）※暫定でプレースホルダ生成可
 - ☐ アイテムアイコン（`assets/images/items/<itemId>.png`）
 - ☐ タイトル/結末用のキービジュアル（任意）
 - ☐ 配置後、`pubspec.yaml` の `assets:` に画像ディレクトリを登録

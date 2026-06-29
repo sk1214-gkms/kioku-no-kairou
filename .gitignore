@@ -84,3 +84,7 @@ app.*.symbols
 
 # Flutter SDK 本体（誤ってプロジェクト内に置かれた場合に除外）
 /flutter/
+
+# プレースホルダ画像（tools/gen_placeholders.py で各PCで再生成。履歴肥大を避けるため非追跡）
+assets/images/rooms/*.png
+assets/images/items/*.png

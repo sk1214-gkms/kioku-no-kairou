@@ -18,7 +18,7 @@ class VerdictScreen extends StatelessWidget {
   final int playSeconds; // 実プレイ時間（秒）
   final int totalHints; // ヒント閲覧の総回数
   final List<Map<String, dynamic>> floors; // フロア別 {name, seconds, hints}
-  final String mode; // 'normal' / 'timer' / 'hard'
+  final String mode; // story / normal / normal_t / hard / hard_t
   final VoidCallback onRestart;
 
   const VerdictScreen({
@@ -41,7 +41,13 @@ class VerdictScreen extends StatelessWidget {
   });
 
   String get _modeLabel =>
-      const {'normal': 'ストーリー', 'timer': 'ノーマル', 'hard': 'ハード'}[mode] ??
+      const {
+        'story': 'ストーリー',
+        'normal': 'ノーマル',
+        'normal_t': 'ノーマル＋時間',
+        'hard': 'ハード',
+        'hard_t': 'ハード＋時間',
+      }[mode] ??
       mode;
 
   static String fmtTime(int s) {

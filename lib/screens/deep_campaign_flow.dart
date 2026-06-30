@@ -51,8 +51,8 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
   int _earnedLetters = 0; // 結末時点で点灯できた GEDÄCHTNIS 文字数
   bool _brainDead = false;
 
-  /// 時間制限の有無。ストーリー(内部キー normal)＝制限なし、ノーマル/ハード＝あり。
-  bool get _timed => widget.mode != 'normal';
+  /// 時間制限の有無。末尾 _t（normal_t / hard_t）＝あり、story/normal/hard＝なし。
+  bool get _timed => widget.mode.endsWith('_t');
 
   // 実プレイ時間の計測（全モード共通・バックグラウンド中は停止）
   final Stopwatch _watch = Stopwatch();
@@ -61,15 +61,15 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
   final List<Map<String, dynamic>> _floors = [];
   int _roomStartMs = 0; // 現在フロアに入った時点の経過ミリ秒
 
-  /// モード別の総制限時間（秒）。ハードほど短い。
+  /// 制限時間（秒）。時間あり版のみ実効（時間なしは名目値＝T算出で生存度100扱い）。
   int _durationFor(String mode) {
     switch (mode) {
-      case 'hard':
-        return 720; // 12分
-      case 'timer':
-        return 900; // 15分
+      case 'hard_t':
+        return 720; // ハード＋時間：12分
+      case 'normal_t':
+        return 900; // ノーマル＋時間：15分
       default:
-        return 1500; // ノーマル 25分
+        return 1500; // 時間なし（story/normal/hard）の名目値
     }
   }
 

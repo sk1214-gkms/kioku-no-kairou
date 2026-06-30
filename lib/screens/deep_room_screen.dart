@@ -45,12 +45,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
 
   Map<String, dynamic> get _room => widget.room;
 
-  bool get _hard => widget.mode == 'hard';
+  // hard / hard_t は暗号・囮の難化層を使う
+  bool get _hard => widget.mode.startsWith('hard');
 
   List<String> get _hints => ((_room['hints'] as List?) ?? []).cast<String>();
-  // ハードは最終（答え直結）ヒントを伏せる＝説明を減らす難化
-  int get _maxHint =>
-      _hard ? (_hints.length - 1).clamp(0, _hints.length) : _hints.length;
+  // ストーリーのみ最終（答え直結）ヒントまで開放＝安全網。
+  // ノーマル/ハード系は最終ヒントを伏せ、自力導出させる（詰み防止はスキップで担保）。
+  int get _maxHint => widget.mode == 'story'
+      ? _hints.length
+      : (_hints.length - 1).clamp(0, _hints.length);
 
   /// ハードでは reveal_hard（あれば）を使い、親切な説明を伏せる。
   String _reveal(Map<String, dynamic> o) =>

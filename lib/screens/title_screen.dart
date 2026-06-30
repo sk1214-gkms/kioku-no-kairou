@@ -85,12 +85,13 @@ class _TitleScreenState extends State<TitleScreen> {
     _reload();
   }
 
-  // 時間のゆとり順のラダー：ストーリー(25分) > ノーマル(15分) > ハード(12分)。
-  // 内部キーは据え置き（normal=ストーリー / timer=ノーマル / hard=ハード）。
+  // 5モード。難度3層(story/normal/hard) × 時間制限(なし / 末尾_t=あり)。
   static const Map<String, String> _modeLabels = {
-    'normal': 'ストーリー',
+    'story': 'ストーリー',
+    'normal': 'ノーマル',
+    'normal_t': 'ノーマル＋時間',
     'hard': 'ハード',
-    'timer': 'ノーマル',
+    'hard_t': 'ハード＋時間',
   };
 
   String _savedSummary(SavedRun s) {
@@ -147,10 +148,15 @@ class _TitleScreenState extends State<TitleScreen> {
                     const SizedBox(height: 8),
                   ],
                   _modeButton('ストーリー',
-                      '時間制限なし。砂時計に追われず、じっくり推理。ヒントあり。', 'normal'),
-                  _modeButton('ノーマル', '脳死まで15分。標準の緊張感で解く。', 'timer'),
+                      '時間制限なし。最終ヒントで答えまで導ける安全網つき。物語と推理をじっくり。', 'story'),
+                  _modeButton('ノーマル',
+                      '時間制限なし。答えの最終ヒントは無し＝自力で導く標準難度。', 'normal'),
+                  _modeButton('ノーマル＋制限時間',
+                      'ノーマル難度＋脳死カウント15分。時間切れで精神の死(D)。', 'normal_t'),
                   _modeButton('ハード',
-                      '脳死まで12分。手がかりの説明を削りミスリードを足した最難。ヒント制限。', 'hard'),
+                      '時間制限なし。手がかりを暗号化・ミスリード増の最難。', 'hard'),
+                  _modeButton('ハード＋制限時間',
+                      'ハード＋脳死カウント12分。最高難度。時間切れでD。', 'hard_t'),
                   const SizedBox(height: 24),
                   _endingCollection(),
                   const SizedBox(height: 24),

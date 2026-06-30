@@ -23,6 +23,34 @@ class _TitleScreenState extends State<TitleScreen> {
   Set<String> _seen = {};
   bool _loading = true;
 
+  // モード選択：難度3層＋制限時間トグル（ストーリーは常に時間なし）
+  String _diff = 'normal'; // story / normal / hard
+  bool _timed = false;
+
+  static const List<Map<String, String>> _diffs = [
+    {
+      'key': 'story',
+      'name': 'ストーリー',
+      'goal': '物語を味わう',
+      'desc': '時間制限なし。最終ヒントまで開放の安全網。推理が苦手でも結末へ辿り着ける。',
+    },
+    {
+      'key': 'normal',
+      'name': 'ノーマル',
+      'goal': '標準の謎解き',
+      'desc': '答えの最終ヒントは無し＝自力で導く。手応えと達成感のバランス。',
+    },
+    {
+      'key': 'hard',
+      'name': 'ハード',
+      'goal': '限界に挑む',
+      'desc': '手がかりを暗号化し、ミスリードを増した最難。',
+    },
+  ];
+
+  String _resolveMode() =>
+      _diff == 'story' ? 'story' : (_timed ? '${_diff}_t' : _diff);
+
   // 結末コレクション表示用（コード→題）。配布順＝物語の振れ幅。
   static const List<List<String>> _allEndings = [
     ['A+', '完璧な偽物'],
@@ -147,16 +175,7 @@ class _TitleScreenState extends State<TitleScreen> {
                         style: TextStyle(color: Colors.white38)),
                     const SizedBox(height: 8),
                   ],
-                  _modeButton('ストーリー',
-                      '時間制限なし。最終ヒントで答えまで導ける安全網つき。物語と推理をじっくり。', 'story'),
-                  _modeButton('ノーマル',
-                      '時間制限なし。答えの最終ヒントは無し＝自力で導く標準難度。', 'normal'),
-                  _modeButton('ノーマル＋制限時間',
-                      'ノーマル難度＋脳死カウント15分。時間切れで精神の死(D)。', 'normal_t'),
-                  _modeButton('ハード',
-                      '時間制限なし。手がかりを暗号化・ミスリード増の最難。', 'hard'),
-                  _modeButton('ハード＋制限時間',
-                      'ハード＋脳死カウント12分。最高難度。時間切れでD。', 'hard_t'),
+                  _modeSelector(),
                   const SizedBox(height: 24),
                   _endingCollection(),
                   const SizedBox(height: 24),
@@ -219,25 +238,118 @@ class _TitleScreenState extends State<TitleScreen> {
     );
   }
 
-  Widget _modeButton(String title, String desc, String mode) {
-    return Container(
-      width: 320,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: FilledButton(
-        onPressed: () => _deepNew(mode),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          child: Column(
-            children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text(desc,
-                  style: const TextStyle(fontSize: 11),
-                  textAlign: TextAlign.center),
-            ],
+  // ===== モード選択：3カード（難度）＋制限時間トグル＋開始ボタン =====
+  Widget _modeSelector() {
+    final canTime = _diff != 'story';
+    final dur = _diff == 'hard' ? '12分' : '15分';
+    return SizedBox(
+      width: 340,
+      child: Column(
+        children: [
+          const Text('難易度を選ぶ',
+              style: TextStyle(color: Colors.white54, fontSize: 12)),
+          const SizedBox(height: 8),
+          for (final d in _diffs) _diffCard(d),
+          const SizedBox(height: 10),
+          // 制限時間トグル（ストーリー時は無効）
+          Opacity(
+            opacity: canTime ? 1 : 0.35,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF15131C),
+                border: Border.all(
+                    color: (canTime && _timed)
+                        ? Colors.redAccent
+                        : Colors.white12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: SwitchListTile(
+                value: canTime && _timed,
+                onChanged:
+                    canTime ? (v) => setState(() => _timed = v) : null,
+                dense: true,
+                title: const Text('⏱ 制限時間（脳死カウント）',
+                    style: TextStyle(fontSize: 13)),
+                subtitle: Text(
+                    canTime
+                        ? '$dur で時間切れ＝“精神の死(D)”。この時だけの結末が加わる。'
+                        : 'ストーリーは時間制限なし',
+                    style: const TextStyle(fontSize: 10, color: Colors.white38)),
+              ),
+            ),
           ),
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () => _deepNew(_resolveMode()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Text('${_modeLabels[_resolveMode()]} で潜る  →',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _diffCard(Map<String, String> d) {
+    final sel = _diff == d['key'];
+    return GestureDetector(
+      onTap: () => setState(() {
+        _diff = d['key']!;
+        if (_diff == 'story') _timed = false;
+      }),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: sel ? const Color(0xFF241F33) : const Color(0xFF15131C),
+          border: Border.all(
+              color: sel ? Colors.amberAccent : Colors.white12,
+              width: sel ? 2 : 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+                sel
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                size: 18,
+                color: sel ? Colors.amberAccent : Colors.white24),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(d['name']!,
+                          style: const TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 8),
+                      Text('— ${d['goal']}',
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.amberAccent)),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(d['desc']!,
+                      style:
+                          const TextStyle(fontSize: 11, color: Colors.white54)),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -107,7 +107,7 @@ A dark painterly semi-realistic illustration, a gothic study inside a mansion th
 
 **r4_west.png**
 ```
-A dark painterly semi-realistic illustration, a gothic study inside a mansion that is secretly a medical facility, muted teal-and-sepia palette with a single blood-red accent, dim cinematic uncanny lighting. Scene: the west wall, an antique puzzle panel engraved with a row of carved animal/beast figures in sequence. Vertical 9:16 composition. No legible text, no people.
+A dark painterly semi-realistic illustration, a gothic study inside a mansion that is secretly a medical facility, muted teal-and-sepia palette with a single blood-red accent, dim cinematic uncanny lighting. Scene: the west wall, an antique brass-and-wood cipher panel engraved with a single horizontal row of four large geometric symbols in this exact order — an outline circle, an outline triangle, an outline square, and a solid filled black circle. No animals, no creatures. Vertical 9:16 composition. No legible text, no people.
 ```
 
 **r4_south.png**

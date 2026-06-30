@@ -41,14 +41,35 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   final List<String> _selected = [];
   String _msg = '';
   bool _done = false;
-  int _hintLevel = 0; // 公開済みヒント段数（最大3）
+  int _hintLevel = 0; // 進捗連動の現在位置（済み手順を飛ばして進む）
+  int _hintsViewed = 0; // 実際に開いた（＝広告視聴した）ヒント数。結果画面用
 
   Map<String, dynamic> get _room => widget.room;
 
   // hard / hard_t は暗号・囮の難化層を使う
   bool get _hard => widget.mode.startsWith('hard');
 
-  List<String> get _hints => ((_room['hints'] as List?) ?? []).cast<String>();
+  // ヒントは文字列 or {t:文章, done_when:{state/items/flags}} を許容（進捗連動用）。
+  List<dynamic> get _hintsRaw => (_room['hints'] as List?) ?? const [];
+  List<String> get _hints => _hintsRaw.map(_hintText).toList();
+  String _hintText(dynamic h) =>
+      h is Map ? (h['t'] as String? ?? '') : h.toString();
+
+  /// そのヒントの“手順”が既に達成済みか（達成済みなら出さずに飛ばす）。
+  bool _hintDone(dynamic h) {
+    if (h is! Map) return false;
+    final dw = (h['done_when'] as Map?)?.cast<String, dynamic>();
+    if (dw == null) return false;
+    final st = dw['state'];
+    if (st is List && !_stateOk(st)) return false;
+    for (final it in (dw['items'] as List? ?? const [])) {
+      if (!_items.contains(it)) return false;
+    }
+    for (final fl in (dw['flags'] as List? ?? const [])) {
+      if (widget.gameState?.flags['$fl'] != true) return false;
+    }
+    return true;
+  }
   // ストーリーのみ最終（答え直結）ヒントまで開放＝安全網。
   // ノーマル/ハード系は最終ヒントを伏せ、自力導出させる（詰み防止はスキップで担保）。
   int get _maxHint => widget.mode == 'story'
@@ -909,23 +930,31 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   }
 
   // ---- ヒント／スキップ（詰み防止）----
+  // 進捗連動：現在地から“済んだ手順”を飛ばし、いま詰まっている手順のヒントを出す。
   void _showHint() {
-    final hints = _hints;
+    final raw = _hintsRaw;
     final max = _maxHint;
-    if (hints.isEmpty || max <= 0) {
+    if (raw.isEmpty || max <= 0) {
       setState(() => _msg = 'この部屋にヒントは無い……自力で解け。');
       return;
     }
-    if (_hintLevel >= max) {
-      _zoom('ヒント $max / $max', hints[max - 1]);
+    var i = _hintLevel;
+    while (i < max && i < raw.length && _hintDone(raw[i])) {
+      i++; // その手順は達成済み＝広告なしで飛ばす
+    }
+    if (i >= max || i >= raw.length) {
+      setState(() {
+        _hintLevel = max; // スキップを解放
+        _msg = '今、出せるヒントはもう無い。';
+      });
       return;
     }
-    final next = _hintLevel + 1;
+    final shown = i;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('ヒント $next / $max'),
-        content: const Text('広告を見て、次のヒントを表示しますか？'),
+        title: const Text('ヒント'),
+        content: const Text('広告を見て、いま必要なヒントを表示しますか？'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx), child: const Text('やめる')),
@@ -934,8 +963,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
               Navigator.pop(ctx);
               if (!mounted) return;
               // 広告はスタブ（no-op）。視聴完了とみなしてヒントを解放。
-              setState(() => _hintLevel = next);
-              _zoom('ヒント $next / ${hints.length}', hints[next - 1]);
+              setState(() {
+                _hintLevel = shown + 1;
+                _hintsViewed++;
+              });
+              _zoom('ヒント', _hintText(raw[shown]));
             },
             child: const Text('見る'),
           ),
@@ -948,7 +980,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     if (_done) return;
     _done = true;
     if (widget.onCleared != null) {
-      widget.onCleared!(_hintLevel);
+      widget.onCleared!(_hintsViewed);
     } else {
       Navigator.of(context).maybePop();
     }
@@ -1032,7 +1064,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
               Navigator.pop(ctx);
               if (!mounted) return;
               if (widget.onCleared != null) {
-                widget.onCleared!(_hintLevel);
+                widget.onCleared!(_hintsViewed);
               } else {
                 Navigator.of(context).maybePop();
               }
@@ -1316,7 +1348,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 label: Text(
                   _hints.isEmpty || _maxHint <= 0
                       ? 'ヒント'
-                      : 'ヒント（$_hintLevel/$_maxHint・広告）',
+                      : 'ヒント（広告）',
                   style: const TextStyle(color: Colors.amberAccent, fontSize: 12),
                 ),
               ),

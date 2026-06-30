@@ -156,7 +156,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     if (o['win'] == true) {
       final need = o['requires_item'] as String?;
       if (need != null && !_selected.contains(need)) {
-        setState(() => _msg = '${_itemLabel(need)} を選んでから使おう。');
+        setState(() => _msg = '扉は、びくともしない。');
         return;
       }
       _win();
@@ -201,7 +201,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           _msg = o['on_use_reveal'] as String? ?? '${_itemLabel(need)} を使った。';
         });
       } else {
-        setState(() => _msg = '${_itemLabel(need)} が必要だ（下で選んでからタップ）。');
+        setState(() => _msg = '……今は、手の出しようがない。');
       }
       return;
     }
@@ -673,7 +673,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
 
   void _combine() {
     if (_selected.length != 2) {
-      setState(() => _msg = '合成するアイテムを2つ選ぼう。');
+      setState(() => _msg = '……うまく組み合わさらない。');
       return;
     }
     for (final r0 in (_room['combines'] as List?) ?? []) {

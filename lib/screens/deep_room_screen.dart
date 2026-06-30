@@ -121,7 +121,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       return;
     }
     if (!_stateOk(o['requires_state'] as List?)) {
-      setState(() => _msg = '今は反応しないようだ…');
+      setState(() => _msg = ''); // 前提未達は無反応（“何か先に要る”という糸口を出さない）
       return;
     }
     if (o['editable_memory'] != null) {
@@ -673,7 +673,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
 
   void _combine() {
     if (_selected.length != 2) {
-      setState(() => _msg = '……うまく組み合わさらない。');
+      setState(() => _msg = ''); // 合成は成功時のみ反応（2つ未選択は無音）
       return;
     }
     for (final r0 in (_room['combines'] as List?) ?? []) {
@@ -693,7 +693,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         return;
       }
     }
-    setState(() => _msg = 'この2つは組み合わせられないようだ。');
+    setState(() => _msg = ''); // 合成失敗は無反応（“その2つは組み合わない”という糸口を出さない）
   }
 
   // ---- ① 記憶の上書き（直視 vs 書き換え）----

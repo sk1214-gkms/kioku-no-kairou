@@ -85,6 +85,8 @@ app.*.symbols
 # Flutter SDK 本体（誤ってプロジェクト内に置かれた場合に除外）
 /flutter/
 
-# プレースホルダ画像（tools/gen_placeholders.py で各PCで再生成。履歴肥大を避けるため非追跡）
-assets/images/rooms/*.png
-assets/images/items/*.png
+# 完成アセット画像（背景・アイテム）は追跡する＝自宅PCへ pull で配布するため。
+#   ・Gemini出力の取り込み：tools/import_images.py（透かし除去＋PNG化＋振り分け）
+#   ・プレースホルダ生成：tools/gen_placeholders.py
+# 退避用 _staging（door等・現エンジン未使用アセット）は派生物なので非追跡。
+assets/images/_staging/

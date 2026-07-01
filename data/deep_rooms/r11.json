@@ -26,7 +26,12 @@
           ],
           "label": "無影灯",
           "reveal": "無影灯。点けるのは、術野を確かめ、術者の手を清めた“後”だ。",
-          "reveal_hard": "無影灯。"
+          "reveal_hard": "無影灯。",
+          "record": {
+            "key": "s_lamp",
+            "label": "無影灯",
+            "value": "術野確認と清潔の後"
+          }
         },
         {
           "id": "dwash",
@@ -38,7 +43,12 @@
           ],
           "label": "消毒槽",
           "reveal": "消毒槽。確認の次、灯を点ける前に、手を清める。",
-          "reveal_hard": "消毒槽。"
+          "reveal_hard": "消毒槽。",
+          "record": {
+            "key": "s_scrub",
+            "label": "消毒槽",
+            "value": "確認の次・灯の前"
+          }
         }
       ]
     },
@@ -55,7 +65,12 @@
           ],
           "label": "カルテの束",
           "reveal": "カルテ。何よりもまず、術式を確認する。",
-          "reveal_hard": "カルテ。"
+          "reveal_hard": "カルテ。",
+          "record": {
+            "key": "s_chart",
+            "label": "カルテ",
+            "value": "まず確認（最初）"
+          }
         },
         {
           "id": "eanes",
@@ -67,7 +82,12 @@
           ],
           "label": "麻酔器",
           "reveal": "麻酔器。患者を眠らせるのは、灯の後、刃の前。",
-          "reveal_hard": "麻酔器。"
+          "reveal_hard": "麻酔器。",
+          "record": {
+            "key": "s_anes",
+            "label": "麻酔器",
+            "value": "灯の後・刃の前"
+          }
         }
       ]
     },
@@ -84,7 +104,12 @@
           ],
           "label": "トレイの器具",
           "reveal": "トレイのメス。手に取るのは、最後だ。横に止血鉗子もあるが、手順には要らぬ。",
-          "reveal_hard": "メス。"
+          "reveal_hard": "メス。",
+          "record": {
+            "key": "s_tool",
+            "label": "メス／持針器",
+            "value": "切開は最後、縫合は最後の最後"
+          }
         },
         {
           "id": "suture_o",

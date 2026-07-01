@@ -26,7 +26,12 @@
           ],
           "label": "刻印①",
           "reveal": "壁の刻印『MO』。",
-          "reveal_hard": "刻印『MO』。"
+          "reveal_hard": "刻印『MO』。",
+          "record": {
+            "key": "f_mo",
+            "label": "刻印",
+            "value": "MO"
+          }
         },
         {
           "id": "e",
@@ -38,7 +43,12 @@
           ],
           "label": "刻印（梁）",
           "reveal": "梁の刻印『OR』。",
-          "reveal_hard": "刻印『OR』。"
+          "reveal_hard": "刻印『OR』。",
+          "record": {
+            "key": "f_or",
+            "label": "刻印(罠)",
+            "value": "OR"
+          }
         }
       ]
     },
@@ -55,7 +65,12 @@
           ],
           "label": "刻印②",
           "reveal": "床の刻印『RY』。",
-          "reveal_hard": "刻印『RY』。"
+          "reveal_hard": "刻印『RY』。",
+          "record": {
+            "key": "f_ry",
+            "label": "刻印",
+            "value": "RY"
+          }
         },
         {
           "id": "d",
@@ -67,7 +82,12 @@
           ],
           "label": "刻印（柱）",
           "reveal": "柱の刻印『DE』——これは、別の言葉の名残か。惑わされるな。",
-          "reveal_hard": "刻印『DE』。"
+          "reveal_hard": "刻印『DE』。",
+          "record": {
+            "key": "f_de",
+            "label": "刻印(罠)",
+            "value": "DE"
+          }
         }
       ]
     },
@@ -84,7 +104,12 @@
           ],
           "label": "刻印③",
           "reveal": "天井の刻印『ME』。六つの断片のうち、三つだけが一つの英単語へ収束する。",
-          "reveal_hard": "刻印『ME』。"
+          "reveal_hard": "刻印『ME』。",
+          "record": {
+            "key": "f_me",
+            "label": "刻印",
+            "value": "ME"
+          }
         },
         {
           "id": "f",
@@ -96,7 +121,12 @@
           ],
           "label": "刻印（床下）",
           "reveal": "床下の刻印『GE』。",
-          "reveal_hard": "刻印『GE』。"
+          "reveal_hard": "刻印『GE』。",
+          "record": {
+            "key": "f_ge",
+            "label": "刻印(罠)",
+            "value": "GE"
+          }
         }
       ]
     },

@@ -193,7 +193,12 @@
                 "label": "担当医欄の切れ端",
                 "gives": "item_frag_c",
                 "reveal": "名札の裏に、カルテの担当医欄の切れ端が隠されていた。",
-                "reveal_hard": "切れ端が一枚。"
+                "reveal_hard": "切れ端が一枚。",
+                "record": {
+                  "key": "doc",
+                  "label": "カルテ担当医欄",
+                  "value": "『蓮見』"
+                }
               }
             ]
           }

@@ -119,10 +119,49 @@ def make(room, idx, direction, seed):
 
 # 情景変化の状態差分（明るさ倍率）。bg_variants の suffix と一致させる。
 VARIANTS = {
-    "r3": [("lit", 1.7)],    # ブラックライトON＝明るく
+    "r3": [("lit", 1.55)],   # ブラックライトON＝明るく
     "r8": [("dark", 0.42)],  # 消灯＝暗く
-    "r10": [("on", 1.5)],    # 通電＝明るく
+    "r10": [("on", 1.4)],    # 通電＝明るく
 }
+# 差分背景に“出現した物”を描く（W2：本番アートの型／(room,dir,suffix)→(種類, 540x960系rect)）。
+DEPICT = {
+    ("r3", "north", "lit"):  ("wall",    (165, 225, 240, 240)),
+    ("r8", "east", "dark"):  ("mirror",  (165, 210, 225, 300)),
+    ("r10", "north", "on"):  ("monitor", (150, 225, 255, 225)),
+    ("r10", "east", "on"):   ("monitor", (135, 225, 240, 225)),
+}
+
+def _depict(img, typ, rect):
+    d = ImageDraw.Draw(img, "RGBA")
+    x, y, w, h = rect
+    if typ == "monitor":  # 点いたモニタ（シアンの発光＋走査線＋▶）
+        d.rounded_rectangle([x, y, x + w, y + h], 8, fill=(14, 26, 30, 255),
+                            outline=(90, 220, 230, 230), width=4)
+        for yy in range(int(y) + 12, int(y + h) - 8, 10):
+            d.line([x + 8, yy, x + w - 8, yy], fill=(90, 220, 230, 40), width=1)
+        cx, cy = x + w / 2, y + h / 2
+        d.polygon([(cx - 16, cy - 20), (cx - 16, cy + 20), (cx + 20, cy)],
+                  fill=(120, 235, 240, 210))
+    elif typ == "mirror":  # 返り血の鏡（枠＋赤い滴り＋人影）
+        d.rounded_rectangle([x, y, x + w, y + h], 18, fill=(30, 26, 34, 255),
+                            outline=(150, 150, 165, 230), width=5)
+        d.ellipse([x + w * 0.28, y + h * 0.22, x + w * 0.72, y + h * 0.62],
+                  fill=(60, 55, 66, 255))  # 人影
+        import random as _r
+        _r.seed(int(x + y))
+        for _ in range(9):  # 返り血
+            sx = x + 20 + _r.random() * (w - 40)
+            sy = y + 20 + _r.random() * (h * 0.5)
+            d.line([sx, sy, sx - 6, sy + 30 + _r.random() * 40],
+                   fill=(150, 20, 20, 220), width=4)
+    elif typ == "wall":  # 現像された壁（数字/滲み）
+        d.rectangle([x, y, x + w, y + h], fill=(20, 22, 20, 200),
+                    outline=(120, 200, 120, 180), width=3)
+        try:
+            f = ImageFont.truetype(r"C:/Windows/Fonts/consolab.ttf", 40)
+        except Exception:
+            f = ImageFont.load_default()
+        d.text((x + 16, y + h / 2 - 20), "○ △ □", font=f, fill=(150, 220, 150, 210))
 
 def main():
     os.makedirs(OUT, exist_ok=True)
@@ -134,8 +173,11 @@ def main():
             img.save(os.path.join(OUT, f"r{i}_{dr}.png"), optimize=True)
             n += 1
             for suf, fac in VARIANTS.get(f"r{i}", []):
-                ImageEnhance.Brightness(img).enhance(fac).save(
-                    os.path.join(OUT, f"r{i}_{dr}_{suf}.png"), optimize=True)
+                var = ImageEnhance.Brightness(img).enhance(fac)
+                dep = DEPICT.get((f"r{i}", dr, suf))
+                if dep:
+                    _depict(var, dep[0], dep[1])  # 出現物を描き込む(W2)
+                var.save(os.path.join(OUT, f"r{i}_{dr}_{suf}.png"), optimize=True)
                 n += 1
     print(f"generated {n} backgrounds (incl. state variants) -> {OUT}")
 

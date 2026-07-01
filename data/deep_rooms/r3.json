@@ -94,6 +94,14 @@
             "key": "memo",
             "label": "現像メモ",
             "value": "凶行の半刻(=30分)のち"
+          },
+          "show_when": {
+            "state": [
+              {
+                "interactable": "lamp",
+                "state": "on"
+              }
+            ]
           }
         },
         {
@@ -176,5 +184,18 @@
         }
       ]
     }
-  }
+  },
+  "bg_variants": [
+    {
+      "when": {
+        "state": [
+          {
+            "interactable": "lamp",
+            "state": "on"
+          }
+        ]
+      },
+      "suffix": "lit"
+    }
+  ]
 }

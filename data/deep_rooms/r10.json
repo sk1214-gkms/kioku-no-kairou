@@ -106,7 +106,15 @@
               }
             ]
           },
-          "normal_only": true
+          "normal_only": true,
+          "show_when": {
+            "state": [
+              {
+                "interactable": "power",
+                "state": "on"
+              }
+            ]
+          }
         },
         {
           "id": "m1_h",
@@ -168,7 +176,15 @@
               }
             ]
           },
-          "hard_only": true
+          "hard_only": true,
+          "show_when": {
+            "state": [
+              {
+                "interactable": "power",
+                "state": "on"
+              }
+            ]
+          }
         }
       ]
     },
@@ -195,6 +211,14 @@
             "key": "aux",
             "label": "補助モニター",
             "value": "異音と重なるのは一度きり"
+          },
+          "show_when": {
+            "state": [
+              {
+                "interactable": "power",
+                "state": "on"
+              }
+            ]
           }
         }
       ]
@@ -215,5 +239,18 @@
         }
       ]
     }
-  }
+  },
+  "bg_variants": [
+    {
+      "when": {
+        "state": [
+          {
+            "interactable": "power",
+            "state": "on"
+          }
+        ]
+      },
+      "suffix": "on"
+    }
+  ]
 }

@@ -10,7 +10,7 @@
 依存:    Pillow
 """
 import os, io, json, math, random
-from PIL import Image, ImageDraw, ImageFilter, ImageChops, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageChops, ImageFont, ImageEnhance
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT  = os.path.join(ROOT, "assets", "images", "rooms")
@@ -117,6 +117,13 @@ def make(room, idx, direction, seed):
     # 軽いソフト化（プレースホルダ＝鮮鋭不要、PNG圧縮も効く）
     return img.filter(ImageFilter.GaussianBlur(0.5)).convert("RGB")
 
+# 情景変化の状態差分（明るさ倍率）。bg_variants の suffix と一致させる。
+VARIANTS = {
+    "r3": [("lit", 1.7)],    # ブラックライトON＝明るく
+    "r8": [("dark", 0.42)],  # 消灯＝暗く
+    "r10": [("on", 1.5)],    # 通電＝明るく
+}
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     n = 0
@@ -126,7 +133,11 @@ def main():
             img = make(room, i - 1, dr, seed=i * 10 + j)
             img.save(os.path.join(OUT, f"r{i}_{dr}.png"), optimize=True)
             n += 1
-    print(f"generated {n} backgrounds -> {OUT}")
+            for suf, fac in VARIANTS.get(f"r{i}", []):
+                ImageEnhance.Brightness(img).enhance(fac).save(
+                    os.path.join(OUT, f"r{i}_{dr}_{suf}.png"), optimize=True)
+                n += 1
+    print(f"generated {n} backgrounds (incl. state variants) -> {OUT}")
 
 if __name__ == "__main__":
     main()

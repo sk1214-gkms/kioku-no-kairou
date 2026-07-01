@@ -133,7 +133,15 @@
               "win": true
             }
           },
-          "normal_only": true
+          "normal_only": true,
+          "show_when": {
+            "state": [
+              {
+                "interactable": "lamp",
+                "state": "off"
+              }
+            ]
+          }
         },
         {
           "id": "mirror_h",
@@ -192,7 +200,15 @@
               "win": true
             }
           },
-          "hard_only": true
+          "hard_only": true,
+          "show_when": {
+            "state": [
+              {
+                "interactable": "lamp",
+                "state": "off"
+              }
+            ]
+          }
         }
       ]
     },
@@ -212,5 +228,18 @@
         }
       ]
     }
-  }
+  },
+  "bg_variants": [
+    {
+      "when": {
+        "state": [
+          {
+            "interactable": "lamp",
+            "state": "off"
+          }
+        ]
+      },
+      "suffix": "dark"
+    }
+  ]
 }

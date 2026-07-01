@@ -56,20 +56,25 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   String _hintText(dynamic h) =>
       h is Map ? (h['t'] as String? ?? '') : h.toString();
 
+  /// 汎用条件：state(requires_state形式)/items(所持)/flags(true) を全て満たすか。
+  /// done_when・show_when・hide_when・bg_variants.when で共用。
+  bool _condMet(Map<String, dynamic> c) {
+    final st = c['state'];
+    if (st is List && !_stateOk(st)) return false;
+    for (final it in (c['items'] as List? ?? const [])) {
+      if (!_items.contains(it)) return false;
+    }
+    for (final fl in (c['flags'] as List? ?? const [])) {
+      if (widget.gameState?.flags['$fl'] != true) return false;
+    }
+    return true;
+  }
+
   /// そのヒントの“手順”が既に達成済みか（達成済みなら出さずに飛ばす）。
   bool _hintDone(dynamic h) {
     if (h is! Map) return false;
     final dw = (h['done_when'] as Map?)?.cast<String, dynamic>();
-    if (dw == null) return false;
-    final st = dw['state'];
-    if (st is List && !_stateOk(st)) return false;
-    for (final it in (dw['items'] as List? ?? const [])) {
-      if (!_items.contains(it)) return false;
-    }
-    for (final fl in (dw['flags'] as List? ?? const [])) {
-      if (widget.gameState?.flags['$fl'] != true) return false;
-    }
-    return true;
+    return dw != null && _condMet(dw);
   }
   // ストーリーのみ最終（答え直結）ヒントまで開放＝安全網。
   // ノーマル/ハード系は最終ヒントを伏せ、自力導出させる（詰み防止はスキップで担保）。
@@ -101,6 +106,14 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         .map((e) => (e as Map).cast<String, dynamic>())
         // hard_only=ハードのみ表示（ミスリード等）／normal_only=ノーマルのみ表示
         .where((o) => _hard ? o['normal_only'] != true : o['hard_only'] != true)
+        // 情景変化：show_when が満たされるまで出現しない／hide_when で消える
+        .where((o) {
+          final sw = o['show_when'];
+          if (sw is Map && !_condMet(sw.cast<String, dynamic>())) return false;
+          final hw = o['hide_when'];
+          if (hw is Map && _condMet(hw.cast<String, dynamic>())) return false;
+          return true;
+        })
         .toList();
   }
 
@@ -111,10 +124,21 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   }
 
   /// 方向ごとの背景画像パス（規約: assets/images/rooms/<id>_<dir>.png）。
-  /// subview(拡大)中は今は背景なし。未配置なら errorBuilder で暗色にフォールバック。
-  String? get _bgAsset => _subStack.isNotEmpty
-      ? null
-      : 'assets/images/rooms/${_room['id']}_${_dirs[_dirIdx]}.png';
+  /// 情景変化：bg_variants の when が満たされれば <id>_<dir>_<suffix>.png に差し替え。
+  /// subview(拡大)中は背景なし。未配置なら errorBuilder で暗色にフォールバック。
+  String? get _bgAsset {
+    if (_subStack.isNotEmpty) return null;
+    final id = _room['id'];
+    final dir = _dirs[_dirIdx];
+    for (final v in (_room['bg_variants'] as List? ?? const [])) {
+      final m = (v as Map).cast<String, dynamic>();
+      final when = (m['when'] as Map?)?.cast<String, dynamic>();
+      if (when != null && _condMet(when)) {
+        return 'assets/images/rooms/${id}_${dir}_${m['suffix']}.png';
+      }
+    }
+    return 'assets/images/rooms/${id}_$dir.png';
+  }
 
   bool _stateOk(List? prs) {
     if (prs == null) return true;

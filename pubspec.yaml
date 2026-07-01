@@ -19,10 +19,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   # データはエンジン非依存の JSON をそのまま読み込む
+  # ※実行時に使うものだけを明示列挙（data/image の生成元jpg等は同梱しない＝容量削減）
   assets:
-    - data/
-    - data/stages/
     - data/deep_rooms/
+    - data/text_ja.json
+    - data/endings.json
+    - data/cipher.json
     - assets/images/rooms/
     - assets/images/items/
 

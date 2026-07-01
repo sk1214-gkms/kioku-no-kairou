@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import '../collection_service.dart';
 import '../deep_save_service.dart';
-import '../save_service.dart';
 import 'deep_campaign_flow.dart';
-import 'game_flow.dart';
 
 /// タイトル＋モード選択。ここで選んだモードが体験（記憶・結末）を変える。
 /// 中断したプレイがあれば「つづきから」を表示する。
@@ -15,10 +13,8 @@ class TitleScreen extends StatefulWidget {
 }
 
 class _TitleScreenState extends State<TitleScreen> {
-  final SaveService _save = SaveService();
   final DeepSaveService _deepSave = DeepSaveService();
   final CollectionService _collection = CollectionService();
-  SavedRun? _saved;
   DeepSavedRun? _deepSaved;
   Set<String> _seen = {};
   bool _loading = true;
@@ -69,12 +65,10 @@ class _TitleScreenState extends State<TitleScreen> {
   }
 
   Future<void> _reload() async {
-    final s = await _save.load();
     final d = await _deepSave.load();
     final seen = await _collection.seen();
     if (!mounted) return;
     setState(() {
-      _saved = s;
       _deepSaved = d;
       _seen = seen;
       _loading = false;
@@ -97,22 +91,6 @@ class _TitleScreenState extends State<TitleScreen> {
     _reload();
   }
 
-  Future<void> _newGame(String mode) async {
-    await _save.clear();
-    if (!mounted) return;
-    await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => GameFlow(mode: mode)));
-    _reload();
-  }
-
-  Future<void> _continue() async {
-    final saved = _saved;
-    if (saved == null) return;
-    await Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => GameFlow(resume: saved)));
-    _reload();
-  }
-
   // 5モード。難度3層(story/normal/hard) × 時間制限(なし / 末尾_t=あり)。
   static const Map<String, String> _modeLabels = {
     'story': 'ストーリー',
@@ -121,13 +99,6 @@ class _TitleScreenState extends State<TitleScreen> {
     'hard': 'ハード',
     'hard_t': 'ハード＋時間',
   };
-
-  String _savedSummary(SavedRun s) {
-    final mode = _modeLabels[s.gameState.mode] ?? s.gameState.mode;
-    final where =
-        s.phase == 'finalRoom' ? '最終室' : 'STAGE ${s.stageIndex + 1}';
-    return 'つづきから（$mode・$where）';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,23 +149,6 @@ class _TitleScreenState extends State<TitleScreen> {
                   _modeSelector(),
                   const SizedBox(height: 24),
                   _endingCollection(),
-                  const SizedBox(height: 24),
-                  // ===== 旧30部屋ゲーム（参考・legacy）=====
-                  const Text('― 旧30部屋ゲーム（参考・legacy）―',
-                      style: TextStyle(color: Colors.white24, fontSize: 11)),
-                  const SizedBox(height: 4),
-                  if (_saved != null)
-                    TextButton(
-                      onPressed: _continue,
-                      child: Text('（旧）${_savedSummary(_saved!)}',
-                          style: const TextStyle(
-                              color: Colors.white38, fontSize: 12)),
-                    ),
-                  TextButton(
-                    onPressed: () => _newGame('normal'),
-                    child: const Text('旧版をプレイ（ノーマル）',
-                        style: TextStyle(color: Colors.white38, fontSize: 12)),
-                  ),
                 ],
               ],
             ),

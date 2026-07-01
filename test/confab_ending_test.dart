@@ -18,8 +18,6 @@ ContentRepository _repo() {
   };
   return ContentRepository(
     texts: const {},
-    stages: const [],
-    finalRoom: Stage.fromJson({'stage_id': 0}),
     endings: endings,
     cipher: const {},
   );

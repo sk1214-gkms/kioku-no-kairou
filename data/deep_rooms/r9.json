@@ -278,5 +278,15 @@
         }
       ]
     }
-  }
+  },
+  "bg_variants": [
+    {
+      "when": {
+        "flags": [
+          "has_culprit_evidence"
+        ]
+      },
+      "suffix": "open"
+    }
+  ]
 }

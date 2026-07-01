@@ -122,6 +122,7 @@ VARIANTS = {
     "r3": [("lit", 1.55)],   # ブラックライトON＝明るく
     "r8": [("dark", 0.42)],  # 消灯＝暗く
     "r10": [("on", 1.4)],    # 通電＝明るく
+    "r9": [("open", 1.0)],   # 金属筒入手＝西の戸棚が開く（明るさ据置・西のみ描画）
 }
 # 差分背景に“出現した物”を描く（W2：本番アートの型／(room,dir,suffix)→(種類, 540x960系rect)）。
 DEPICT = {
@@ -129,6 +130,7 @@ DEPICT = {
     ("r8", "east", "dark"):  ("mirror",  (165, 210, 225, 300)),
     ("r10", "north", "on"):  ("monitor", (150, 225, 255, 225)),
     ("r10", "east", "on"):   ("monitor", (135, 225, 240, 225)),
+    ("r9", "west", "open"):  ("cabinet", (165, 225, 225, 255)),
 }
 
 def _depict(img, typ, rect):
@@ -162,6 +164,15 @@ def _depict(img, typ, rect):
         except Exception:
             f = ImageFont.load_default()
         d.text((x + 16, y + h / 2 - 20), "○ △ □", font=f, fill=(150, 220, 150, 210))
+    elif typ == "cabinet":  # 開いた戸棚（扉が開き、中は空＝筒を取った後）
+        d.rectangle([x, y, x + w, y + h], fill=(8, 8, 10, 255),
+                    outline=(120, 110, 95, 230), width=5)  # 暗い内部
+        d.line([x, y, x - 26, y + 14], fill=(120, 110, 95, 230), width=5)      # 開いた左扉
+        d.line([x + w, y, x + w + 26, y + 14], fill=(120, 110, 95, 230), width=5)  # 右扉
+        d.line([x, y + h, x - 26, y + h - 14], fill=(120, 110, 95, 230), width=5)
+        d.line([x + w, y + h, x + w + 26, y + h - 14], fill=(120, 110, 95, 230), width=5)
+        d.text((x + w / 2 - 16, y + h / 2 - 16), "空", font=load_font(30),
+               fill=(150, 140, 120, 170))
 
 def main():
     os.makedirs(OUT, exist_ok=True)

@@ -43,6 +43,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   bool _done = false;
   int _hintLevel = 0; // 進捗連動の現在位置（済み手順を飛ばして進む）
   int _hintsViewed = 0; // 実際に開いた（＝広告視聴した）ヒント数。結果画面用
+  final Map<String, String> _clues = {}; // 部屋内memo: key→「ラベル：値」（収束型）
 
   Map<String, dynamic> get _room => widget.room;
 
@@ -145,6 +146,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       setState(() => _msg = ''); // 前提未達は無反応（“何か先に要る”という糸口を出さない）
       return;
     }
+    _recordClue(o); // 収束型：手がかり(値/記号/事実)を部屋内memoに記録
     if (o['editable_memory'] != null) {
       final em = (o['editable_memory'] as Map).cast<String, dynamic>();
       final st = _states[id];
@@ -256,6 +258,53 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             child: Text(body, style: const TextStyle(fontSize: 16, height: 1.5))),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('閉じる'))
+        ],
+      ),
+    );
+  }
+
+  /// 収束型：objに record:{key,label,value} があれば部屋内memoに手がかりを記録。
+  /// ハードでは record_hard を優先（暗号のまま記録など）。重複keyは上書き。
+  void _recordClue(Map<String, dynamic> o) {
+    final rec = ((_hard ? o['record_hard'] : null) ?? o['record']) as Map?;
+    if (rec == null) return;
+    final r = rec.cast<String, dynamic>();
+    final key = r['key'] as String? ?? (o['id'] as String? ?? '');
+    final label = r['label'] as String? ?? (o['label'] as String? ?? '手がかり');
+    final value = r['value'] as String? ?? '';
+    if (_clues[key] == null) {
+      AudioService.instance.sfx('pickup'); // 新規発見の合図
+    }
+    setState(() => _clues[key] = value.isEmpty ? label : '$label：$value');
+  }
+
+  /// 集めた手がかり(memo)の一覧。収束錠の組み立てに使う。
+  void _showClues() {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('判明した手がかり（${_clues.length}）'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (_clues.isEmpty)
+                const Text('まだ何も掴んでいない。四方を調べよ。',
+                    style: TextStyle(color: Colors.white54))
+              else
+                for (final v in _clues.values)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: Text('・$v',
+                        style: const TextStyle(fontSize: 14, height: 1.4)),
+                  ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: const Text('閉じる')),
         ],
       ),
     );
@@ -1341,6 +1390,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           ),
           Row(
             children: [
+              if (_clues.isNotEmpty)
+                TextButton.icon(
+                  onPressed: _showClues,
+                  icon: const Icon(Icons.fact_check_outlined,
+                      size: 16, color: Colors.cyanAccent),
+                  label: Text('手がかり（${_clues.length}）',
+                      style:
+                          const TextStyle(color: Colors.cyanAccent, fontSize: 12)),
+                ),
               TextButton.icon(
                 onPressed: _showHint,
                 icon: const Icon(Icons.lightbulb_outline,

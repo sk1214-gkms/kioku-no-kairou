@@ -999,6 +999,12 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       final d = (outcome['delta'] as num?)?.toInt() ?? 0;
       if (d != 0) gs.meters['confront'] = (gs.meters['confront'] ?? 0) + d;
     }
+    // 収束：推理の結論を部屋内memoへ（例：消去法→犯人＝私）
+    final rec = (outcome['record'] as Map?)?.cast<String, dynamic>();
+    if (rec != null) {
+      _clues[rec['key'] as String? ?? 'reasoned'] =
+          '${rec['label'] ?? '結論'}：${rec['value'] ?? ''}';
+    }
     setState(() => _msg = outcome['text'] as String? ?? '');
   }
 

@@ -249,23 +249,23 @@
             "elements": [
               {
                 "id": "promise",
-                "label": "教授の懇願（19:00）"
+                "label": "教授の懇願"
               },
               {
                 "id": "lock",
-                "label": "正門の施錠（22:00）"
+                "label": "正門の施錠"
               },
               {
                 "id": "crime",
-                "label": "凶行（03:45）"
+                "label": "凶行"
               },
               {
                 "id": "witness",
-                "label": "甥の目撃（03:46）"
+                "label": "甥の目撃"
               },
               {
                 "id": "record",
-                "label": "事件記録（後日）"
+                "label": "事件記録"
               },
               {
                 "id": "break_in",

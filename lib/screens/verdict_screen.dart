@@ -21,6 +21,7 @@ class VerdictScreen extends StatelessWidget {
   final String mode; // story / normal / normal_t / hard / hard_t
   final VoidCallback onRestart;
   final VoidCallback? onRetryJudgment; // 「最後の審判からやり直す」（到達済みの周回のみ）
+  final bool loopRestart; // B(ループ)で本編を自動再走するか（やり直しセッションでは false）
 
   const VerdictScreen({
     super.key,
@@ -40,6 +41,7 @@ class VerdictScreen extends StatelessWidget {
     this.mode = 'normal',
     required this.onRestart,
     this.onRetryJudgment,
+    this.loopRestart = true,
   });
 
   String get _modeLabel =>
@@ -60,14 +62,21 @@ class VerdictScreen extends StatelessWidget {
 
   // 共有文はネタバレ厳禁：結末名・結末記号・作話などの語は一切入れない。
   // 出すのはスコア／タイム／ヒント回数（数値）と、煽り文・タグ・URLのみ。
-  String _shareText() =>
-      '『アムネジィ・ケース』をクリア！\n'
-      'モード：$_modeLabel\n'
-      'スコア：$integrity\n'
-      'クリアタイム：${fmtTime(playSeconds)} ／ ヒント：$totalHints回\n'
-      'あなたは、どんな“結末”に辿り着く？\n'
-      '#アムネジィケース\n'
-      'https://sk1214-gkms.github.io/kioku-no-kairou/';
+  // D（脳死＝未クリア）は「クリア！」と書かない（事実に合わせ「到達」表記）。
+  String _shareText() => result.ending == 'D'
+      ? '『アムネジィ・ケース』——刻限が、尽きた。\n'
+          'モード：$_modeLabel\n'
+          '到達：${fmtTime(playSeconds)} ／ ヒント：$totalHints回\n'
+          'あなたは、“結末”に辿り着ける？\n'
+          '#アムネジィケース\n'
+          'https://sk1214-gkms.github.io/kioku-no-kairou/'
+      : '『アムネジィ・ケース』をクリア！\n'
+          'モード：$_modeLabel\n'
+          'スコア：$integrity\n'
+          'クリアタイム：${fmtTime(playSeconds)} ／ ヒント：$totalHints回\n'
+          'あなたは、どんな“結末”に辿り着く？\n'
+          '#アムネジィケース\n'
+          'https://sk1214-gkms.github.io/kioku-no-kairou/';
 
   Future<void> _share(BuildContext context) async {
     await Clipboard.setData(ClipboardData(text: _shareText()));
@@ -133,7 +142,7 @@ class VerdictScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
-                    child: Text(result.loopToStage != null
+                    child: Text(result.loopToStage != null && loopRestart
                         ? '回廊の最初へ戻される……'
                         : 'タイトルへ戻る'),
                   ),

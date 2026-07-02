@@ -6,7 +6,7 @@
     "B":    { "title": "忘却の揺り籠",      "type": "loop",        "text": "t_end_B", "loop_to_stage": 1 },
     "C":    { "title": "断罪の重圧",        "type": "delusion",    "text": "t_end_A2" },
     "D":    { "title": "精神の死",          "type": "death",       "text": "t_end_D" },
-    "S":    { "title": "Gedächtnisverlust", "type": "hidden",      "text": "t_end_S" },
+    "S":    { "title": "深淵の白", "type": "hidden",      "text": "t_end_S" },
     "True": { "title": "白慈の審判",        "type": "truth",       "text": "t_end_true" }
   },
 

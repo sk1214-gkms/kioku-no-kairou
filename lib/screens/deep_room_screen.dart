@@ -578,6 +578,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             })
         .toList();
     var cur = start;
+    var missMsg = ''; // 誤保存時のフィードバック（正誤はボタン活性で漏らさない）
     String two(int n) => n.toString().padLeft(2, '0');
     String hhmm(int t) => '${two(t ~/ 60)}:${two(t % 60)}';
     showDialog<void>(
@@ -585,7 +586,6 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) {
           var cap = '……砂嵐。判別できる像はない。';
-          var isKey = false;
           if (frames.isNotEmpty) {
             var bi = 0, best = 1 << 30;
             for (var i = 0; i < frames.length; i++) {
@@ -597,10 +597,8 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             }
             if (best <= 8) {
               cap = frames[bi]['cap'] as String;
-              isKey = frames[bi]['key'] == true;
             }
           }
-          final canSave = (cur - tgt).abs() <= tol;
           return AlertDialog(
             title: Text('${o['label']}：記録再生'),
             content: Column(
@@ -627,12 +625,18 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                   color: Colors.black26,
                   child: Text(
                     cap,
-                    style: TextStyle(
-                        fontSize: 13,
-                        height: 1.4,
-                        color: isKey ? Colors.redAccent : Colors.white70),
+                    // key(正解)で色を変えない＝映像の見た目から答えを漏らさない
+                    style: const TextStyle(
+                        fontSize: 13, height: 1.4, color: Colors.white70),
                   ),
                 ),
+                if (missMsg.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(missMsg,
+                        style: const TextStyle(
+                            color: Colors.redAccent, fontSize: 12)),
+                  ),
               ],
             ),
             actions: [
@@ -640,22 +644,26 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                   onPressed: () => Navigator.pop(ctx),
                   child: const Text('やめる')),
               FilledButton(
-                onPressed: canSave
-                    ? () {
-                        Navigator.pop(ctx);
-                        if (!mounted) return;
-                        AudioService.instance.sfx('lock_open');
-                        if (lock['win'] == true) {
-                          _win();
-                          return;
-                        }
-                        setState(() {
-                          _states[o['id'] as String] =
-                              lock['on_solve_state'] as String? ?? 'open';
-                          _msg = lock['reveal'] as String? ?? '決定的瞬間を保存した。';
-                        });
-                      }
-                    : null,
+                // 常時押せる＝正解位置がボタンの活性状態として漏れない。押して初めて判定。
+                onPressed: () {
+                  if ((cur - tgt).abs() > tol) {
+                    AudioService.instance.sfx('wrong');
+                    setLocal(() => missMsg = '……違う。この刻では、ない。');
+                    return;
+                  }
+                  Navigator.pop(ctx);
+                  if (!mounted) return;
+                  AudioService.instance.sfx('lock_open');
+                  if (lock['win'] == true) {
+                    _win();
+                    return;
+                  }
+                  setState(() {
+                    _states[o['id'] as String] =
+                        lock['on_solve_state'] as String? ?? 'open';
+                    _msg = lock['reveal'] as String? ?? '決定的瞬間を保存した。';
+                  });
+                },
                 child: const Text('この瞬間を保存'),
               ),
             ],

@@ -12,6 +12,7 @@ class FinalJudgmentScreen extends StatefulWidget {
   final GameState gameState;
   final VoidCallback onComplete;
   final ValueListenable<int>? remaining;
+  final bool retry; // 審判やり直しセッション（「戻れない」文言を差し替える）
 
   const FinalJudgmentScreen({
     super.key,
@@ -19,6 +20,7 @@ class FinalJudgmentScreen extends StatefulWidget {
     required this.gameState,
     required this.onComplete,
     this.remaining,
+    this.retry = false,
   });
 
   @override
@@ -175,8 +177,12 @@ class _FinalJudgmentScreenState extends State<FinalJudgmentScreen> {
               const Text('── この推理を、現実へ出力する',
                   style: TextStyle(color: Colors.white70, fontSize: 14)),
               const SizedBox(height: 6),
-              const Text('一度確定すれば、この「記憶」が現実として出力される。もう、戻れない。',
-                  style: TextStyle(color: Colors.white38, fontSize: 12)),
+              Text(
+                  widget.retry
+                      // やり直し＝死にゆく脳が証言を塗り直す行為。機能と物語を一致させる
+                      ? '——また、塗り直すのか。何度書き換えても、それが"現実"として出力される。'
+                      : '一度確定すれば、この「記憶」が現実として出力される。もう、戻れない。',
+                  style: const TextStyle(color: Colors.white38, fontSize: 12)),
               const SizedBox(height: 14),
               FilledButton(
                 onPressed: _finish,

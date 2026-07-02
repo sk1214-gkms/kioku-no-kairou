@@ -15,7 +15,7 @@ import 'verlust_reveal_screen.dart';
 
 enum _Phase { loading, room, reveal, judgment, ending }
 
-/// 深い部屋キャンペーン：13部屋 → 30号室（最後の審判）→ 8結末。
+/// 深い部屋キャンペーン：13部屋 → 30号室（最後の審判）→ 7結末（A+/A/B/C/S/True/D）。
 /// 全モード共通で『脳細胞の壊死』カウントダウンを保持し、0で Ending D（精神の死）。
 /// 結末は evaluateConfabEnding（離散ツリー）で決定し、作話完全度 I を VerdictScreen に表示。
 class DeepCampaignFlow extends StatefulWidget {
@@ -138,6 +138,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     }
     final judgment = jsonDecode(await rootBundle.loadString(_judgmentPath))
         as Map<String, dynamic>;
+    if (!mounted) return; // 読込中に画面が閉じられた場合の dispose後 setState を防ぐ
     final mem = <String, String>{};
     for (final r in rooms) {
       final id = r['memory_id'] as String?;
@@ -327,7 +328,9 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
   }
 
   void _restartOrTitle() {
-    if (_ending?.loopToStage != null) {
+    // B(ループ)の自動再走は本編セッションのみ。やり直しセッションで再走すると
+    // その _autosave が放置中の別周回の中断セーブを上書きしてしまうため、タイトルへ帰す。
+    if (_ending?.loopToStage != null && !_judgmentOnly) {
       _boot(fresh: true); // 忘却の揺り籠：resumeを無視して回廊の最初へ
     } else {
       Navigator.of(context).maybePop();
@@ -376,6 +379,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
           gameState: _gs,
           // ストーリー・審判やり直しは砂時計非表示（やり直しでDは発生しない）
           remaining: (_timed && !_judgmentOnly) ? _remaining : null,
+          retry: _judgmentOnly, // 「もう、戻れない」文言をやり直し用に差し替える
           onComplete: _onJudged,
         );
       case _Phase.ending:
@@ -410,6 +414,8 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
           onRestart: _restartOrTitle,
           // この周回で審判に到達していれば、答えだけ変えて再挑戦できる
           onRetryJudgment: _hasJudgmentCp ? _retryJudgment : null,
+          // やり直しセッションのB(ループ)は自動再走しない（中断セーブ保護）
+          loopRestart: !_judgmentOnly,
         );
       case _Phase.loading:
         return const Scaffold(body: Center(child: CircularProgressIndicator()));

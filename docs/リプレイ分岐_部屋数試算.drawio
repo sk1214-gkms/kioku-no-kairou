@@ -109,4 +109,40 @@
       </root>
     </mxGraphModel>
   </diagram>
+  <diagram name="v3_周回体験フロー_7結末コンプ_2026-07-02" id="replayux1">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1120" pageHeight="800">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="t" value="周回体験フロー：7結末コンプまで（約60〜90分）" style="text;html=1;fontSize=15;fontStyle=1;align=left;" vertex="1" parent="1"><mxGeometry x="40" y="16" width="1000" height="30" as="geometry"/></mxCell>
+
+        <mxCell id="s1" value="1周目：自由に遊ぶ（15〜25分）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="80" y="70" width="360" height="70" as="geometry"/></mxCell>
+        <mxCell id="n1" value="混在プレイ → 結末1つ目。審判やり直しで A / C を回収（＋2）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="480" y="70" width="580" height="70" as="geometry"/></mxCell>
+
+        <mxCell id="s2" value="審判やり直し（3問だけ再回答）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="80" y="165" width="360" height="70" as="geometry"/></mxCell>
+        <mxCell id="n2" value="その周の直視/筒の範囲内＝1周から最大4結末まで。A+・B・D はやり直しでは取れない → フル周回の価値が構造的に保たれる" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="480" y="165" width="580" height="70" as="geometry"/></mxCell>
+
+        <mxCell id="s3" value="2周目（真実側）：全直視・全直面・筒入手" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="80" y="260" width="360" height="70" as="geometry"/></mxCell>
+        <mxCell id="n3" value="世界は“明瞭”＝現行の素直な謎。回収：True / S（＋A/C）。直視する者には世界が澄む" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="480" y="260" width="580" height="70" as="geometry"/></mxCell>
+
+        <mxCell id="s4" value="3周目（作話側）：全上書き・全逃避" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="80" y="355" width="360" height="70" as="geometry"/></mxCell>
+        <mxCell id="n4" value="変種謎3室が出現（R10記録汚染／R7現場編集／R5曖昧化）＝高スコア(I=(T×M)(1+E/3))の代償に難化。回収：A+ / B。嘘をつくほど世界が歪む" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="480" y="355" width="580" height="70" as="geometry"/></mxCell>
+
+        <mxCell id="s5" value="D周：時間制限モードで力尽きる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="80" y="450" width="360" height="70" as="geometry"/></mxCell>
+        <mxCell id="n5" value="hard_t 本気挑戦の自然死でも可。回収：D（〜12分）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="480" y="450" width="580" height="70" as="geometry"/></mxCell>
+
+        <mxCell id="s6" value="コンプリート 7/7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="545" width="360" height="60" as="geometry"/></mxCell>
+        <mxCell id="n6" value="総プレイ約60〜90分。各周は ①/分岐テキスト逆側＋分岐反応＋変種謎で「同じ再走」にならない" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="480" y="545" width="580" height="60" as="geometry"/></mxCell>
+
+        <mxCell id="g" value="◆ 実装ガード（周回UX評価 2026-07-02）&#10;1) 歪み＝囮を足す。推理の手段（判別ルール）は消さない — 収束できる手がかり連鎖を必ず残す&#10;2) ヒントは変種中立に書く（ヒント文のフラグ出し分けはエンジン未対応。答え不変なので両対応文で回避）&#10;3) 変種部屋は intro を1行変えて“気づかせる”（例：「……記録が、私に優しい嘘をつく」）&#10;4) Dの回収は待機が退屈になり得る — ティーザーで「挑戦の果て」感を演出" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="80" y="635" width="980" height="120" as="geometry"/></mxCell>
+
+        <mxCell id="f1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="s1" target="s2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="s2" target="s3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="s3" target="s4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="s4" target="s5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="s5" target="s6"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>

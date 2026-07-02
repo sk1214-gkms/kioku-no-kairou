@@ -20,6 +20,7 @@ class VerdictScreen extends StatelessWidget {
   final List<Map<String, dynamic>> floors; // フロア別 {name, seconds, hints}
   final String mode; // story / normal / normal_t / hard / hard_t
   final VoidCallback onRestart;
+  final VoidCallback? onRetryJudgment; // 「最後の審判からやり直す」（到達済みの周回のみ）
 
   const VerdictScreen({
     super.key,
@@ -38,6 +39,7 @@ class VerdictScreen extends StatelessWidget {
     this.floors = const [],
     this.mode = 'normal',
     required this.onRestart,
+    this.onRetryJudgment,
   });
 
   String get _modeLabel =>
@@ -115,6 +117,16 @@ class VerdictScreen extends StatelessWidget {
                   icon: const Icon(Icons.ios_share, size: 18),
                   label: const Text('結果をSNS用にコピー'),
                 ),
+                if (onRetryJudgment != null) ...[
+                  const SizedBox(height: 10),
+                  OutlinedButton.icon(
+                    onPressed: onRetryJudgment,
+                    icon: const Icon(Icons.gavel,
+                        size: 18, color: Colors.amberAccent),
+                    label: const Text('最後の審判からやり直す',
+                        style: TextStyle(color: Colors.amberAccent)),
+                  ),
+                ],
                 const SizedBox(height: 24),
                 FilledButton(
                   onPressed: onRestart,
@@ -159,6 +171,12 @@ class VerdictScreen extends StatelessWidget {
                   label: const Text('結果をコピー',
                       style: TextStyle(color: Colors.white24)),
                 ),
+                if (onRetryJudgment != null)
+                  TextButton(
+                    onPressed: onRetryJudgment,
+                    child: const Text('最後の審判からやり直す',
+                        style: TextStyle(color: Colors.white24)),
+                  ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: onRestart,

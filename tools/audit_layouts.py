@@ -53,6 +53,16 @@ def overlaps(a, b):
     bx, by, bw, bh = b
     return not (ax + aw <= bx or bx + bw <= ax or ay + ah <= by or by + bh <= ay)
 
+def flags_of(o, key):
+    c = o.get(key)
+    return set((c or {}).get("flags") or []) if isinstance(c, dict) else set()
+
+def exclusive(a, b):
+    """フラグで相互排他（片方 show_when F・もう片方 hide_when F）＝同時表示されないペア。
+    同一rectの“条件付き差し替え”（例: R7 white / white_ow）を重なり誤検出しない。"""
+    return bool(flags_of(a, "show_when") & flags_of(b, "hide_when")) or \
+           bool(flags_of(b, "show_when") & flags_of(a, "hide_when"))
+
 def main():
     thumbs, prob = {}, 0
     print("=== レイアウト点検（出現物すべて表示・normal）===")
@@ -69,7 +79,8 @@ def main():
                     iss.append("画面外:" + oid)
             for i in range(len(rects)):
                 for j in range(i + 1, len(rects)):
-                    if overlaps(rects[i][1], rects[j][1]):
+                    if overlaps(rects[i][1], rects[j][1]) and \
+                            not exclusive(objs[i], objs[j]):
                         iss.append(f"重なり:{rects[i][0]}x{rects[j][0]}")
             if iss:
                 print(f"  R{rn} {dr}: {len(objs)}個  [!] {', '.join(iss)}")

@@ -21,7 +21,9 @@ enum _Phase { loading, room, reveal, judgment, ending }
 class DeepCampaignFlow extends StatefulWidget {
   final String mode;
   final DeepSavedRun? resume; // 中断からの再開（null＝新規）
-  const DeepCampaignFlow({super.key, this.mode = 'normal', this.resume});
+  final JudgmentCheckpoint? retry; // 「最後の審判からやり直す」（審判へ直行）
+  const DeepCampaignFlow(
+      {super.key, this.mode = 'normal', this.resume, this.retry});
 
   @override
   State<DeepCampaignFlow> createState() => _DeepCampaignFlowState();
@@ -50,6 +52,12 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
   int _tAtJudgment = 0; // 審判時点の残り秒（I 算出用に固定）
   int _earnedLetters = 0; // 結末時点で点灯できた GEDÄCHTNIS 文字数
   bool _brainDead = false;
+
+  // 審判やり直し：審判のみを再走するセッション（タイマー無し＝Dは発生しない）
+  bool _judgmentOnly = false;
+  bool _hasJudgmentCp = false; // この周回で審判チェックポイントが存在するか
+  int _retrySeq = 0; // 審判画面を作り直すためのキー
+  int _playBaseMs = 0; // やり直し時：突入時点までの実プレイ時間（表示用の底上げ）
 
   /// 時間制限の有無。末尾 _t（normal_t / hard_t）＝あり、story/normal/hard＝なし。
   bool get _timed => widget.mode.endsWith('_t');
@@ -97,7 +105,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
           _phase != _Phase.loading &&
           _repo != null) {
         _watch.start();
-        if (_timed) _startTicker();
+        if (_timed && !_judgmentOnly) _startTicker();
       }
     } else {
       _ticker?.cancel();
@@ -137,15 +145,33 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     }
     final dur = _durationFor(widget.mode);
     final r = fresh ? null : widget.resume; // ループ(B)再起動時は resume を無視して頭から
+    final cp = fresh ? null : widget.retry; // 審判やり直し（ループ時は頭から）
     setState(() {
       _repo = repo;
       _rooms = rooms;
       _judgment = judgment;
-      if (r != null) {
+      _brainDead = false;
+      _ending = null;
+      _floors.clear();
+      _playBaseMs = 0;
+      _judgmentOnly = cp != null;
+      _hasJudgmentCp = cp != null;
+      if (cp != null) {
+        // 「最後の審判からやり直す」：スナップショットから審判へ直行。
+        // タイマーは走らせない（やり直しでDは発生しない）。スコアTは保存値で固定。
+        _gs = cp.gameState;
+        _total = cp.total;
+        _remaining.value = cp.remaining;
+        _idx = rooms.length - 1;
+        _floors.addAll(List<Map<String, dynamic>>.from(cp.floors));
+        _playBaseMs = cp.playSeconds * 1000;
+        _phase = _Phase.judgment;
+      } else if (r != null) {
         _gs = r.gameState;
         _total = r.total;
         _remaining.value = r.remaining;
         _idx = r.idx.clamp(0, rooms.length - 1);
+        _phase = _Phase.room;
       } else {
         _gs = GameState(
           mode: widget.mode,
@@ -163,19 +189,20 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
         _total = dur;
         _remaining.value = dur;
         _idx = 0;
+        _phase = _Phase.room;
       }
-      _brainDead = false;
-      _ending = null;
-      _floors.clear();
-      _phase = _Phase.room;
     });
     _watch
       ..reset()
       ..start();
     _roomStartMs = 0;
-    _autosave();
-    if (_timed) _startTicker(); // ストーリーは時間制限なし＝砂時計を動かさない
-    AudioService.instance.bgm(_idx < 4 ? 'ch1' : (_idx < 9 ? 'ch2' : 'ch3'));
+    if (_judgmentOnly) {
+      AudioService.instance.bgm('finale');
+    } else {
+      _autosave();
+      if (_timed) _startTicker(); // ストーリーは時間制限なし＝砂時計を動かさない
+      AudioService.instance.bgm(_idx < 4 ? 'ch1' : (_idx < 9 ? 'ch2' : 'ch3'));
+    }
   }
 
   void _startTicker() {
@@ -240,13 +267,50 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
 
   void _onRevealDone() {
     if (_phase == _Phase.ending) return;
+    // 審判チェックポイント（「最後の審判からやり直す」用）。周回ごとに上書き。
+    _saveService.saveJudgment(
+      mode: widget.mode,
+      total: _total,
+      remaining: _remaining.value,
+      gameState: _gs,
+      playSeconds: ((_playBaseMs + _watch.elapsedMilliseconds) / 1000).round(),
+      floors: List<Map<String, dynamic>>.from(_floors),
+    );
+    _hasJudgmentCp = true;
     AudioService.instance.bgm('finale');
     setState(() => _phase = _Phase.judgment);
   }
 
+  /// 結果画面から審判のみを再走（チェックポイントを毎回読み直し＝状態は突入時点に巻き戻る）。
+  Future<void> _retryJudgment() async {
+    final cp = await _saveService.loadJudgment();
+    if (cp == null || !mounted) return;
+    _ticker?.cancel();
+    setState(() {
+      _gs = cp.gameState;
+      _total = cp.total;
+      _remaining.value = cp.remaining;
+      _brainDead = false;
+      _ending = null;
+      _floors
+        ..clear()
+        ..addAll(List<Map<String, dynamic>>.from(cp.floors));
+      _playBaseMs = cp.playSeconds * 1000;
+      _judgmentOnly = true;
+      _retrySeq++;
+      _phase = _Phase.judgment;
+    });
+    _watch
+      ..reset()
+      ..start();
+    _roomStartMs = 0;
+    AudioService.instance.bgm('finale');
+  }
+
   void _onJudged() {
     if (_phase == _Phase.ending) return;
-    _saveService.clear(); // 結末到達＝セーブ破棄
+    // やり直しセッションでは中断セーブに触らない（放置中の別周回を消さない）
+    if (!_judgmentOnly) _saveService.clear(); // 結末到達＝セーブ破棄
     _ticker?.cancel();
     _watch.stop();
     // ストーリー(時間制限なし)は残り=総時間のまま＝T(生存度)=100扱い
@@ -307,9 +371,11 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
         );
       case _Phase.judgment:
         return FinalJudgmentScreen(
+          key: ValueKey('judgment_$_retrySeq'), // やり直しごとに作り直す
           data: _judgment,
           gameState: _gs,
-          remaining: _timed ? _remaining : null, // ストーリーは砂時計非表示
+          // ストーリー・審判やり直しは砂時計非表示（やり直しでDは発生しない）
+          remaining: (_timed && !_judgmentOnly) ? _remaining : null,
           onComplete: _onJudged,
         );
       case _Phase.ending:
@@ -321,8 +387,9 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
         final tRem = _brainDead ? 0 : _tAtJudgment;
         final integrity = confabIntegrity(
             correct: m, evade: e, tRemaining: tRem, tTotal: _total);
-        // 実プレイ時間は Stopwatch 実測（全モード共通・ストーリーでも正しく出る）
-        final playSeconds = (_watch.elapsedMilliseconds / 1000).round();
+        // 実プレイ時間は Stopwatch 実測（やり直し時は突入時点までの実測を底上げ）
+        final playSeconds =
+            ((_playBaseMs + _watch.elapsedMilliseconds) / 1000).round();
         final totalHints =
             _floors.fold<int>(0, (s, f) => s + (f['hints'] as int));
         return VerdictScreen(
@@ -341,6 +408,8 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
           floors: List<Map<String, dynamic>>.from(_floors),
           mode: widget.mode,
           onRestart: _restartOrTitle,
+          // この周回で審判に到達していれば、答えだけ変えて再挑戦できる
+          onRetryJudgment: _hasJudgmentCp ? _retryJudgment : null,
         );
       case _Phase.loading:
         return const Scaffold(body: Center(child: CircularProgressIndicator()));

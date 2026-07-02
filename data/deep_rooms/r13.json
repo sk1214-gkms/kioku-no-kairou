@@ -127,6 +127,24 @@
             "label": "刻印(罠)",
             "value": "GE"
           }
+        },
+        {
+          "id": "familiar_trap",
+          "rect": [
+            100,
+            310,
+            150,
+            60
+          ],
+          "label": "馴染む刻印",
+          "show_when": {
+            "flags": [
+              "ow_truth",
+              "ow_culprit"
+            ]
+          },
+          "reveal": "罠の刻印（DE・OR・GE）が、妙に手に馴染む。——嘘に慣れた、指先だ。",
+          "reveal_hard": "罠の刻印が、手に馴染む。"
         }
       ]
     },

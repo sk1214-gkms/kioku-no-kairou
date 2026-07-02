@@ -16,6 +16,7 @@ class _TitleScreenState extends State<TitleScreen> {
   final DeepSaveService _deepSave = DeepSaveService();
   final CollectionService _collection = CollectionService();
   DeepSavedRun? _deepSaved;
+  JudgmentCheckpoint? _judgmentCp; // 「最後の審判からやり直す」
   Set<String> _seen = {};
   bool _loading = true;
 
@@ -58,6 +59,17 @@ class _TitleScreenState extends State<TitleScreen> {
     ['D', '精神の死'],
   ];
 
+  // A3：未取得の結末チップをタップすると浮かぶ“条件のティーザー”（初回クリア後）。
+  static const Map<String, String> _teasers = {
+    'A+': 'すべてを偽り、すべてから目を背けたなら——',
+    'A': '嘘は完成した。だが、目は逸らしきれなかった。',
+    'B': '嘘は綻び、それでも背け続けたなら——',
+    'C': '嘘は綻び、直視だけが残ったなら——',
+    'S': '標本室の奥に隠された“それ”が、鍵になる。',
+    'True': 'すべての真実を直視し、すべてに向き合ったなら——',
+    'D': '刻限の中で、脳が灼き切れたら——（時間制限モードのみ）',
+  };
+
   @override
   void initState() {
     super.initState();
@@ -66,10 +78,12 @@ class _TitleScreenState extends State<TitleScreen> {
 
   Future<void> _reload() async {
     final d = await _deepSave.load();
+    final jc = await _deepSave.loadJudgment();
     final seen = await _collection.seen();
     if (!mounted) return;
     setState(() {
       _deepSaved = d;
+      _judgmentCp = jc;
       _seen = seen;
       _loading = false;
     });
@@ -88,6 +102,15 @@ class _TitleScreenState extends State<TitleScreen> {
     if (s == null) return;
     await Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => DeepCampaignFlow(mode: s.mode, resume: s)));
+    _reload();
+  }
+
+  /// 「最後の審判からやり直す」：保存済みチェックポイントから審判へ直行。
+  Future<void> _retryJudgment() async {
+    final cp = _judgmentCp;
+    if (cp == null) return;
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => DeepCampaignFlow(mode: cp.mode, retry: cp)));
     _reload();
   }
 
@@ -147,6 +170,26 @@ class _TitleScreenState extends State<TitleScreen> {
                     const SizedBox(height: 8),
                   ],
                   _modeSelector(),
+                  // 審判到達済みなら、答えだけ変えて別の結末を回収できる
+                  if (_judgmentCp != null) ...[
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: 320,
+                      child: OutlinedButton.icon(
+                        onPressed: _retryJudgment,
+                        icon: const Icon(Icons.gavel,
+                            size: 18, color: Colors.amberAccent),
+                        label: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            '最後の審判からやり直す（${_modeLabels[_judgmentCp!.mode] ?? _judgmentCp!.mode}）',
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.amberAccent),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 24),
                   _endingCollection(),
                 ],
@@ -159,6 +202,7 @@ class _TitleScreenState extends State<TitleScreen> {
   }
 
   Widget _endingCollection() {
+    final teasable = _seen.isNotEmpty && _seen.length < _allEndings.length;
     return SizedBox(
       width: 320,
       child: Column(
@@ -172,6 +216,13 @@ class _TitleScreenState extends State<TitleScreen> {
             alignment: WrapAlignment.center,
             children: [for (final e in _allEndings) _endingChip(e)],
           ),
+          // A3：初回クリア後は「？？？」タップで条件のティーザーが浮かぶ
+          if (teasable)
+            const Padding(
+              padding: EdgeInsets.only(top: 6),
+              child: Text('？？？ に触れると、手がかりが浮かぶ',
+                  style: TextStyle(color: Colors.white24, fontSize: 10)),
+            ),
         ],
       ),
     );
@@ -179,7 +230,7 @@ class _TitleScreenState extends State<TitleScreen> {
 
   Widget _endingChip(List<String> e) {
     final got = _seen.contains(e[0]);
-    return Container(
+    final chip = Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: got ? const Color(0xFF2A2438) : const Color(0xFF15131C),
@@ -189,6 +240,31 @@ class _TitleScreenState extends State<TitleScreen> {
       child: Text(got ? '${e[0]} ${e[1]}' : '？？？',
           style: TextStyle(
               fontSize: 11, color: got ? Colors.amberAccent : Colors.white24)),
+    );
+    // A3：未取得＋初回クリア済み → タップでティーザー表示
+    if (got || _seen.isEmpty) return chip;
+    return GestureDetector(
+      onTap: () => _showTeaser(e[0]),
+      child: chip,
+    );
+  }
+
+  void _showTeaser(String code) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF15131C),
+        title: const Text('？？？',
+            style: TextStyle(color: Colors.amberAccent, letterSpacing: 4)),
+        content: Text(_teasers[code] ?? '……',
+            style: const TextStyle(color: Colors.white70, height: 1.8)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('閉じる'),
+          ),
+        ],
+      ),
     );
   }
 

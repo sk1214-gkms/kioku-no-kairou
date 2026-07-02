@@ -1,0 +1,71 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="v1_完全分岐の部屋数試算_2026-07-02" id="branchcount1">
+    <mxGraphModel dx="1000" dy="1000" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1100" pageHeight="1150">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="ttl" value="『アムネジィ・ケース』 分岐点を全部“別部屋”にしたら何室要るか（完全分岐 vs 現行）" style="text;html=1;fontSize=15;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="16" width="1000" height="30" as="geometry"/></mxCell>
+
+        <!-- ==== 縦スパイン：13室＋審判＋結末（版数を併記）==== -->
+        <mxCell id="r1" value="R1 白い部屋　　　×1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="340" y="60" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r2" value="R2 準備室　　　×1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="340" y="128" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r3" value="R3 暗室 ①〈決定1〉　×1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="340" y="196" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r4" value="R4 書斎 分岐〈決定2〉　×2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="340" y="264" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r5" value="R5 診察室　　　×4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="340" y="332" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r6" value="R6 記録室 ①〈決定3〉　×4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="340" y="400" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r7" value="R7 廊下 ①〈決定4〉　×8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="340" y="468" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r8" value="R8 鏡の間 対峙〈決定5〉　×16" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="340" y="536" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r9" value="R9 標本室 筒〈決定6〉　×32" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="340" y="604" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r10" value="R10 監視室　　×64" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="340" y="672" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r11" value="R11 手術室　　×64" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="340" y="740" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r12" value="R12 証拠保管室 分岐〈決定7〉　×64" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="340" y="808" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="r13" value="R13 最後の扉　×128" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="340" y="876" width="240" height="46" as="geometry"/></mxCell>
+        <mxCell id="judge" value="30号室・最後の審判　　入口 2⁷=128 状態 / 回答 3³=27" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="300" y="944" width="320" height="46" as="geometry"/></mxCell>
+        <mxCell id="ends" value="結末　7種（A+ / A / B / C / S / True / D）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="300" y="1012" width="320" height="46" as="geometry"/></mxCell>
+
+        <!-- spine edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r1" target="r2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r2" target="r3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r3" target="r4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r4" target="r5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r5" target="r6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r6" target="r7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r7" target="r8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r8" target="r9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r9" target="r10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r10" target="r11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r11" target="r12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r12" target="r13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r13" target="judge"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="judge" target="ends"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ==== 小ツリー：最初の3決定で 1→2→4→8 に倍化する様子（左側・矢印はボックスを貫かない）==== -->
+        <mxCell id="thead" value="倍化のイメージ（最初の3決定）" style="text;html=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="40" y="196" width="220" height="20" as="geometry"/></mxCell>
+        <mxCell id="t0" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=11;" vertex="1" parent="1"><mxGeometry x="130" y="226" width="40" height="28" as="geometry"/></mxCell>
+        <mxCell id="ta1" value="真" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="290" width="40" height="26" as="geometry"/></mxCell>
+        <mxCell id="ta2" value="偽" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=10;" vertex="1" parent="1"><mxGeometry x="180" y="290" width="40" height="26" as="geometry"/></mxCell>
+        <mxCell id="tb1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;" vertex="1" parent="1"><mxGeometry x="50" y="352" width="26" height="22" as="geometry"/></mxCell>
+        <mxCell id="tb2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;" vertex="1" parent="1"><mxGeometry x="94" y="352" width="26" height="22" as="geometry"/></mxCell>
+        <mxCell id="tb3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;" vertex="1" parent="1"><mxGeometry x="180" y="352" width="26" height="22" as="geometry"/></mxCell>
+        <mxCell id="tb4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;" vertex="1" parent="1"><mxGeometry x="224" y="352" width="26" height="22" as="geometry"/></mxCell>
+        <mxCell id="tc" value="…以降 決定ごとに ×2（8→16→32→…→128）" style="text;html=1;fontSize=11;align=center;" vertex="1" parent="1"><mxGeometry x="40" y="392" width="230" height="30" as="geometry"/></mxCell>
+        <mxCell id="te0a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="t0" target="ta1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="te0b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="t0" target="ta2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="te1a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="ta1" target="tb1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="te1b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="ta1" target="tb2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="te2a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="ta2" target="tb3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="te2b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="ta2" target="tb4"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ==== 右パネル：試算と結論（矢印なし・スパインと非重なり）==== -->
+        <mxCell id="p1" value="◆ 完全分岐（全分岐点を別部屋で用意した場合）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="650" y="60" width="400" height="40" as="geometry"/></mxCell>
+        <mxCell id="p2" value="各部屋は『それまでの決定の組合せ』ごとに別バージョンが要る。&lt;br&gt;決定点は 7 つ（すべて2択）：&lt;br&gt;　R3① / R4分岐 / R6① / R7① / R8対峙 / R9筒 / R12分岐&lt;br&gt;&lt;br&gt;各室の版数 ＝ 2^(手前の決定数)：&lt;br&gt;　R1〜R3 : 1　R4 : 2　R5〜R6 : 4&lt;br&gt;　R7 : 8　R8 : 16　R9 : 32&lt;br&gt;　R10〜R12 : 64　R13 : 128" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacingLeft=8;spacingTop=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="650" y="112" width="400" height="196" as="geometry"/></mxCell>
+        <mxCell id="p3" value="合計 ≈ 389 室　（現行 13 室 の 約30倍）&#10;末端の物語分岐 ＝ 2⁷ ＝ 128 通り&#10;審判の回答は 3³=27 → 7結末に収束" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;align=center;fontSize=13;" vertex="1" parent="1"><mxGeometry x="650" y="326" width="400" height="80" as="geometry"/></mxCell>
+        <mxCell id="p4" value="◆ だから丸ごと別部屋は非現実的（作れない・保てない）&#10;&#10;現行の解：&#10;・1部屋＝show_when/hide_when で『選択に反応する複数の顔』に集約&#10;・結末の振り直しは “審判やり直し” で担う&#10;→ 制作物は 13室 のまま、体験だけ枝分かれさせる" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=8;spacingTop=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="650" y="430" width="400" height="150" as="geometry"/></mxCell>
+
+        <!-- 凡例 -->
+        <mxCell id="lg" value="凡例：黄=決定点(2択) / 青=固定 / 緑=審判 / 橙=結末　　※版数は『そこに到達するまでの2択の組合せ数』" style="text;html=1;fontSize=11;align=left;" vertex="1" parent="1"><mxGeometry x="300" y="1076" width="740" height="24" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

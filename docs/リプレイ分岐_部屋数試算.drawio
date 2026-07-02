@@ -68,4 +68,45 @@
       </root>
     </mxGraphModel>
   </diagram>
+  <diagram name="v2_ストーリー分岐に絞った場合_2026-07-02" id="branchcount2">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1120" pageHeight="620">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="t" value="ストーリーに効く分岐だけに絞ると何室要るか（絞り込みの段階別）" style="text;html=1;fontSize=15;fontStyle=1;align=left;" vertex="1" parent="1"><mxGeometry x="40" y="16" width="1040" height="30" as="geometry"/></mxCell>
+
+        <!-- header -->
+        <mxCell id="h1" value="方針" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="40" y="66" width="480" height="40" as="geometry"/></mxCell>
+        <mxCell id="h2" value="部屋を分ける分岐 / 経路" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="530" y="66" width="330" height="40" as="geometry"/></mxCell>
+        <mxCell id="h3" value="必要な部屋数" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="870" y="66" width="210" height="40" as="geometry"/></mxCell>
+
+        <!-- row1 389 -->
+        <mxCell id="a1" value="① 全2択を独立（前回の試算）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="40" y="116" width="480" height="56" as="geometry"/></mxCell>
+        <mxCell id="b1" value="7決定 → 128経路" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="530" y="116" width="330" height="56" as="geometry"/></mxCell>
+        <mxCell id="c1" value="≈ 389 室" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=14;" vertex="1" parent="1"><mxGeometry x="870" y="116" width="210" height="56" as="geometry"/></mxCell>
+
+        <!-- row2 93 -->
+        <mxCell id="a2" value="② メーター(R4/R8/R12 直面逃避)は“加算のみ”＝部屋を分けない。分けるのは ①×3(R3/R6/R7)＋筒(R9) だけ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="40" y="182" width="480" height="56" as="geometry"/></mxCell>
+        <mxCell id="b2" value="4決定 → 16経路" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="530" y="182" width="330" height="56" as="geometry"/></mxCell>
+        <mxCell id="c2" value="≈ 93 室" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;fontSize=14;" vertex="1" parent="1"><mxGeometry x="870" y="182" width="210" height="56" as="geometry"/></mxCell>
+
+        <!-- row3 24 -->
+        <mxCell id="a3" value="③ 「真実アーク vs 作話アーク」の2本に集約（R3で分岐・以後合流しない）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="40" y="248" width="480" height="56" as="geometry"/></mxCell>
+        <mxCell id="b3" value="1マクロ分岐 → 2経路" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="530" y="248" width="330" height="56" as="geometry"/></mxCell>
+        <mxCell id="c3" value="≈ 24 室&#10;(R1-2共有＋R3-13×2)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=13;" vertex="1" parent="1"><mxGeometry x="870" y="248" width="210" height="56" as="geometry"/></mxCell>
+
+        <!-- row4 13 -->
+        <mxCell id="a4" value="④ 現行＝フラグ＋show_when/hide_when で1部屋を選択に反応させる" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="40" y="314" width="480" height="56" as="geometry"/></mxCell>
+        <mxCell id="b4" value="部屋は分けない（128通りを内包）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="530" y="314" width="330" height="56" as="geometry"/></mxCell>
+        <mxCell id="c4" value="13 室（＝現行）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=14;" vertex="1" parent="1"><mxGeometry x="870" y="314" width="210" height="56" as="geometry"/></mxCell>
+
+        <!-- 効き方の分類 -->
+        <mxCell id="cls" value="◆ 7決定の“効き方”は3種&#10;・R4/R8/R12（直面/逃避）＝合計値だけが結末に効く → 部屋は変わらない（加算メーター）&#10;・R3/R6/R7（①記憶）＝審判で“真実”を選べるかの開閉（True到達条件）&#10;・R9（筒）＝S結末だけを開く側面ゲート" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;" vertex="1" parent="1"><mxGeometry x="40" y="400" width="520" height="120" as="geometry"/></mxCell>
+
+        <!-- 結論 -->
+        <mxCell id="concl" value="◆ 結論：どれだけ絞っても“正解は複製しない”&#10;confront・①・筒は全てフラグで持てる＝下流の謎は不変。&#10;物語の枝分かれは【①テキスト差＋show_when反応＋審判やり直し】で表現し、&#10;制作物は 13室 のまま 128通りの体験を内包する。&#10;（どうしても物理複製するなら現実的上限は②③＝24〜93室。13の2〜7倍でコスパ悪）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="580" y="400" width="500" height="120" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>

@@ -65,23 +65,31 @@ def exclusive(a, b):
 
 def main():
     thumbs, prob = {}, 0
-    print("=== レイアウト点検（出現物すべて表示・normal）===")
+    print("=== レイアウト点検（normal＋hard 両表示集合）===")
     for rn in range(1, 14):
         d = load(rn)
         for dr in DIRS:
-            objs = [o for o in d["views"][dr]["objects"] if not o.get("hard_only")]
-            rects = [(o["id"], o["rect"]) for o in objs]
+            allobjs = d["views"][dr]["objects"]
+            objs = [o for o in allobjs if not o.get("hard_only")]  # 描画用=normal
             iss = []
             if not objs:
                 iss.append("空(0)")
-            for oid, (x, y, w, h) in rects:
-                if x < 0 or y < 0 or x + w > CW or y + h > CH:
-                    iss.append("画面外:" + oid)
-            for i in range(len(rects)):
-                for j in range(i + 1, len(rects)):
-                    if overlaps(rects[i][1], rects[j][1]) and \
-                            not exclusive(objs[i], objs[j]):
-                        iss.append(f"重なり:{rects[i][0]}x{rects[j][0]}")
+            # normal と hard、両方の表示集合で 画面外/重なり を検査
+            for tag, excl in (("N", "hard_only"), ("H", "normal_only")):
+                mobjs = [o for o in allobjs if not o.get(excl)]
+                rects = [(o["id"], o["rect"]) for o in mobjs]
+                for oid, (x, y, w, h) in rects:
+                    if x < 0 or y < 0 or x + w > CW or y + h > CH:
+                        iss.append(f"[{tag}]画面外:" + oid)
+                for i in range(len(rects)):
+                    for j in range(i + 1, len(rects)):
+                        if overlaps(rects[i][1], rects[j][1]) and \
+                                not exclusive(mobjs[i], mobjs[j]):
+                            iss.append(f"[{tag}]重なり:{rects[i][0]}x{rects[j][0]}")
+            # 同一問題がN/H双方に出たら片方に集約
+            iss = sorted(set(iss), key=iss.index)
+            dedup = [s for s in iss if not (s.startswith("[H]") and ("[N]" + s[3:]) in iss)]
+            iss = dedup
             if iss:
                 print(f"  R{rn} {dr}: {len(objs)}個  [!] {', '.join(iss)}")
                 prob += 1
@@ -100,6 +108,7 @@ def main():
                                   fill=(255, 255, 255, 255), anchor="mm", align="center")
             thumbs[(rn, dr)] = img
     print(f"--- 問題画面 {prob}/52 ---")
+    audit_records()
     tw, th = 150, 267
     for rns, fn in ((range(1, 8), "layout_1_7.png"), (range(8, 14), "layout_8_13.png")):
         rns = list(rns)
@@ -109,6 +118,54 @@ def main():
                 M.paste(thumbs[(rn, dr)].resize((tw, th)), (6 + ci * (tw + 6), 6 + ri * (th + 6)))
         M.save(os.path.join(OUT, fn))
         print("saved", os.path.join(OUT, fn))
+
+def audit_records():
+    """手がかりmemo(record)の漏洩検査：
+    - ハードで有効になる record(_hard) の value に含まれる数字列が、
+      reveal_hard（無ければ reveal）に現れない → 『文章では伏せたのに記録が漏らす』候補
+    - record のラベルが 罠/囮 を自己申告していないか
+    規約: recordは観測のみ・導出は書かない／reveal_hardで伏せた値は record_hard で同等に伏せる"""
+    import re
+    KANJI = {"三十": "30", "二十": "20", "十五": "15", "十九": "19"}
+    warn = 0
+
+    def scan(rn, objs):
+        nonlocal warn
+        for o in objs:
+            rh = o.get("record_hard")
+            eff = None
+            if rh is False:
+                eff = None  # ハードでは記録しない＝漏洩なし
+            elif isinstance(rh, dict):
+                eff = rh
+            elif isinstance(o.get("record"), dict):
+                eff = o["record"]
+            if eff:
+                label = str(eff.get("label", ""))
+                if "罠" in label or "囮" in label:
+                    print(f"  [record] R{rn} {o.get('id')}: ラベルが囮を自己申告 -> '{label}'")
+                    warn += 1
+                val = str(eff.get("value", ""))
+                digs = re.findall(r"[0-9]+", val)
+                if digs:
+                    rev = str(o.get("reveal_hard") or o.get("reveal") or "")
+                    for k, v in KANJI.items():
+                        rev = rev.replace(k, v)
+                    miss = [t for t in digs if t not in rev]
+                    if miss:
+                        print(f"  [record] R{rn} {o.get('id')}: 記録値の数字 {miss} が"
+                              f" reveal_hard に無い（ハードで記録だけ漏れる候補）")
+                        warn += 1
+            sub = o.get("subview")
+            if isinstance(sub, dict):
+                scan(rn, sub.get("objects") or [])
+
+    print("=== record漏洩検査（ハード規約） ===")
+    for rn in range(1, 14):
+        d = load(rn)
+        for v in d["views"].values():
+            scan(rn, v["objects"])
+    print(f"--- record警告 {warn}件 ---")
 
 if __name__ == "__main__":
     main()

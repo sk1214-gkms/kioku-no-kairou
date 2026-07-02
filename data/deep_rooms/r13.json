@@ -46,7 +46,7 @@
           "reveal_hard": "刻印『OR』。",
           "record": {
             "key": "f_or",
-            "label": "刻印(罠)",
+            "label": "刻印",
             "value": "OR"
           }
         }
@@ -85,7 +85,7 @@
           "reveal_hard": "刻印『DE』。",
           "record": {
             "key": "f_de",
-            "label": "刻印(罠)",
+            "label": "刻印",
             "value": "DE"
           }
         }
@@ -124,7 +124,7 @@
           "reveal_hard": "刻印『GE』。",
           "record": {
             "key": "f_ge",
-            "label": "刻印(罠)",
+            "label": "刻印",
             "value": "GE"
           }
         },
@@ -143,8 +143,8 @@
               "ow_culprit"
             ]
           },
-          "reveal": "罠の刻印（DE・OR・GE）が、妙に手に馴染む。——嘘に慣れた、指先だ。",
-          "reveal_hard": "罠の刻印が、手に馴染む。"
+          "reveal": "幾つかの刻印が、妙に手に馴染む。——嘘に慣れた、指先だ。",
+          "reveal_hard": "幾つかの刻印が、手に馴染む。"
         }
       ]
     },

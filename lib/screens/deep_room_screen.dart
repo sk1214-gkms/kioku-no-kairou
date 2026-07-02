@@ -290,7 +290,9 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   /// 収束型：objに record:{key,label,value} があれば部屋内memoに手がかりを記録。
   /// ハードでは record_hard を優先（暗号のまま記録など）。重複keyは上書き。
   void _recordClue(Map<String, dynamic> o) {
-    final rec = ((_hard ? o['record_hard'] : null) ?? o['record']) as Map?;
+    final rawHard = _hard ? o['record_hard'] : null;
+    if (rawHard == false) return; // record_hard:false＝ハードでは記録しない（例:R1の読めない札）
+    final rec = ((rawHard is Map ? rawHard : null) ?? o['record']) as Map?;
     if (rec == null) return;
     final r = rec.cast<String, dynamic>();
     final key = r['key'] as String? ?? (o['id'] as String? ?? '');

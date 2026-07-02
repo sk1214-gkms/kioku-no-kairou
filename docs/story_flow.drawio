@@ -67,4 +67,124 @@
       </root>
     </mxGraphModel>
   </diagram>
+  <diagram id="kioku_full_flow_v2" name="v2_全体フロー_ストーリーと謎の分岐_2026-07-02">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1560" pageHeight="2400">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="ttl" value="『アムネジィ・ケース』全体フロー ── 13室の謎と分岐 → 審判 → 7結末＋リプレイ" style="text;html=1;fontSize=16;fontStyle=1;align=left;" vertex="1" parent="1"><mxGeometry x="40" y="6" width="1200" height="28" as="geometry"/></mxCell>
+
+        <mxCell id="start" value="タイトル → モード選択" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="560" y="40" width="300" height="56" as="geometry"/></mxCell>
+        <mxCell id="modes" value="5モード：ストーリー(時間∞・最終ヒント有) / ノーマル(最終ヒント封印) / ハード(暗号化・囮増・対峙/追跡/scrub強化) / ＋時間=N15分・H12分(結末Dが解禁)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="40" width="520" height="56" as="geometry"/></mxCell>
+
+        <mxCell id="hL" value="◆ 謎（解法 → 答え）" style="text;html=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="60" y="134" width="460" height="24" as="geometry"/></mxCell>
+        <mxCell id="hC" value="◆ 部屋（進行）" style="text;html=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="560" y="134" width="300" height="24" as="geometry"/></mxCell>
+        <mxCell id="hR" value="◆ 決断・フラグ・周回反応" style="text;html=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="900" y="134" width="520" height="24" as="geometry"/></mxCell>
+
+        <mxCell id="r1" value="R1 白い部屋〔T〕" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="560" y="170" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p1" value="探索：洗面台の下→小箱→『小さな鍵』→南扉（要アイテム）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="170" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d1" value="手がかり：鍵札『7-305』＝R4金庫・R5薬棚で回収される伏線" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="170" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r2" value="R2 準備室〔S〕" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="560" y="274" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p2" value="合成チェーン：紙片(左)＋(右)→半カルテ＋担当医欄→通行証＋受付印→『受理印つき通行証』→南扉" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="274" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d2" value="手がかり：『蓮見』の名札（私はここの人間？）　※Hard：囮『古い受付表』（この扉は数字錠ではない）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="274" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r3" value="R3 暗室〔Ä〕 ①" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="378" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p3" value="収束：BL点灯→現像メモ『凶行の半刻のち』＋覚書『半刻=30分』＋止時計03:45 → dial『04:15』（囮：予備時計04:45）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="378" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d3" value="①あの夜の記憶：直視→kept_truth ／ 書き換え→ow_truth（審判の問3と、R10変種(今後)を左右）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="378" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r4" value="R4 書斎〔分岐①〕" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="482" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p4" value="3手がかり収束：医学書7冊＋暗号表○3△0□5＋カルテ『○△□号室』→金庫『7305』→ドアノブ→南扉" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="482" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d4" value="分岐①（金庫の怒号）：聞く→s_r4_confront(+1) ／ 耳を塞ぐ→s_r4_evade(−1)　→R5が反応・R12の付記条件" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="482" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r5" value="R5 診察室〔C〕" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="560" y="586" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p5" value="刻み傷：深い順 7・4・11・15 →各＋1→ A=1 で文字化→『HELP』（囮：12 9 5＝LIE）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="586" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d5" value="周回反応：R4逃避→『耳の奥』／R4直面→『残響』が出現　※変種謎候補（←R4分岐・R7の手応え後）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="586" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r6" value="R6 記録室〔N〕 ① ★最難" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="690" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p6" value="対峙（消去法）：乙の改竄を看破→原本21:00→甲19:00・甥=門施錠→残るは私 → number『0345』　※Hard：二重の改竄看破" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="690" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d6" value="①推理の結論：直視→kept_culprit ／ 書き換え『甥』→ow_culprit（錠が独りでに開く）　→R7変種・R8小鏡が反応" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="690" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r7" value="R7 廊下〔I〕 ① ★変種実装済" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="794" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p7" value="足跡選別：規則『往復＋還り乱れ』→白い足跡→血痕03:45＋半時→number『0415』　★変種：ow_culprit周＝現場が編集（掠れた足跡＋囮の血足跡）・答不変" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="794" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d7" value="①凶器の記憶：直視→kept_weapon ／ 書き換え→ow_weapon（審判の問2を左右）。kept_truthで『壁の滲み』" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="794" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r8" value="R8 鏡の間〔分岐②〕★対峙" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="898" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p8" value="消灯→鏡と対峙：鏡の嘘×3に“直視した記憶(kept_*)”を突きつけ全論破　※Hard：4手目の追い詰め" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="898" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d8" value="分岐②：受容→s_r8_confront(+1) ／ 目を背ける→s_r8_evade(−1)（突きつけ不可でも否定で脱出可）　→R10が反応。ow_culprit周は小鏡が囁く" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="898" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r9" value="R9 標本室〔G〕★追跡" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="1002" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p9" value="合成：空シリンジ＋針→＋薬液→『完全な注射器』→南扉に挿す" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="1002" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d9" value="隠し：追跡（影を方向で追う・N5手/H7手＋攪乱）→『金属製の筒』has_culprit_evidence ＝ S結末の鍵（任意）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="1002" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r10" value="R10 監視室〔E〕★scrub" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="560" y="1106" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p10" value="通電→記録をスクラブ再生：刃物の瞬間複数から“異音03:45”と重なる一点だけ保存（N±1分/H±0・罠：04:15白衣の袖）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="1106" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d10" value="周回反応：s_r8_confrontで『砂嵐の顔』　※変種謎候補（←R3①・R7の手応え後）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="1106" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r11" value="R11 手術室〔D〕★手順" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="560" y="1210" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p11" value="sequence：各器具の相対順を読解→カルテ→手洗い→無影灯→麻酔→メス→縫合（囮：止血鉗子／H＋洗浄）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="1210" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d11" value="—（決断なし。部屋そのものが暗号＝手がかりは説明されない）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="1210" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r12" value="R12 証拠保管室〔分岐③〕" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="1314" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p12" value="sequence：時系列＝約束→施錠→凶行→甥の目撃→記録（捏造2つ除外：甥の侵入・自殺偽装／H＝3つ）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="1314" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d12" value="分岐③（03:45の記録）：暴く→s_r12_confront(+1) ／ 目を背ける→s_r12_evade(−1)。直面×2で『検視官の付記』" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="1314" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="r13" value="R13 最後の扉〔H収束〕" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="560" y="1418" width="300" height="76" as="geometry"/></mxCell>
+        <mxCell id="p13" value="断片6つ→ME＋MO＋RY＝text『MEMORY』（罠：DE／OR／GE）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="1418" width="460" height="76" as="geometry"/></mxCell>
+        <mxCell id="d13" value="周回反応：上書き×2で罠刻印が“馴染む”。クリア→GEDÄCHTNIS→VERLUST収束演出へ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="1418" width="520" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="verlust" value="VERLUST 収束演出（真相の自覚）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="560" y="1544" width="300" height="56" as="geometry"/></mxCell>
+
+        <mxCell id="judg" value="30号室・最後の審判（3問×3択・証拠連結）※突入時に審判チェックポイント保存&#10;問1 真犯人：嘘＝甥〔無条件〕／ 真実＝私〔要kept_culprit〕／ 囮＝使用人〔無条件〕&#10;問2 凶器：嘘＝甥のナイフ〔無条件〕／ 真実＝ペーパーナイフ〔要kept_weapon〕／ シリンジ〔要 金属筒〕&#10;問3 あの夜：嘘＝目撃しただけ〔無条件〕／ 真実＝この手で刺した〔要kept_truth〕／ 囮＝憶えていない&#10;※嘘・囮は無条件＝嘘に根拠は要らない。真実は“直視した記憶”が必要（書き換えた者は真実を主張できない）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;spacingTop=4;fontSize=11;" vertex="1" parent="1"><mxGeometry x="360" y="1650" width="700" height="150" as="geometry"/></mxCell>
+
+        <mxCell id="decide" value="結末決定（優先順）　①脳死→D ＞ ②凶器=シリンジ＋金属筒→S ＞ ③全問真実＋全直面→True&#10;＞ ④嘘M=3 →（全逃避ならA+／それ以外A） ＞ ⑤M&lt;3 →（全逃避ならB／それ以外C）&#10;スコア＝作話完全度 I=(T×M)(1+E/3)　※E=逃避＋①上書き回数(0..3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;spacingTop=4;fontSize=11;" vertex="1" parent="1"><mxGeometry x="360" y="1850" width="700" height="96" as="geometry"/></mxCell>
+
+        <mxCell id="endAp" value="A+&#10;完璧な偽物" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="60" y="1996" width="190" height="76" as="geometry"/></mxCell>
+        <mxCell id="endA" value="A&#10;作話の綻び" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="266" y="1996" width="190" height="76" as="geometry"/></mxCell>
+        <mxCell id="endB" value="B 忘却の揺り籠&#10;（回廊の最初へループ→）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="472" y="1996" width="190" height="76" as="geometry"/></mxCell>
+        <mxCell id="endC" value="C&#10;断罪の重圧" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="678" y="1996" width="190" height="76" as="geometry"/></mxCell>
+        <mxCell id="endS" value="S 深淵の白&#10;（安楽死の真相）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1"><mxGeometry x="884" y="1996" width="190" height="76" as="geometry"/></mxCell>
+        <mxCell id="endT" value="True&#10;白慈の審判" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1090" y="1996" width="190" height="76" as="geometry"/></mxCell>
+        <mxCell id="endD" value="D 精神の死&#10;（時間切れ・灰色の虚無）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1296" y="1996" width="190" height="76" as="geometry"/></mxCell>
+
+        <mxCell id="timer" value="脳死タイマー&#10;（＋時間モードのみ）&#10;N=15分／H=12分&#10;0になった瞬間、&#10;どの地点でも→D" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1430" y="170" width="104" height="140" as="geometry"/></mxCell>
+
+        <mxCell id="replay" value="クリア後のリプレイ：A3＝『？？？』タップで条件ティーザー ／ 審判やり直し＝3問だけ再回答（←左のループ・D不可・T固定）&#10;／ 変種謎・分岐反応＝逆側の選択をした周は部屋の中身が変わる ／ B＝回廊の最初へループ（→右の矢印）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=8;spacingTop=4;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="2122" width="560" height="100" as="geometry"/></mxCell>
+
+        <mxCell id="lg" value="凡例：黄＝決断・分岐あり／青＝謎のみ／緑＝審判・True／紫＝メタ・S／橙＝結末／赤＝タイマー・D　　①＝記憶の上書き（直視/書き換え）" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1"><mxGeometry x="60" y="2244" width="1200" height="24" as="geometry"/></mxCell>
+
+        <mxCell id="fT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="start" target="r1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r1" target="r2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r2" target="r3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r3" target="r4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r4" target="r5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r5" target="r6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r6" target="r7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r7" target="r8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r8" target="r9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r9" target="r10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r10" target="r11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r11" target="r12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r12" target="r13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="r13" target="verlust"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="verlust" target="judg"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="judg" target="decide"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="gAp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0.05;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="decide" target="endAp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="gA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0.2;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="decide" target="endA"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="gB" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0.35;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="decide" target="endB"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="gC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="decide" target="endC"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="gS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0.65;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="decide" target="endS"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="gT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0.8;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="decide" target="endT"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="gD" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0.95;exitY=1;entryX=0.5;entryY=0;dashed=1;" edge="1" parent="1" source="decide" target="endD"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="gTimer" value="0で発動" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;strokeColor=#b85450;exitX=0.5;exitY=1;entryX=0.5;entryY=0;fontSize=10;" edge="1" parent="1" source="timer" target="endD"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1482" y="1975"/><mxPoint x="1391" y="1975"/></Array></mxGeometry></mxCell>
+
+        <mxCell id="gLoopB" value="B：記憶初期化ループ" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;strokeColor=#d79b00;exitX=0.5;exitY=1;entryX=0.67;entryY=0;fontSize=10;" edge="1" parent="1" source="endB" target="r1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="567" y="2100"/><mxPoint x="1548" y="2100"/><mxPoint x="1548" y="120"/><mxPoint x="760" y="120"/></Array></mxGeometry></mxCell>
+
+        <mxCell id="gRetry" value="審判やり直し（3問だけ再回答・D不可）" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;strokeColor=#82b366;exitX=0;exitY=0.5;entryX=0;entryY=0.5;fontSize=10;" edge="1" parent="1" source="replay" target="judg"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="26" y="2172"/><mxPoint x="26" y="1725"/></Array></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>

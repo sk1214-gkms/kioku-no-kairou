@@ -5,6 +5,7 @@ import 'deep_campaign_flow.dart';
 
 /// タイトル＋モード選択。ここで選んだモードが体験（記憶・結末）を変える。
 /// 中断したプレイがあれば「つづきから」を表示する。
+/// 見た目は docs/design_title_mock.html のデザイン案に準拠（配色HEX一致）。
 class TitleScreen extends StatefulWidget {
   const TitleScreen({super.key});
 
@@ -13,6 +14,16 @@ class TitleScreen extends StatefulWidget {
 }
 
 class _TitleScreenState extends State<TitleScreen> {
+  // ===== 館のDNA配色（design_title_mock.html と一致）=====
+  static const _bg = Color(0xFF0E0C14);
+  static const _panel = Color(0xFF15131C);
+  static const _sel = Color(0xFF241F33);
+  static const _line = Color(0xFF2A2733);
+  static const _red = Color(0xFF961A1A);
+  static const _redAccent = Color(0xFFFF5A5A);
+  static const _gold = Colors.amberAccent; // ≒ #FFD740
+  static const _sub = Color(0xFF8A8496);
+
   final DeepSaveService _deepSave = DeepSaveService();
   final CollectionService _collection = CollectionService();
   DeepSavedRun? _deepSaved;
@@ -28,20 +39,23 @@ class _TitleScreenState extends State<TitleScreen> {
     {
       'key': 'story',
       'name': 'ストーリー',
+      'echo': 'STORY',
       'goal': '物語を味わう',
       'desc': '時間制限なし。最終ヒントまで開放の安全網。推理が苦手でも結末へ辿り着ける。',
     },
     {
       'key': 'normal',
       'name': 'ノーマル',
+      'echo': 'NORMAL',
       'goal': '標準の謎解き',
       'desc': '答えの最終ヒントは無し＝自力で導く。手応えと達成感のバランス。',
     },
     {
       'key': 'hard',
       'name': 'ハード',
+      'echo': 'HARD',
       'goal': '限界に挑む',
-      'desc': '手がかりを暗号化し、ミスリードを増した最難。',
+      'desc': '手がかりを暗号化し、ミスリードを増した最難。記憶が牙を剥く。',
     },
   ];
 
@@ -126,75 +140,140 @@ class _TitleScreenState extends State<TitleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E0C14),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('アムネジィ・ケース',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 3)),
-                const SizedBox(height: 8),
-                const Text('── 教授の不完全な安楽 ──',
-                    style: TextStyle(color: Colors.white54, letterSpacing: 1)),
-                const SizedBox(height: 40),
-                if (_loading)
-                  const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: CircularProgressIndicator(),
-                  )
-                else ...[
-                  // ===== 本編（深い部屋・作話システム）=====
-                  if (_deepSaved != null) ...[
-                    SizedBox(
-                      width: 320,
-                      child: OutlinedButton(
-                        onPressed: _deepContinue,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          child: Text(
-                              'つづきから（第${_deepSaved!.idx + 1}室）',
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text('― はじめから ―',
-                        style: TextStyle(color: Colors.white38)),
-                    const SizedBox(height: 8),
-                  ],
-                  _modeSelector(),
-                  // 審判到達済みなら、答えだけ変えて別の結末を回収できる
-                  if (_judgmentCp != null) ...[
-                    const SizedBox(height: 14),
-                    SizedBox(
-                      width: 320,
-                      child: OutlinedButton.icon(
-                        onPressed: _retryJudgment,
-                        icon: const Icon(Icons.gavel,
-                            size: 18, color: Colors.amberAccent),
-                        label: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            '最後の審判からやり直す（${_modeLabels[_judgmentCp!.mode] ?? _judgmentCp!.mode}）',
-                            style: const TextStyle(
-                                fontSize: 13, color: Colors.amberAccent),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 24),
-                  _endingCollection(),
-                ],
-              ],
+      backgroundColor: _bg,
+      body: Stack(
+        children: [
+          const Positioned.fill(child: _Atmosphere()),
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(26, 44, 26, 24),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _logo(),
+                      const SizedBox(height: 30),
+                      if (_loading)
+                        const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: CircularProgressIndicator(),
+                        )
+                      else ...[
+                        if (_deepSaved != null) ...[
+                          _continueButton(),
+                          const SizedBox(height: 16),
+                          const Text('― はじめから ―',
+                              style: TextStyle(color: Colors.white38)),
+                          const SizedBox(height: 8),
+                        ],
+                        _modeSelector(),
+                        if (_judgmentCp != null) ...[
+                          const SizedBox(height: 12),
+                          _retryButton(),
+                        ],
+                        const SizedBox(height: 26),
+                        _endingCollection(),
+                        const SizedBox(height: 18),
+                        const Text('G E D Ä C H T N I S',
+                            style: TextStyle(
+                                fontFamily: 'Blackletter',
+                                color: Color(0xFF3A3646),
+                                fontSize: 11,
+                                letterSpacing: 3)),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ===== ロゴ（kicker＋明朝風タイトル＋副題）=====
+  Widget _logo() {
+    return Column(
+      children: [
+        const Text('A M N E S I E   C A S E',
+            style: TextStyle(
+                fontFamily: 'Blackletter',
+                color: Color(0xFFB9B1C4),
+                fontSize: 15,
+                letterSpacing: 4)),
+        const SizedBox(height: 10),
+        Text.rich(
+          const TextSpan(children: [
+            TextSpan(text: 'アムネジィ・ケー'),
+            TextSpan(
+                text: 'ス',
+                style: TextStyle(color: _redAccent, shadows: [
+                  Shadow(color: _red, blurRadius: 16),
+                ])),
+          ]),
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 3,
+              color: Color(0xFFF2ECE0),
+              height: 1.18,
+              shadows: [Shadow(color: Colors.black, blurRadius: 24)]),
+        ),
+        const SizedBox(height: 14),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _ruleLine(),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('教授の不完全な安楽',
+                  style: TextStyle(
+                      color: _sub, fontSize: 14, letterSpacing: 4)),
+            ),
+            _ruleLine(),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _ruleLine() =>
+      Container(width: 30, height: 1, color: _line);
+
+  Widget _continueButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        onPressed: _deepContinue,
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: _gold),
+          foregroundColor: _gold,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Text('つづきから（第${_deepSaved!.idx + 1}室）',
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        ),
+      ),
+    );
+  }
+
+  Widget _retryButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: _retryJudgment,
+        icon: const Icon(Icons.gavel, size: 18, color: _gold),
+        label: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Text(
+            '最後の審判からやり直す（${_modeLabels[_judgmentCp!.mode] ?? _judgmentCp!.mode}）',
+            style: const TextStyle(fontSize: 13, color: _gold),
           ),
         ),
       ),
@@ -203,59 +282,53 @@ class _TitleScreenState extends State<TitleScreen> {
 
   Widget _endingCollection() {
     final teasable = _seen.isNotEmpty && _seen.length < _allEndings.length;
-    return SizedBox(
-      width: 320,
-      child: Column(
-        children: [
-          Text('── 結末コレクション　${_seen.length} / ${_allEndings.length} ──',
-              style: const TextStyle(color: Colors.white38, fontSize: 12)),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            alignment: WrapAlignment.center,
-            children: [for (final e in _allEndings) _endingChip(e)],
+    return Column(
+      children: [
+        Text('── 結末コレクション　${_seen.length} / ${_allEndings.length} ──',
+            style: const TextStyle(color: _sub, fontSize: 12)),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          alignment: WrapAlignment.center,
+          children: [for (final e in _allEndings) _endingChip(e)],
+        ),
+        if (teasable)
+          const Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text('？？？ に触れると、手がかりが浮かぶ',
+                style: TextStyle(color: Color(0xFF4B465A), fontSize: 10)),
           ),
-          // A3：初回クリア後は「？？？」タップで条件のティーザーが浮かぶ
-          if (teasable)
-            const Padding(
-              padding: EdgeInsets.only(top: 6),
-              child: Text('？？？ に触れると、手がかりが浮かぶ',
-                  style: TextStyle(color: Colors.white24, fontSize: 10)),
-            ),
-        ],
-      ),
+      ],
     );
   }
 
   Widget _endingChip(List<String> e) {
     final got = _seen.contains(e[0]);
     final chip = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: got ? const Color(0xFF2A2438) : const Color(0xFF15131C),
-        border: Border.all(color: got ? Colors.amberAccent : Colors.white12),
+        color: got ? _sel : const Color(0xFF100E17),
+        border: Border.all(color: got ? _gold : _line),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Text(got ? '${e[0]} ${e[1]}' : '？？？',
           style: TextStyle(
-              fontSize: 11, color: got ? Colors.amberAccent : Colors.white24)),
+              fontSize: 11,
+              letterSpacing: got ? 0 : 2,
+              color: got ? _gold : const Color(0xFF4B465A))),
     );
-    // A3：未取得＋初回クリア済み → タップでティーザー表示
     if (got || _seen.isEmpty) return chip;
-    return GestureDetector(
-      onTap: () => _showTeaser(e[0]),
-      child: chip,
-    );
+    return GestureDetector(onTap: () => _showTeaser(e[0]), child: chip);
   }
 
   void _showTeaser(String code) {
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF15131C),
+        backgroundColor: _panel,
         title: const Text('？？？',
-            style: TextStyle(color: Colors.amberAccent, letterSpacing: 4)),
+            style: TextStyle(color: _gold, letterSpacing: 4)),
         content: Text(_teasers[code] ?? '……',
             style: const TextStyle(color: Colors.white70, height: 1.8)),
         actions: [
@@ -272,56 +345,79 @@ class _TitleScreenState extends State<TitleScreen> {
   Widget _modeSelector() {
     final canTime = _diff != 'story';
     final dur = _diff == 'hard' ? '12分' : '15分';
+    return Column(
+      children: [
+        const Text('── 記憶に、潜る難度を選ぶ ──',
+            style: TextStyle(color: _sub, fontSize: 12, letterSpacing: 1)),
+        const SizedBox(height: 10),
+        for (final d in _diffs) _diffCard(d),
+        const SizedBox(height: 10),
+        // 制限時間トグル（ストーリー時は無効）
+        Opacity(
+          opacity: canTime ? 1 : 0.4,
+          child: Container(
+            decoration: BoxDecoration(
+              color: _panel,
+              border: Border.all(
+                  color: (canTime && _timed) ? _redAccent : _line),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: SwitchListTile(
+              value: canTime && _timed,
+              onChanged: canTime ? (v) => setState(() => _timed = v) : null,
+              dense: true,
+              title: const Text('⏱ 制限時間（脳死カウント）',
+                  style: TextStyle(fontSize: 13)),
+              subtitle: Text(
+                  canTime
+                      ? '$dur で時間切れ＝“精神の死”。この時だけの結末が加わる。'
+                      : 'ストーリーは時間制限なし',
+                  style: const TextStyle(fontSize: 10, color: _sub)),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        _diveButton(),
+      ],
+    );
+  }
+
+  Widget _diveButton() {
     return SizedBox(
-      width: 340,
-      child: Column(
-        children: [
-          const Text('難易度を選ぶ',
-              style: TextStyle(color: Colors.white54, fontSize: 12)),
-          const SizedBox(height: 8),
-          for (final d in _diffs) _diffCard(d),
-          const SizedBox(height: 10),
-          // 制限時間トグル（ストーリー時は無効）
-          Opacity(
-            opacity: canTime ? 1 : 0.35,
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF15131C),
-                border: Border.all(
-                    color: (canTime && _timed)
-                        ? Colors.redAccent
-                        : Colors.white12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SwitchListTile(
-                value: canTime && _timed,
-                onChanged:
-                    canTime ? (v) => setState(() => _timed = v) : null,
-                dense: true,
-                title: const Text('⏱ 制限時間（脳死カウント）',
-                    style: TextStyle(fontSize: 13)),
-                subtitle: Text(
-                    canTime
-                        ? '$dur で時間切れ＝“精神の死(D)”。この時だけの結末が加わる。'
-                        : 'ストーリーは時間制限なし',
-                    style: const TextStyle(fontSize: 10, color: Colors.white38)),
-              ),
+      width: double.infinity,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF2A2440), Color(0xFF1C1830)],
+          ),
+          border: Border.all(color: const Color(0xFF4A3F6B)),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withValues(alpha: 0.5),
+                blurRadius: 20,
+                offset: const Offset(0, 8)),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => _deepNew(_resolveMode()),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Text('${_modeLabels[_resolveMode()]} で潜る　→',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                      color: Color(0xFFEDE7DA))),
             ),
           ),
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: () => _deepNew(_resolveMode()),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Text('${_modeLabels[_resolveMode()]} で潜る  →',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -337,13 +433,18 @@ class _TitleScreenState extends State<TitleScreen> {
         duration: const Duration(milliseconds: 150),
         width: double.infinity,
         margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
         decoration: BoxDecoration(
-          color: sel ? const Color(0xFF241F33) : const Color(0xFF15131C),
+          color: sel ? _sel : _panel,
           border: Border.all(
-              color: sel ? Colors.amberAccent : Colors.white12,
-              width: sel ? 2 : 1),
-          borderRadius: BorderRadius.circular(10),
+              color: sel ? _gold : _line, width: sel ? 2 : 1),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: sel
+              ? [
+                  BoxShadow(
+                      color: _gold.withValues(alpha: 0.10), blurRadius: 26),
+                ]
+              : null,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,8 +454,8 @@ class _TitleScreenState extends State<TitleScreen> {
                     ? Icons.radio_button_checked
                     : Icons.radio_button_unchecked,
                 size: 18,
-                color: sel ? Colors.amberAccent : Colors.white24),
-            const SizedBox(width: 10),
+                color: sel ? _gold : const Color(0xFF4A4560)),
+            const SizedBox(width: 11),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,18 +465,28 @@ class _TitleScreenState extends State<TitleScreen> {
                     textBaseline: TextBaseline.alphabetic,
                     children: [
                       Text(d['name']!,
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              color: sel ? _gold : Colors.white)),
                       const SizedBox(width: 8),
-                      Text('— ${d['goal']}',
+                      Text(d['echo']!,
                           style: const TextStyle(
-                              fontSize: 12, color: Colors.amberAccent)),
+                              fontFamily: 'Blackletter',
+                              fontSize: 12,
+                              color: Color(0xFF5F5A70))),
+                      const Spacer(),
+                      Text(d['goal']!,
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: _gold.withValues(alpha: 0.85))),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 5),
                   Text(d['desc']!,
-                      style:
-                          const TextStyle(fontSize: 11, color: Colors.white54)),
+                      style: const TextStyle(
+                          fontSize: 11, color: _sub, height: 1.5)),
                 ],
               ),
             ),
@@ -384,4 +495,82 @@ class _TitleScreenState extends State<TitleScreen> {
       ),
     );
   }
+}
+
+/// 背景の雰囲気レイヤ（暗い階調＋ビネット＋血の赤の一差し＋巨大な亀甲文字）。
+class _Atmosphere extends StatelessWidget {
+  const _Atmosphere();
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Stack(
+        children: [
+          // 階調（ティール寄りの上→漆黒の下）
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xFF141A1C), Color(0xFF0E0C14), Color(0xFF070609)],
+                stops: [0.0, 0.5, 1.0],
+              ),
+            ),
+            child: SizedBox.expand(),
+          ),
+          // 巨大な亀甲文字の焼き込み（トラウマ文字 T）
+          Center(
+            child: Transform.translate(
+              offset: const Offset(0, -30),
+              child: Text('T',
+                  style: TextStyle(
+                      fontFamily: 'Blackletter',
+                      fontSize: 460,
+                      height: 1,
+                      color: Colors.white.withValues(alpha: 0.035))),
+            ),
+          ),
+          // 血の赤の一差し（斜めの滲み）
+          Align(
+            alignment: const Alignment(0.35, -0.55),
+            child: Transform.rotate(
+              angle: 0.42,
+              child: Container(
+                width: 3,
+                height: 220,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      _red0(0),
+                      _red0(0.5),
+                      _red0(0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // ビネット（周辺を締める）
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment.center,
+                radius: 0.95,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withValues(alpha: 0.62),
+                ],
+                stops: const [0.6, 1.0],
+              ),
+            ),
+            child: const SizedBox.expand(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Color _red0(double a) => const Color(0xFF961A1A).withValues(alpha: a);
 }

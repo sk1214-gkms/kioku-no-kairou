@@ -95,7 +95,17 @@ class VerdictScreen extends StatelessWidget {
     if (result.ending == 'D') return _deathView(context);
     return Scaffold(
       backgroundColor: const Color(0xFF0E0C14),
-      body: SafeArea(
+      // タイトル画面と同じ館の階調（ティール→漆黒）で世界観を統一
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF141A1C), Color(0xFF0E0C14), Color(0xFF070609)],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(28),
@@ -151,6 +161,7 @@ class VerdictScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

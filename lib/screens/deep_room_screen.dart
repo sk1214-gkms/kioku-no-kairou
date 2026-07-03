@@ -1245,8 +1245,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   Widget build(BuildContext context) {
     final inSub = _subStack.isNotEmpty;
     return Scaffold(
+      backgroundColor: const Color(0xFF0E0C14),
       appBar: AppBar(
-        title: Text('${_room['name']}  ［$_placeLabel］'),
+        backgroundColor: const Color(0xFF15131C),
+        foregroundColor: const Color(0xFFE7E2D8),
+        elevation: 0,
+        shape: const Border(
+            bottom: BorderSide(color: Color(0xFF2A2733), width: 1)),
+        title: Text('${_room['name']}  ［$_placeLabel］',
+            style: const TextStyle(fontSize: 16, letterSpacing: 1)),
         actions: [
           if (widget.timed && widget.remaining != null)
             Center(
@@ -1356,10 +1363,18 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           child: GestureDetector(
             onTap: () => _tap(o),
             child: Container(
+              // 調べられる箇所＝暗い半透明パネル＋金の細枠（アプリの顔と同じ金の差し色）
               decoration: BoxDecoration(
-                color: const Color(0x59673AB7),
-                border: Border.all(color: Colors.white70, width: 2),
-                borderRadius: BorderRadius.circular(6),
+                color: const Color(0x55100E17),
+                border: Border.all(
+                    color: Colors.amberAccent.withValues(alpha: 0.55),
+                    width: 1.4),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      blurRadius: 8),
+                ],
               ),
               alignment: Alignment.center,
               child: Text(
@@ -1367,7 +1382,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                     ? '${o['label']}\n[${_states[o['id']] ?? (o['states'] as List).first}]'
                     : '${o['label']}',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 11, color: Colors.white),
+                style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                    shadows: [Shadow(color: Colors.black, blurRadius: 4)]),
               ),
             ),
           ),
@@ -1378,7 +1396,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   Widget _statusBar() {
     return Container(
       width: double.infinity,
-      color: const Color(0xFF1E1B26),
+      decoration: const BoxDecoration(
+        color: Color(0xFF15131C),
+        border: Border(top: BorderSide(color: Color(0xFF2A2733), width: 1)),
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1403,12 +1424,12 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                               horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
                             color: _selected.contains(id)
-                                ? const Color(0xFFB8860B)
-                                : const Color(0xFF2A2438),
+                                ? Colors.amberAccent
+                                : const Color(0xFF241F33),
                             border: Border.all(
                                 color: _selected.contains(id)
-                                    ? Colors.amber
-                                    : Colors.white24),
+                                    ? Colors.amberAccent
+                                    : const Color(0xFF2A2733)),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Row(

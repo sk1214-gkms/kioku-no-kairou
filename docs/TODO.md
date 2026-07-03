@@ -81,12 +81,14 @@
 > 🔴 次の関門＝**自宅PCで flutter analyze / test / 実機確認**（legacy撤去 6e4b86b＋本リプレイ実装をまとめて検証）
 
 ## 5. 🟡 配信（リリース）
-WindowsとiPhone/Androidのみで配信する段取り。
+**本番配信＝Google Play ／ App Store**（GitHub Pages は開発・実機確認用の一時公開のみ＝製品チャネルではない）。
 
 - ☐ 自宅PCで Android ビルド（`flutter build apk` / 実機 `flutter run`）
 - ☐ iPhone：TestFlight 配信（Mac不要ルート）→ 使用感確認
-- ☐ ストア用素材：アプリアイコン・スクリーンショット・説明文・年齢レーティング（流血表現に注意）
-- ☐ プライバシーポリシー（広告/データ収集を入れる場合）
+- ☐ ストア用素材：アプリアイコン・スクリーンショット・説明文・**年齢レーティング**（安楽死/殺人/自傷の示唆＝App Store 17+・Play IARC高め想定。両ストアとも内容審査あり。虚偽申告は却下要因）
+- ☐ **プライバシーポリシー（URL必須）**：AdMob等で広告/データ収集を入れる場合、両ストアで必須
+- ☐ **開発者アカウント**：Google Play＝$25買い切り／Apple Developer＝$99/年
+- ☐ **リリース前クリーンアップ**：GitHub Pages 公開停止 or リポジトリ Private 化（公開のままだと全部屋JSON＋解答キーが読める）。一度公開＝キャッシュ/アーカイブに残り得る点は許容
 - 参考：[iPhone配信手順（Windowsのみ）](iPhone配信手順_Windowsのみ.md)
 
 ---

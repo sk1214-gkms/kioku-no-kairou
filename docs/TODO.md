@@ -88,6 +88,9 @@
 - ☐ 自宅PCで Android ビルド（`flutter build apk` / 実機 `flutter run`）
 - ☐ iPhone：TestFlight 配信（Mac不要ルート）→ 使用感確認
 - ☐ ストア用素材：アプリアイコン・スクリーンショット・説明文・**年齢レーティング**（安楽死/殺人/自傷の示唆＝App Store 17+・Play IARC高め想定。両ストアとも内容審査あり。虚偽申告は却下要因）
+  - ☑ **アプリアイコン案＝V3「頭文字A×鍵穴＋金の細環」に確定**（Claude Design）。1024pxを `assets/icon/app_icon.png` に置き、[アプリアイコン導入.md](アプリアイコン導入.md) の手順で `flutter_launcher_icons` 生成（自宅）
+  - ☑ **タイトル画面のデザイン確定＆Flutter実装済**（[design_title_mock.html](design_title_mock.html) → [title_screen.dart](../lib/screens/title_screen.dart)）※実機確認は自宅
+  - ☐ スクリーンショット5枚・フィーチャーグラフィック（本番アート完成後・[配信準備](配信準備_ストアとポリシー.md)の掲載文と合わせる）
 - ☐ **プライバシーポリシー（URL必須）**：AdMob等で広告/データ収集を入れる場合、両ストアで必須
 - ☐ **開発者アカウント**：Google Play＝$25買い切り／Apple Developer＝$99/年
 - ☐ **リリース前クリーンアップ**：GitHub Pages 公開停止 or リポジトリ Private 化（公開のままだと全部屋JSON＋解答キーが読める）。一度公開＝キャッシュ/アーカイブに残り得る点は許容

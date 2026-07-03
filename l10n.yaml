@@ -1,6 +1,0 @@
-# Flutter 多言語対応の設定（現在は“準備”＝pubspec で generate を有効化するまで未使用）。
-# 有効化手順は docs/多言語対応_l10n土台.md を参照。
-arb-dir: lib/l10n
-template-arb-file: app_ja.arb
-output-localization-file: app_localizations.dart
-output-class: L

@@ -97,10 +97,10 @@ flutter run
 
 [lib/ad_service.dart](lib/ad_service.dart) に実装（※現在スタブ）。**既定は無効**（`AdService.enabled = false`）。AdMob のアプリID設定が済むまではオフのまま安全に開発できる（未設定で有効化すると起動クラッシュの恐れ）。広告の有無でゲームは詰まない。
 
-- **発火点は現行フロー（[deep_campaign_flow.dart](lib/screens/deep_campaign_flow.dart)／[deep_room_screen.dart](lib/screens/deep_room_screen.dart)）へ再配線が必要**（旧30部屋の配線は撤去済み）。
-  - **インタースティシャル**：章替わり／部屋クリアの区切りで表示（想定）。
-  - **リワード**：ヒント解放（[deep_room_screen.dart](lib/screens/deep_room_screen.dart) の `_showHint`＝「ヒント（広告）」ボタン）。
-- いまは **Google公式のテスト広告ID** を使用する前提（本番前に自分のIDへ差し替え）。
+- **リワード＝配線済み**：ヒント解放（[deep_room_screen.dart](lib/screens/deep_room_screen.dart) の `_showHint`）。**広告が出るのは「`AdService.enabled` かつ 非プレミアム」の時だけ**で、それ以外は"広告を見て"とは表示せず即開放（＝虚偽表示にしない）。`showRewarded()` が空(no-fill)でも進行は止めずヒント開放（詰み防止）。
+- **プレミアム（¥480買い切り）＝土台実装済み**：[lib/purchase_service.dart](lib/purchase_service.dart)（`isPremium` で広告除去＋ヒント無料）。ストア連携(`in_app_purchase`)は本番マネタイズ期に `buyPremium()` を差し替え。
+- **インタースティシャル＝未配線**：章替わり（R4→R5／R9→R10）と結果画面前に入れる想定（`AdService.showInterstitial()` の呼び出しを [deep_campaign_flow.dart](lib/screens/deep_campaign_flow.dart) に追加）。
+- いまは `AdService.enabled=false`＝全て無効。本番は **Google公式のテスト広告ID** から始め、自分のIDへ差し替え。
 
 ### 有効化の手順
 1. AdMob でアプリ登録 → アプリID・各ユニットIDを取得。

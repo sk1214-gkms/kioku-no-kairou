@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
+import '../ad_service.dart';
 import '../audio_service.dart';
 import '../models.dart';
+import '../purchase_service.dart';
 import '../widgets/design_canvas.dart';
 
 /// 深い部屋（東西南北4視点 × ネスト調査 × アイテム合成 × 多段ロック）。
@@ -1039,6 +1041,22 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       return;
     }
     final shown = i;
+    void reveal() {
+      if (!mounted) return;
+      setState(() {
+        _hintLevel = shown + 1;
+        _hintsViewed++;
+      });
+      _zoom('ヒント', _hintText(raw[shown]));
+    }
+
+    // 広告を出すのは「広告が有効 かつ 非プレミアム」の時だけ。
+    // それ以外（広告オフ中／プレミアム購入者）は“広告を見て”とは言わず即開放（虚偽表示にしない）。
+    final showAd = AdService.enabled && !PurchaseService.instance.isPremium;
+    if (!showAd) {
+      reveal();
+      return;
+    }
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -1048,15 +1066,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           TextButton(
               onPressed: () => Navigator.pop(ctx), child: const Text('やめる')),
           FilledButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(ctx);
-              if (!mounted) return;
-              // 広告はスタブ（no-op）。視聴完了とみなしてヒントを解放。
-              setState(() {
-                _hintLevel = shown + 1;
-                _hintsViewed++;
-              });
-              _zoom('ヒント', _hintText(raw[shown]));
+              // リワード広告を再生（無ければ進行を止めずヒント開放＝詰み防止）。
+              await AdService.instance.showRewarded();
+              reveal();
             },
             child: const Text('見る'),
           ),
@@ -1444,7 +1458,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 icon: const Icon(Icons.lightbulb_outline,
                     size: 16, color: Colors.amberAccent),
                 label: Text(
-                  _hints.isEmpty || _maxHint <= 0
+                  // 実際に広告が出る時だけ「（広告）」を付ける（虚偽表示にしない）
+                  (_hints.isEmpty ||
+                          _maxHint <= 0 ||
+                          !AdService.enabled ||
+                          PurchaseService.instance.isPremium)
                       ? 'ヒント'
                       : 'ヒント（広告）',
                   style: const TextStyle(color: Colors.amberAccent, fontSize: 12),

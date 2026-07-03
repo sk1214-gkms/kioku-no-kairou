@@ -41,7 +41,10 @@ jobs:
       # base-href はプロジェクトサイト（/<repo名>/）に合わせる
       - run: flutter build web --release --base-href "/kioku-no-kairou/"
 
+      # enablement: true ＝ Pages 未設定でもワークフローから自動で有効化を試みる
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web

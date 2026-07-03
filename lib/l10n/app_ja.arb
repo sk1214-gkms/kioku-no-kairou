@@ -1,0 +1,41 @@
+{
+  "@@locale": "ja",
+  "@@x-note": "多言語対応の“種”ファイル。本番で flutter gen-l10n を有効化して使う（docs/多言語対応_l10n土台.md）。UI文言のみ。物語テキスト(結末等)は data/text_ja.json / 部屋JSON 側でロケール分割する。",
+
+  "appTitle": "アムネジィ・ケース",
+  "appSubtitle": "── 教授の不完全な安楽 ──",
+
+  "chooseDifficulty": "難易度を選ぶ",
+  "modeStory": "ストーリー",
+  "modeNormal": "ノーマル",
+  "modeHard": "ハード",
+  "modeStoryDesc": "時間制限なし。最終ヒントまで開放の安全網。推理が苦手でも結末へ辿り着ける。",
+  "modeNormalDesc": "答えの最終ヒントは無し＝自力で導く。手応えと達成感のバランス。",
+  "modeHardDesc": "手がかりを暗号化し、ミスリードを増した最難。",
+  "timeLimitToggle": "⏱ 制限時間（脳死カウント）",
+  "diveButton": "{mode} で潜る  →",
+  "@diveButton": { "placeholders": { "mode": { "type": "String" } } },
+  "continueRoom": "つづきから（第{n}室）",
+  "@continueRoom": { "placeholders": { "n": { "type": "int" } } },
+  "retryJudgment": "最後の審判からやり直す",
+  "endingCollection": "── 結末コレクション　{seen} / {total} ──",
+  "@endingCollection": { "placeholders": { "seen": { "type": "int" }, "total": { "type": "int" } } },
+  "teaserHint": "？？？ に触れると、手がかりが浮かぶ",
+
+  "hint": "ヒント",
+  "hintAd": "ヒント（広告）",
+  "hintAdConfirm": "広告を見て、いま必要なヒントを表示しますか？",
+  "clues": "手がかり（{n}）",
+  "@clues": { "placeholders": { "n": { "type": "int" } } },
+  "giveUp": "……諦めて先へ進む",
+  "cancel": "やめる",
+  "watch": "見る",
+  "noHintLeft": "今、出せるヒントはもう無い。",
+  "scrubSave": "この瞬間を保存",
+  "scrubMiss": "……違う。この刻では、ない。",
+
+  "confirmMemory": "この記憶を、確定する",
+  "shareCopy": "結果をSNS用にコピー",
+  "backToTitle": "タイトルへ戻る",
+  "loopBack": "回廊の最初へ戻される……"
+}

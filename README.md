@@ -26,6 +26,8 @@
 - [アセット仕様書](docs/アセット仕様書.md) … 必要な画像/イラストの詳細一覧（13室4方向）＋生成プロンプト
 - [音響仕様書（BGM・SE）](docs/音響仕様書_BGM_SE.md) … BGM/効果音の一覧・ムード・生成プロンプト・ツール
 - [**BGM・SEプロンプト（コピペ用）**](docs/音楽SEプロンプト_コピペ用.md) … ★1個ずつコードブロックで即コピペ。貼り付け先(Suno/ElevenLabs)と設定つき
+- [**配信準備：ストア掲載文・プライバシーポリシー・年齢レーティング**](docs/配信準備_ストアとポリシー.md) … ★下書き一式（本番=Play/App Store）
+- [多言語対応（l10n）土台と有効化手順](docs/多言語対応_l10n土台.md) … .arb種＋l10n.yaml＋直書き文言の在り処＋有効化手順
 - [**iPhone配信手順（Windows＋iPhoneのみ・Mac不要）**](docs/iPhone配信手順_Windowsのみ.md) … TestFlight配信の段取り
 - [**Stable Diffusion（ローカル）生成手順**](docs/StableDiffusion_ローカル生成手順.md) … 画像アセットをローカルSDで作る（Windows）
 - [**Adobe Firefly 生成手順**](docs/AdobeFirefly_生成手順.md) … 商用安全なFirefly＋Photoshopで作る（流血表現の回避策つき）

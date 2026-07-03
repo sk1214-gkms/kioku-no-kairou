@@ -1,0 +1,41 @@
+{
+  "@@locale": "en",
+  "@@x-note": "English seed. Machine-translated draft — MUST be reviewed by a native speaker before release (the game's voice matters). Story text (endings/rooms) is localized separately in data.",
+
+  "appTitle": "Amnesie Case",
+  "appSubtitle": "— The Professor's Imperfect Euthanasia —",
+
+  "chooseDifficulty": "Choose difficulty",
+  "modeStory": "Story",
+  "modeNormal": "Normal",
+  "modeHard": "Hard",
+  "modeStoryDesc": "No time limit. Hints open all the way to the answer. Reach an ending even if puzzles aren't your thing.",
+  "modeNormalDesc": "The final answer-hint is withheld — solve it yourself. Balanced challenge.",
+  "modeHardDesc": "Clues are encrypted and misdirection is heavier. The hardest way.",
+  "timeLimitToggle": "⏱ Time limit (brain-death countdown)",
+  "diveButton": "Descend in {mode}  →",
+  "@diveButton": { "placeholders": { "mode": { "type": "String" } } },
+  "continueRoom": "Continue (Room {n})",
+  "@continueRoom": { "placeholders": { "n": { "type": "int" } } },
+  "retryJudgment": "Redo the Final Judgment",
+  "endingCollection": "── Endings  {seen} / {total} ──",
+  "@endingCollection": { "placeholders": { "seen": { "type": "int" }, "total": { "type": "int" } } },
+  "teaserHint": "Tap ??? to reveal a clue",
+
+  "hint": "Hint",
+  "hintAd": "Hint (Ad)",
+  "hintAdConfirm": "Watch an ad to show the hint you need right now?",
+  "clues": "Clues ({n})",
+  "@clues": { "placeholders": { "n": { "type": "int" } } },
+  "giveUp": "…Give up and move on",
+  "cancel": "Cancel",
+  "watch": "Watch",
+  "noHintLeft": "No more hints to give right now.",
+  "scrubSave": "Save this moment",
+  "scrubMiss": "…No. Not this moment.",
+
+  "confirmMemory": "Commit this memory",
+  "shareCopy": "Copy result for social",
+  "backToTitle": "Back to title",
+  "loopBack": "You are drawn back to the start of the corridor…"
+}

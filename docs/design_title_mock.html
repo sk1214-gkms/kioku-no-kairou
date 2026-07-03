@@ -59,8 +59,10 @@
   .kicker{font-family:var(--black); text-align:center; letter-spacing:.28em;
     color:#B9B1C4; font-size:15px; opacity:.85}
   .title{font-family:var(--mincho); font-weight:800; text-align:center;
-    font-size:44px; line-height:1.14; letter-spacing:.06em; margin-top:10px; color:#F2ECE0;
+    font-size:34px; line-height:1.18; letter-spacing:.04em; margin-top:10px; color:#F2ECE0;
     text-shadow:0 2px 24px rgba(0,0,0,.6)}
+  /* 語中で割れないよう2ブロックに分割：入れば1行、狭ければ「アムネジィ・」／「ケース」で改行 */
+  .title .seg{display:inline-block}
   .title .r{color:var(--redAccent); text-shadow:0 0 18px rgba(150,26,26,.6)}
   .rule{display:flex; align-items:center; gap:10px; justify-content:center; margin-top:14px; color:var(--sub)}
   .rule::before,.rule::after{content:""; width:34px; height:1px; background:var(--line)}
@@ -83,7 +85,8 @@
   .card.sel .name{color:var(--gold)}
   .card .echo{font-family:var(--black); font-size:12px; color:#5f5a70; letter-spacing:.05em}
   .card .goal{margin-left:auto; font-size:11px; color:var(--gold); opacity:.85}
-  .card .desc{margin-top:5px; font-size:11px; color:var(--sub); line-height:1.55}
+  .card .desc{margin-top:5px; font-size:11px; color:var(--sub); line-height:1.55;
+    line-break:strict; word-break:normal; overflow-wrap:anywhere}
 
   /* 制限時間トグル */
   .toggle{margin-top:12px; display:flex; align-items:center; gap:12px;
@@ -126,7 +129,7 @@
 
     <div class="content">
       <div class="kicker">A M N E S I E &nbsp; C A S E</div>
-      <div class="title">アムネジィ・<span class="r">ケ</span>ース</div>
+      <div class="title"><span class="seg">アムネジィ・</span><span class="seg">ケー<span class="r">ス</span></span></div>
       <div class="rule"><span class="subtitle">教授の不完全な安楽</span></div>
 
       <div class="pick">── 記憶に、潜る難度を選ぶ ──</div>

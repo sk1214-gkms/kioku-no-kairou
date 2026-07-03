@@ -31,6 +31,7 @@ GameState _gs({
   bool evidence = false,
   int evade = 0,
   int confront = 0,
+  int overwrite = 0, // ①記憶の上書き回数（逃避Eに合算される）
 }) {
   const evadeKeys = ['s_r4_evade', 's_r8_evade', 's_r12_evade'];
   const confKeys = ['s_r4_confront', 's_r8_confront', 's_r12_confront'];
@@ -50,7 +51,7 @@ GameState _gs({
     memories: {},
     items: [],
     flags: flags,
-    meters: {'confab': confab},
+    meters: {'confab': confab, 'overwrite': overwrite},
   );
 }
 
@@ -96,6 +97,13 @@ void main() {
 
     test('全作話正解＋逃避×3 → A+', () {
       expect(end(_gs(confab: 3, evade: 3)), 'A+');
+    });
+
+    test('逃避Eは①上書きも合算：分岐逃避0でも上書き×3ならA+', () {
+      // 表示E・スコアI式と判定を一致させた（2026-07-03）。
+      expect(end(_gs(confab: 3, evade: 0, overwrite: 3)), 'A+');
+      // 作話ミス側も同様：上書き×3で B（＝全逃避扱い）
+      expect(end(_gs(confab: 2, evade: 0, overwrite: 3)), 'B');
     });
 
     test('全作話正解＋直面あり → A', () {

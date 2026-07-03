@@ -141,7 +141,11 @@ EndingResult evaluateConfabEnding(
   final allTruth = gs.flags['all_truth'] == true; // 全問で真実を選んだ
   final syringe = gs.flags['syringe_chosen'] == true;
   final hasEvidence = gs.flags['has_culprit_evidence'] == true; // R9の金属製の筒
-  final allEvade = countEvade(gs) >= 3;
+  // 逃避E＝分岐の逃避＋①記憶の上書き（書き換えも“目を背ける”行為）。
+  // 鑑定書の表示E・スコアI式と定義を一致させる（A+/Bの判定もこのEで分岐）。
+  final evadeE =
+      (countEvade(gs) + (gs.meters['overwrite'] ?? 0)).clamp(0, 3);
+  final allEvade = evadeE >= 3;
   final allConfront = countConfront(gs) >= 3;
 
   String code;

@@ -27,6 +27,7 @@ flutter:
     - data/cipher.json
     - assets/images/rooms/
     - assets/images/items/
+    - assets/icon/app_icon.png   # タイトル画面の紋章として表示（アプリの顔と一致）
 
   # 亜簪文字（黒文字体）フォント。HUD / 結末 / R13収束の符号を亀甲文字にする。
   # 有効化手順（自宅PCで）:

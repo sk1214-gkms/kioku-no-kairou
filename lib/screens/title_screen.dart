@@ -194,10 +194,32 @@ class _TitleScreenState extends State<TitleScreen> {
     );
   }
 
-  // ===== ロゴ（kicker＋明朝風タイトル＋副題）=====
+  // ===== ロゴ（紋章＝アプリアイコン＋kicker＋明朝風タイトル＋副題）=====
   Widget _logo() {
     return Column(
       children: [
+        // アプリの顔（V3：頭文字A×鍵穴）を封蝋のような円形の紋章として据える
+        Container(
+          width: 104,
+          height: 104,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: _gold.withValues(alpha: 0.45), width: 1.5),
+            boxShadow: [
+              BoxShadow(color: _red.withValues(alpha: 0.28), blurRadius: 26),
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.6), blurRadius: 18),
+            ],
+          ),
+          child: ClipOval(
+            child: Image.asset(
+              'assets/icon/app_icon.png',
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
         const Text('A M N E S I E   C A S E',
             style: TextStyle(
                 fontFamily: 'Blackletter',
@@ -518,16 +540,16 @@ class _Atmosphere extends StatelessWidget {
             ),
             child: SizedBox.expand(),
           ),
-          // 巨大な亀甲文字の焼き込み（トラウマ文字 T）
+          // 巨大な亀甲文字の焼き込み（アイコンと同じ頭文字 A）
           Center(
             child: Transform.translate(
-              offset: const Offset(0, -30),
-              child: Text('T',
+              offset: const Offset(0, -20),
+              child: Text('A',
                   style: TextStyle(
                       fontFamily: 'Blackletter',
                       fontSize: 460,
                       height: 1,
-                      color: Colors.white.withValues(alpha: 0.035))),
+                      color: Colors.white.withValues(alpha: 0.03))),
             ),
           ),
           // 血の赤の一差し（斜めの滲み）

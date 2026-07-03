@@ -90,3 +90,7 @@ app.*.symbols
 #   ・プレースホルダ生成：tools/gen_placeholders.py
 # 退避用 _staging（door等・現エンジン未使用アセット）は派生物なので非追跡。
 assets/images/_staging/
+
+# Claude Design のエクスポート（巨大な自己完結HTML＝リポジトリに含めない。参照はローカル or PNGで）
+/*.html
+design_src/

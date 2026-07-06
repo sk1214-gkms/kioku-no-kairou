@@ -119,12 +119,20 @@ def make(cat):
     return img
 
 def main():
+    # 既定＝既存ファイルはスキップ（本番アイコンを上書きしない保護）。--force で全再生成。
+    import sys
+    force = "--force" in sys.argv[1:]
     os.makedirs(OUT, exist_ok=True)
-    n = 0
+    n = skipped = 0
     for item_id, cat in CAT.items():
-        make(cat).save(os.path.join(OUT, f"{item_id}.png"), optimize=True)
+        path = os.path.join(OUT, f"{item_id}.png")
+        if not force and os.path.exists(path):
+            skipped += 1
+            continue
+        make(cat).save(path, optimize=True)
         n += 1
-    print(f"generated {n} item icons -> {OUT}")
+    print(f"generated {n}, skipped {skipped} existing -> {OUT}"
+          + ("" if force else "  (--force で全再生成)"))
 
 if __name__ == "__main__":
     main()

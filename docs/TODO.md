@@ -40,8 +40,9 @@
 > 🧪 **仮画像で今すぐ“画像ありテスト”**：`python tools/gen_placeholders.py`（背景52枚→`assets/images/rooms/`）＋`python tools/gen_item_icons.py`（アイテム透過アイコン15個→`assets/images/items/`）を実行。コード生成なので**画風が必ず揃う**。本番アートは**同じパスに上書き**すれば差し替わる。※現方針では完成アセットPNGは**git追跡**（非追跡は `_staging/` のみ）——生成し直したら commit する。
 > **アート方針＝2Dイラスト（Gemini／Nano Banana）で確定**。作り方は [2Dイラスト制作マニュアル_Gemini.md](2Dイラスト制作マニュアル_Gemini.md)（基準1室→"同じ部屋を編集"で4方向/差分→色統一＝一貫性を保つ）。3D(Blender)は旧方針・参考。
 
-- ☐ 背景画像 13室 × 4方向（`assets/images/rooms/<id>_<dir>.png`）＝Geminiで基準1室→編集展開　※暫定でプレースホルダ生成可
-- ☐ 背景の状態差分16（R3_lit/R8_dark/R10_on/R9_open）＝通常版を"編集"して出す
+- 🔶 背景画像 13室 × 4方向：**18/52 が本番アート済み**（R1〜R4全方向＋R5北/東。`data/image/` の既存Gemini画像を `tools/import_images.py` で取込・透かし除去済み）。**残り＝R5南/西＋R6〜R13**（既存18枚を"基準画"として添付し同じ画風で生成→[2Dマニュアル](2Dイラスト制作マニュアル_Gemini.md)）
+- ☐ 背景の状態差分16（R3_lit/R8_dark/R10_on/R9_open）＝**本番版を"編集"して出す**（⚠現在R3のlit差分は旧プレースホルダ由来＝本番のR3と不一致。R3本番アートを添付して lit 版を作り直す）
+- ℹ 生成ツールは**既存ファイルをスキップ**する保護済み（`--force`で全再生成）＝CI/ローカルどちらでも本番アートは上書きされない
 - ☐ アイテムアイコン15（`assets/images/items/<itemId>.png`・生成後に透過）
 - ☑ アプリアイコン（V3・[導入手順](アプリアイコン導入.md)）／タイトルUI（実装済）
 - ☐ 黒文字体フォント UnifrakturMaguntia(.ttf) を `assets/fonts/` に配置 → `pubspec.yaml` の `# fonts:` コメント解除（グリフHUD・タイトルの亀甲文字用）

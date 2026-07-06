@@ -175,22 +175,35 @@ def _depict(img, typ, rect):
                fill=(150, 140, 120, 170))
 
 def main():
+    # 既定＝既存ファイルはスキップ（★本番アートをプレースホルダで上書きしない保護。
+    # ローカル/CIどちらで走っても、置き済みの本番PNGはそのまま残る）。--force で全再生成。
+    import sys
+    force = "--force" in sys.argv[1:]
     os.makedirs(OUT, exist_ok=True)
-    n = 0
+    n = skipped = 0
+
+    def save(img, name):
+        nonlocal n, skipped
+        path = os.path.join(OUT, name)
+        if not force and os.path.exists(path):
+            skipped += 1
+            return
+        img.save(path, optimize=True)
+        n += 1
+
     for i in range(1, 14):
         room = json.load(io.open(os.path.join(ROOT, "data", "deep_rooms", f"r{i}.json"), encoding="utf-8"))
         for j, dr in enumerate(DIRS):
             img = make(room, i - 1, dr, seed=i * 10 + j)
-            img.save(os.path.join(OUT, f"r{i}_{dr}.png"), optimize=True)
-            n += 1
+            save(img, f"r{i}_{dr}.png")
             for suf, fac in VARIANTS.get(f"r{i}", []):
                 var = ImageEnhance.Brightness(img).enhance(fac)
                 dep = DEPICT.get((f"r{i}", dr, suf))
                 if dep:
                     _depict(var, dep[0], dep[1])  # 出現物を描き込む(W2)
-                var.save(os.path.join(OUT, f"r{i}_{dr}_{suf}.png"), optimize=True)
-                n += 1
-    print(f"generated {n} backgrounds (incl. state variants) -> {OUT}")
+                save(var, f"r{i}_{dr}_{suf}.png")
+    print(f"generated {n}, skipped {skipped} existing -> {OUT}"
+          + ("" if force else "  (--force で全再生成)"))
 
 if __name__ == "__main__":
     main()

@@ -38,14 +38,14 @@
 エンジンは描画対応済。**画像を置けば即反映**（未配置でも errorBuilder でフォールバックし動く）。
 
 > 🧪 **仮画像で今すぐ“画像ありテスト”**：`python tools/gen_placeholders.py`（背景52枚→`assets/images/rooms/`）＋`python tools/gen_item_icons.py`（アイテム透過アイコン15個→`assets/images/items/`）を実行。コード生成なので**画風が必ず揃う**。本番アートは**同じパスに上書き**すれば差し替わる。※現方針では完成アセットPNGは**git追跡**（非追跡は `_staging/` のみ）——生成し直したら commit する。
-> Fireflyで“部屋同士をつなげる”運用は [AdobeFirefly_生成手順.md §6](AdobeFirefly_生成手順.md) を参照（基準1枚をスタイル参照に固定→全部生成→Photoshopで色一括統一）。
+> **アート方針＝2Dイラスト（Gemini／Nano Banana）で確定**。作り方は [2Dイラスト制作マニュアル_Gemini.md](2Dイラスト制作マニュアル_Gemini.md)（基準1室→"同じ部屋を編集"で4方向/差分→色統一＝一貫性を保つ）。3D(Blender)は旧方針・参考。
 
-- ☐ 背景画像 13室 × 4方向（`assets/images/rooms/<id>_<dir>.png`）※暫定でプレースホルダ生成可
-- ☐ アイテムアイコン（`assets/images/items/<itemId>.png`）
-- ☐ タイトル/結末用のキービジュアル（任意）
-- ☐ 配置後、`pubspec.yaml` の `assets:` に画像ディレクトリを登録
-- ☐ 黒文字体フォント UnifrakturMaguntia(.ttf) を `assets/fonts/` に配置 → `pubspec.yaml` の `# fonts:` コメント解除（グリフHUD用）
-- 参考：[アセット仕様書](アセット仕様書.md)（必要画像一覧＋生成プロンプト）／[Stable Diffusion手順](StableDiffusion_ローカル生成手順.md)／[Adobe Firefly手順](AdobeFirefly_生成手順.md)
+- ☐ 背景画像 13室 × 4方向（`assets/images/rooms/<id>_<dir>.png`）＝Geminiで基準1室→編集展開　※暫定でプレースホルダ生成可
+- ☐ 背景の状態差分16（R3_lit/R8_dark/R10_on/R9_open）＝通常版を"編集"して出す
+- ☐ アイテムアイコン15（`assets/images/items/<itemId>.png`・生成後に透過）
+- ☑ アプリアイコン（V3・[導入手順](アプリアイコン導入.md)）／タイトルUI（実装済）
+- ☐ 黒文字体フォント UnifrakturMaguntia(.ttf) を `assets/fonts/` に配置 → `pubspec.yaml` の `# fonts:` コメント解除（グリフHUD・タイトルの亀甲文字用）
+- 参考：[画像の理想像](画像イメージ_自然言語.md)（各室の焦点）／[Geminiプロンプト集](Gemini_生成プロンプト集.md)
 
 ---
 

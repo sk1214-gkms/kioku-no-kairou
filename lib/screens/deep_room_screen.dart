@@ -1354,6 +1354,9 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   }
 
   List<Widget> _hotspots() {
+    // 調べられる箇所は「不可視」＝プレイヤーはイラストを直接タップして探す（脱出ゲームの探索体験）。
+    // 枠・ラベルは出さない（どこを押せばいいか答えを教えてしまうため）。
+    // 透明でもタップは効く(HitTestBehavior.opaque)。トグルの状態変化は背景差し替え＋下部メッセージで伝わる。
     return [
       for (final o in _objects)
         Positioned(
@@ -1362,33 +1365,9 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           width: (o['rect'][2] as num).toDouble(),
           height: (o['rect'][3] as num).toDouble(),
           child: GestureDetector(
+            behavior: HitTestBehavior.opaque, // 透明領域でもタップを受ける
             onTap: () => _tap(o),
-            child: Container(
-              // 調べられる箇所＝暗い半透明パネル＋金の細枠（アプリの顔と同じ金の差し色）
-              decoration: BoxDecoration(
-                color: const Color(0x55100E17),
-                border: Border.all(
-                    color: Colors.amberAccent.withValues(alpha: 0.55),
-                    width: 1.4),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.45),
-                      blurRadius: 8),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                o['toggle'] == true
-                    ? '${o['label']}\n[${_states[o['id']] ?? (o['states'] as List).first}]'
-                    : '${o['label']}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 11,
-                    color: Colors.white,
-                    shadows: [Shadow(color: Colors.black, blurRadius: 4)]),
-              ),
-            ),
+            child: const SizedBox.expand(),
           ),
         ),
     ];

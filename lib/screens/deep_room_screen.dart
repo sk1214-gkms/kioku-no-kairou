@@ -93,7 +93,16 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   @override
   void initState() {
     super.initState();
-    _msg = _room['intro'] as String? ?? '四方の壁を調べよう。';
+    // 入室時は「ストーリーを読む時間」＝暗転した専用画面で intro を読ませ、
+    // 「続ける」で謎解きへ。以後 _msg は短い操作フィードバック専用（字幕バー）。
+    final intro = _room['intro'] as String?;
+    if (intro != null && intro.trim().isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _showStory(intro.trim());
+      });
+    } else {
+      _msg = '四方の壁を調べよう。'; // intro が無い部屋だけ、そっと探索を促す
+    }
   }
 
   Map<String, String> get _itemLabels =>
@@ -1152,31 +1161,17 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       await _glyphIgnite(letter.trim());
       if (!mounted) return;
     }
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        title: Text(verlust ? 'GEDÄCHTNIS → VERLUST' : '脱出',
-            style: TextStyle(
-                color: verlust ? Colors.redAccent : null,
-                fontWeight: verlust ? FontWeight.bold : null)),
-        content: SingleChildScrollView(child: Text(txt)),
-        actions: [
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              if (!mounted) return;
-              if (widget.onCleared != null) {
-                widget.onCleared!(_hintsViewed);
-              } else {
-                Navigator.of(context).maybePop();
-              }
-            },
-            child: const Text('次へ'),
-          ),
-        ],
-      ),
-    );
+    // 脱出時の結末文も「読む専用」演出で見せる（read→solve→read のリズム）。
+    await _showStory(txt,
+        heading: verlust ? 'GEDÄCHTNIS → VERLUST' : '脱出',
+        verlust: verlust,
+        cta: '次へ');
+    if (!mounted) return;
+    if (widget.onCleared != null) {
+      widget.onCleared!(_hintsViewed);
+    } else {
+      Navigator.of(context).maybePop();
+    }
   }
 
   /// トラウマ文字が脳の最深部で発火する一瞬の演出（赤→琥珀、拡大しながら明滅）。
@@ -1217,6 +1212,81 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           ),
         );
       },
+    );
+  }
+
+  /// 「ストーリーを読む時間」＝暗転した全画面で物語文を読ませる専用ビュー。
+  /// 入室時の intro／脱出時の結末文で使用。読み終えたら（続ける/次へ）で謎解きへ戻る。
+  /// これで「読む」と「解く」のフェーズが視覚的に完全に分かれる。
+  Future<void> _showStory(String text,
+      {String? heading, bool verlust = false, String cta = '続ける'}) async {
+    await showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withValues(alpha: 0.93),
+      transitionDuration: const Duration(milliseconds: 420),
+      pageBuilder: (ctx, _, __) => Material(
+        type: MaterialType.transparency,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(28, 40, 28, 28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (heading != null) ...[
+                  Text(
+                    heading,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: verlust
+                          ? Colors.redAccent
+                          : const Color(0xFFC9A24B),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(height: 22),
+                ],
+                Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        text,
+                        style: const TextStyle(
+                          color: Color(0xFFEDE6D6),
+                          fontSize: 17,
+                          height: 2.0,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    child: Text(
+                      '$cta  ▷',
+                      style: const TextStyle(
+                        color: Color(0xFFC9A24B),
+                        fontSize: 15,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      transitionBuilder: (ctx, anim, _, child) => FadeTransition(
+        opacity: CurvedAnimation(parent: anim, curve: Curves.easeOut),
+        child: child,
+      ),
     );
   }
 

@@ -1308,6 +1308,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                       : Container(color: const Color(0xFF15131C)),
                 ),
                 ..._hotspots(),
+                if (_msg.trim().isNotEmpty) _subtitle(),
               ]),
             ),
           ),
@@ -1373,6 +1374,37 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     ];
   }
 
+  /// ストーリー/ナレーション文（入室時は intro）を、イラストの上に重なる
+  /// 「黒い半透明の字幕バー」として最下部に表示。映画字幕風で世界観を保つ。
+  /// 静的なColoredBoxはタップを吸わないので、帯の下のホットスポットも押せる。
+  Widget _subtitle() {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.62),
+          border: const Border(
+              top: BorderSide(color: Color(0x33C9A24B), width: 0.8)), // 金の細線
+        ),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+        constraints: const BoxConstraints(maxHeight: 220),
+        child: SingleChildScrollView(
+          child: Text(
+            _msg,
+            style: const TextStyle(
+              color: Color(0xFFEDE6D6),
+              fontSize: 13,
+              height: 1.5,
+              shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _statusBar() {
     return Container(
       width: double.infinity,
@@ -1384,8 +1416,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(_msg, style: const TextStyle(color: Colors.amberAccent)),
-          const SizedBox(height: 6),
+          // ストーリー文(_msg)はイラスト上の字幕バー(_subtitle)へ移動。ここは所持品のみ。
           Row(
             children: [
               Expanded(

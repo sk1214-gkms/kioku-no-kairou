@@ -140,8 +140,14 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   /// 情景変化：bg_variants の when が満たされれば <id>_<dir>_<suffix>.png に差し替え。
   /// subview(拡大)中は背景なし。未配置なら errorBuilder で暗色にフォールバック。
   String? get _bgAsset {
-    if (_subStack.isNotEmpty) return null;
     final id = _room['id'];
+    // subview（ズーム調査）は自前の背景絵 bg を使う。
+    // 未指定なら親方向の絵で代用（不可視ホットスポットでも黒画面にしない）。
+    if (_subStack.isNotEmpty) {
+      final bg = _subStack.last['bg'] as String?;
+      if (bg != null) return 'assets/images/rooms/$bg.png';
+      return 'assets/images/rooms/${id}_${_dirs[_dirIdx]}.png';
+    }
     final dir = _dirs[_dirIdx];
     for (final v in (_room['bg_variants'] as List? ?? const [])) {
       final m = (v as Map).cast<String, dynamic>();
@@ -261,7 +267,9 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
           _msg = o['on_use_reveal'] as String? ?? '${_itemLabel(need)} を使った。';
         });
       } else {
-        setState(() => _msg = '……今は、手の出しようがない。');
+        // need_msg があれば「何が要るか」の手がかりを出す（無ければ従来の無言に近い一言）
+        setState(() =>
+            _msg = o['need_msg'] as String? ?? '……今は、手の出しようがない。');
       }
       return;
     }

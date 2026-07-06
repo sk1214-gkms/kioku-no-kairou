@@ -1291,23 +1291,24 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         children: [
           _letterHud(),
           Expanded(
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                // 背景画像（未配置なら暗色にフォールバック）
-                if (_bgAsset != null)
-                  Image.asset(_bgAsset!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          Container(color: const Color(0xFF15131C)))
-                else
-                  Container(color: const Color(0xFF15131C)),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(8),
-                  child: DesignCanvas(children: _hotspots()),
+            // 背景は設計面(360x640)の“中”に描く＝どの画面比でもホットスポットと完全に一致。
+            // 設計面の外はレターボックス（暗色）。全画面coverだと横長画面で絵が超拡大され
+            // 構図もrect整合も壊れるため廃止（本番アート導入に伴う修正）。
+            child: Container(
+              alignment: Alignment.center,
+              color: const Color(0xFF0A0910),
+              padding: const EdgeInsets.all(8),
+              child: DesignCanvas(children: [
+                Positioned.fill(
+                  child: _bgAsset != null
+                      ? Image.asset(_bgAsset!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              Container(color: const Color(0xFF15131C)))
+                      : Container(color: const Color(0xFF15131C)),
                 ),
-              ],
+                ..._hotspots(),
+              ]),
             ),
           ),
           _statusBar(),

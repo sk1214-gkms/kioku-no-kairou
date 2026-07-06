@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import '../ad_service.dart';
@@ -1223,65 +1225,14 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     await showGeneralDialog<void>(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withValues(alpha: 0.93),
+      barrierColor: Colors.transparent, // 背景は _StoryView 側でぼかし絵＋スクリムを敷く
       transitionDuration: const Duration(milliseconds: 420),
-      pageBuilder: (ctx, _, __) => Material(
-        type: MaterialType.transparency,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(28, 40, 28, 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (heading != null) ...[
-                  Text(
-                    heading,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: verlust
-                          ? Colors.redAccent
-                          : const Color(0xFFC9A24B),
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                  const SizedBox(height: 22),
-                ],
-                Expanded(
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Text(
-                        text,
-                        style: const TextStyle(
-                          color: Color(0xFFEDE6D6),
-                          fontSize: 17,
-                          height: 2.0,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => Navigator.of(ctx).pop(),
-                    child: Text(
-                      '$cta  ▷',
-                      style: const TextStyle(
-                        color: Color(0xFFC9A24B),
-                        fontSize: 15,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      pageBuilder: (ctx, _, __) => _StoryView(
+        text: text,
+        heading: heading,
+        verlust: verlust,
+        cta: cta,
+        bgAsset: _bgAsset, // 今いる部屋の背景をぼかして薄く敷く
       ),
       transitionBuilder: (ctx, anim, _, child) => FadeTransition(
         opacity: CurvedAnimation(parent: anim, curve: Curves.easeOut),
@@ -1580,6 +1531,153 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 「ストーリーを読む時間」の全画面ビュー。
+/// ・タイプライター：1文字ずつ表示（タップで一気に全文→もう一度タップで進む）
+/// ・背景：今いる部屋のイラストをぼかして薄く敷く（無ければ暗色）
+/// ・どこをタップしても進む（読み途中なら全文表示、読み終えていれば閉じる）
+class _StoryView extends StatefulWidget {
+  final String text;
+  final String? heading;
+  final bool verlust;
+  final String cta;
+  final String? bgAsset;
+  const _StoryView({
+    required this.text,
+    this.heading,
+    this.verlust = false,
+    this.cta = '続ける',
+    this.bgAsset,
+  });
+
+  @override
+  State<_StoryView> createState() => _StoryViewState();
+}
+
+class _StoryViewState extends State<_StoryView> {
+  Timer? _timer;
+  int _shown = 0; // 表示済み文字数
+  bool get _complete => _shown >= widget.text.length;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(milliseconds: 34), (t) {
+      if (_shown >= widget.text.length) {
+        t.cancel();
+        return;
+      }
+      setState(() => _shown++);
+    });
+  }
+
+  void _onTap() {
+    if (!_complete) {
+      _timer?.cancel();
+      setState(() => _shown = widget.text.length); // 途中タップ＝一気に全文表示
+    } else {
+      Navigator.of(context).maybePop(); // 読了後タップ＝謎解きへ進む
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _onTap,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // 背景：部屋のイラストをぼかして薄く敷く（無ければ暗色）
+            if (widget.bgAsset != null)
+              ImageFiltered(
+                imageFilter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                child: Image.asset(
+                  widget.bgAsset!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) =>
+                      Container(color: const Color(0xFF0A0910)),
+                ),
+              )
+            else
+              Container(color: const Color(0xFF0A0910)),
+            // 文章を読みやすくする暗いスクリム
+            Container(
+              color: Colors.black
+                  .withValues(alpha: widget.bgAsset != null ? 0.72 : 0.92),
+            ),
+            // 本文
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(28, 40, 28, 28),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (widget.heading != null) ...[
+                      Text(
+                        widget.heading!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: widget.verlust
+                              ? Colors.redAccent
+                              : const Color(0xFFC9A24B),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                      const SizedBox(height: 22),
+                    ],
+                    Expanded(
+                      child: Center(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            widget.text.substring(0, _shown),
+                            style: const TextStyle(
+                              color: Color(0xFFEDE6D6),
+                              fontSize: 17,
+                              height: 2.0,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // 進行の目印（読み途中は控えめ／読了で「続ける ▷」）
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: AnimatedOpacity(
+                        opacity: _complete ? 1.0 : 0.4,
+                        duration: const Duration(milliseconds: 200),
+                        child: Text(
+                          _complete ? '${widget.cta}  ▷' : 'タップで全文表示',
+                          style: const TextStyle(
+                            color: Color(0xFFC9A24B),
+                            fontSize: 14,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

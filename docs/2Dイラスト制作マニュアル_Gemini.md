@@ -39,6 +39,48 @@ Vertical 9:16 composition. First-person point of view (as if the player is stand
 
 ---
 
+## 1.5 ★推奨：4方向を「1枚にまとめて」生成する（＝一室感の決定打）
+> 「4方向を別々に作ると"別々の小箱"に見えて一室感が出ない」問題への最良の対処。
+> **4壁を1枚のシートにまとめて生成**すれば、床・天井・光・色が**同一生成で必ず揃う**＝確実に「同じ部屋」になる。出た1枚を後述のツールで4枚に自動スライスするだけ。
+
+### 手順（1室あたり3ステップ）
+1. Gemini（Nano Banana）に、**§1のスタイルDNA＋下の"2×2グリッド"指示**を貼って生成。
+2. 出てきた**1枚**をそのまま保存（例 `sheet_r1.png`）。
+3. スライス：
+   ```
+   python tools/slice_room_sheet.py sheet_r1.png --room r1
+   ```
+   → `assets/images/rooms/r1_north.png / r1_east.png / r1_south.png / r1_west.png` が自動生成（各9:16に中央クロップ＝ホットスポットと完全一致）。
+   - パネル間に黒い隙間があるなら `--gutter 8`。
+   - 状態差分は `--suffix lit`（→ `r1_north_lit.png` …）。
+   - 順番を変えたい時は `--order north,east,south,west`。
+
+### コピペ用プロンプト（§1のDNAの後ろに続けて貼る／[焦点]は各室で差し替え）
+```
+Compose a SINGLE image as a 2x2 grid of four panels showing the FOUR WALLS of ONE AND THE SAME room, so they unmistakably belong to the same room.
+Keep IDENTICAL across all four panels: floor material, ceiling, wall material/plaster, baseboard height, overall color grade, film grain, and one single consistent light source and its direction.
+Each panel is a flat, head-on FIRST-PERSON view of one wall, as if standing in the center of the room and facing that wall directly. Minimal or no side walls; do not draw the room as a box.
+- Top-left = NORTH wall: [北の焦点].
+- Top-right = EAST wall: [東の焦点].
+- Bottom-left = SOUTH wall: [南の焦点].
+- Bottom-right = WEST wall: [西の焦点].
+Each panel is vertical/portrait framed. Thin dark gutter between panels. No text, no numbers, no people, no faces.
+```
+例（R1 白い部屋）：北=古い洗面台／東=血の染みたシーツのベッド／南=施錠された白い扉と鍵穴／西=濃霧の見える鉄格子窓。各室の焦点は [画像の理想像](画像イメージ_自然言語.md)。
+
+### さらに強い一室感が欲しいなら：パノラマ（アンロール）
+4壁を**横一列に繋げて**描かせると、角（コーナー）まで連続して真に1部屋になる。
+- プロンプトの「2x2 grid」を「one continuous horizontal panorama, the four walls unrolled left to right in order North, East, South, West, seamless corners」に置換。
+- スライスは `--layout hstrip`：
+  ```
+  python tools/slice_room_sheet.py sheet_r1.png --room r1 --layout hstrip
+  ```
+- 短所：横長出力になり1壁あたりの解像度は下がりがち。まずは扱いやすい**2×2グリッド**を推奨。
+
+> 以降の §2〜§4（基準1室→添付して4方向）は「1枚ずつ高解像度で作りたい」場合の従来法。**一室感重視なら本§1.5を優先**。
+
+---
+
 ## 2. 基準の1部屋を作る（R1・ここが一番大事）
 R1「白い部屋」の**北＝洗面台**を"館の基準画"にします。
 

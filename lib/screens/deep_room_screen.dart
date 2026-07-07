@@ -144,8 +144,19 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     // subview（ズーム調査）は自前の背景絵 bg を使う。
     // 未指定なら親方向の絵で代用（不可視ホットスポットでも黒画面にしない）。
     if (_subStack.isNotEmpty) {
-      final bg = _subStack.last['bg'] as String?;
-      if (bg != null) return 'assets/images/rooms/$bg.png';
+      final sub = _subStack.last;
+      final base = sub['bg'] as String?;
+      if (base != null) {
+        // subview の状態差分（棚の開閉など）：条件を満たせば <bg>_<suffix>.png
+        for (final v in (sub['bg_variants'] as List? ?? const [])) {
+          final m = (v as Map).cast<String, dynamic>();
+          final when = (m['when'] as Map?)?.cast<String, dynamic>();
+          if (when != null && _condMet(when)) {
+            return 'assets/images/rooms/${base}_${m['suffix']}.png';
+          }
+        }
+        return 'assets/images/rooms/$base.png';
+      }
       return 'assets/images/rooms/${id}_${_dirs[_dirIdx]}.png';
     }
     final dir = _dirs[_dirIdx];

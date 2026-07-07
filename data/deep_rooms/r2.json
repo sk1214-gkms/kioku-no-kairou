@@ -86,6 +86,7 @@
           "reveal_hard": "薬品の棚。",
           "subview": {
             "label": "薬棚の奥",
+            "bg": "r2_shelf_zoom",
             "objects": [
               {
                 "id": "fa",
@@ -146,6 +147,7 @@
           "reveal_hard": "作業台の引き出し。",
           "subview": {
             "label": "引き出しの奥",
+            "bg": "r2_drawer_zoom",
             "objects": [
               {
                 "id": "stamp",
@@ -181,6 +183,7 @@
           "reveal_hard": "ロッカー。",
           "subview": {
             "label": "名札の裏",
+            "bg": "r2_locker_zoom",
             "objects": [
               {
                 "id": "fc",

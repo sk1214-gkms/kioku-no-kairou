@@ -160,6 +160,16 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
       return 'assets/images/rooms/${id}_${_dirs[_dirIdx]}.png';
     }
     final dir = _dirs[_dirIdx];
+    // ①この視点(view)固有の状態差分（例：北の棚だけ開く）→ 他方向に波及させない
+    final view = (_room['views'] as Map)[dir] as Map?;
+    for (final v in ((view?['bg_variants']) as List? ?? const [])) {
+      final m = (v as Map).cast<String, dynamic>();
+      final when = (m['when'] as Map?)?.cast<String, dynamic>();
+      if (when != null && _condMet(when)) {
+        return 'assets/images/rooms/${id}_${dir}_${m['suffix']}.png';
+      }
+    }
+    // ②部屋全体の状態差分（照明ON/OFF等・全方向共通）
     for (final v in (_room['bg_variants'] as List? ?? const [])) {
       final m = (v as Map).cast<String, dynamic>();
       final when = (m['when'] as Map?)?.cast<String, dynamic>();

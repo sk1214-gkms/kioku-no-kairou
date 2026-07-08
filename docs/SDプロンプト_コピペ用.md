@@ -202,3 +202,36 @@ first-person view standing in the centre of a small decaying 1950s psychiatric r
 ### 配置
 `assets/images/rooms/` に上記名で置く（9:16直出し・スライス不要）。置けば r1.json の各ノードが自動でその絵になる。**未配置のノードは暗転**するので、まず `r1_entrance` から。
 > エントランスの4つの「進む」タップ位置(rect)は仮置き。`r1_entrance` が出たら実際の構図に合わせて私が調整します。
+
+---
+
+## 11. 【館の部屋ライブラリ】R2〜R13を一気に量産する
+方針＝**豪華な館の一室をSDに作らせ→後で謎解き用に割り当て・調整**。下の**ベースは固定**、**末尾の一言だけ差し替え**て各部屋を出す。各部屋2〜3枚ずつQueue（seedはrandomize）→良いのを保存。
+
+### ベース（Positiveの先頭・固定）
+```
+dark painterly semi-realistic illustration, interior of a decaying 1950s gothic mansion converted into a psychiatric institution, richly furnished and highly detailed, ornate crown moulding, wood wainscoting, faded damask wallpaper, aged period furniture, heavy drapes, a worn persian rug, brass fixtures, a bare hanging bulb, muted teal and sepia palette, near-black shadows, a single faint blood-red accent, dim cinematic lighting, heavy decay (peeling walls, black mold, water stains, dust, cobwebs), deep perspective view looking across the room, first-person, atmospheric depth, film grain, vertical 9:16
+```
+### Negative（固定）
+```
+text, letters, words, numbers, captions, label, watermark, signature, logo, ui, people, person, human, face, crowd, hands, deformed, bright, cheerful, high saturation, colorful, cartoon, anime, flat lighting, lowres, blurry, jpeg artifacts, modern objects, smartphone, clean, pristine, brand new
+```
+設定：832×1216 / dpmpp_2m + karras / steps 30 / cfg 6
+
+### 部屋ごとの"末尾の一言"（ベースの後ろに付ける。`(...:数)`＝重み付け）
+```
+R2 準備室 : , a preparation room, (a tall glass-doored medicine cabinet full of old bottles:1.3), a metal workbench, a row of steel lockers
+R3 暗室   : , a photographic darkroom, (developing photo prints hung on strings:1.3), an old wall clock, an electrical fuse box, EVERYTHING lit only by a deep red safelight glow   ← ※末尾のteal記述を「red safelight」に読み替え
+R4 書斎   : , a study, (tall bookshelves packed with old medical books:1.3), a heavy desk, an ominous oil portrait in a gilt frame, a small iron safe
+R5 診察室 : , an examination room, (a leather examination table with dark bloodstains and restraint straps:1.4), medical charts on the wall, a locked medicine cabinet
+R6 記録室 : , a records office, (a wall covered with a suspect board of photos linked by red string:1.3), filing cabinets, stacks of papers and logbooks
+R7 廊下   : , a long dark corridor with many closed doors, (pale and bloody footprints leading down the floor:1.3), faint dark smears on the wall
+R8 鏡の間 : , a hall of mirrors, (several tall ornate gilt-framed mirrors on the walls:1.4), a lone chair
+R9 標本室 : , a specimen room, (shelves of glass jars with preserved organs and brains in fluid:1.4), a workbench with medical vials and a syringe
+R10 監視室: , a surveillance room, (a bank of old monitors and a recording terminal:1.4), a large electrical power lever, tangled wiring, faint red digital corruption in the corners
+R11 手術室: , an operating room, (a surgical table under a large round surgical lamp:1.4), a tray of surgical instruments, an old anesthesia machine, faint red digital corruption
+R12 証拠室: , an evidence storage room, (shelves of numbered evidence boxes:1.3), stacked case files, a single crime-scene photograph pinned to the wall, faint red digital corruption
+R13 最後の扉: , a final chamber, (a huge ominous locked door with a large combination mechanism:1.5), carved glyph-like marks on the walls, heavy red digital corruption bleeding across the walls, faint light leaking from beyond the door
+```
+> R3暗室だけは「muted teal…」を消して赤い安全灯に。R10〜R13は末尾の red digital corruption が"崩壊の進行"。
+> 各部屋、良い1枚が出たら保存 → `output/` から scp で回収 → 私に渡してくれれば **どの絵をどの部屋のどのノードに割り当て、謎をどう配置するか** をやります（R1と同じ要領で）。

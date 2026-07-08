@@ -39,6 +39,9 @@ class DeepRoomScreen extends StatefulWidget {
 class _DeepRoomScreenState extends State<DeepRoomScreen> {
   static const _dirs = ['north', 'east', 'south', 'west'];
   int _dirIdx = 0;
+  // Lv3 視点移動：room['viewpoints'] があれば有効（無ければ従来の4方向モード）
+  String _nodeId = '';
+  final List<String> _navStack = []; // 視点移動の履歴（戻る用）
   final List<Map<String, dynamic>> _subStack = [];
   final Map<String, String> _states = {};
   final List<String> _items = [];
@@ -50,6 +53,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   final Map<String, String> _clues = {}; // 部屋内memo: key→「ラベル：値」（収束型）
 
   Map<String, dynamic> get _room => widget.room;
+
+  // ---- Lv3 視点移動（viewpointモード） ----
+  bool get _isViewpoint => _room['viewpoints'] != null;
+  Map<String, dynamic> get _node =>
+      ((_room['viewpoints'] as Map)[_nodeId] as Map).cast<String, dynamic>();
 
   // hard / hard_t は暗号・囮の難化層を使う
   bool get _hard => widget.mode.startsWith('hard');
@@ -95,6 +103,10 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   @override
   void initState() {
     super.initState();
+    if (_isViewpoint) {
+      _nodeId = _room['start_node'] as String? ??
+          (_room['viewpoints'] as Map).keys.first as String;
+    }
     // 入室時は「ストーリーを読む時間」＝暗転した専用画面で intro を読ませ、
     // 「続ける」で謎解きへ。以後 _msg は短い操作フィードバック専用（字幕バー）。
     final intro = _room['intro'] as String?;
@@ -112,9 +124,11 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   String _itemLabel(String id) => _itemLabels[id] ?? id;
 
   List<Map<String, dynamic>> get _objects {
-    final src = _subStack.isNotEmpty
+    final Map src = _subStack.isNotEmpty
         ? _subStack.last
-        : ((_room['views'] as Map)[_dirs[_dirIdx]] as Map);
+        : (_isViewpoint
+            ? _node
+            : ((_room['views'] as Map)[_dirs[_dirIdx]] as Map));
     return ((src['objects'] as List?) ?? [])
         .map((e) => (e as Map).cast<String, dynamic>())
         // hard_only=ハードのみ表示（ミスリード等）／normal_only=ノーマルのみ表示
@@ -132,6 +146,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
 
   String get _placeLabel {
     if (_subStack.isNotEmpty) return _subStack.last['label'] as String? ?? '拡大';
+    if (_isViewpoint) return _node['label'] as String? ?? _nodeId;
     final v = (_room['views'] as Map)[_dirs[_dirIdx]] as Map;
     return v['label'] as String? ?? _dirs[_dirIdx];
   }
@@ -157,7 +172,25 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         }
         return 'assets/images/rooms/$base.png';
       }
+      // bg未指定のsubview: 視点モードは現ノードの絵、従来は現方向の絵で代用
+      if (_isViewpoint) {
+        final nb = _node['bg'] as String?;
+        return nb != null ? 'assets/images/rooms/$nb.png' : null;
+      }
       return 'assets/images/rooms/${id}_${_dirs[_dirIdx]}.png';
+    }
+    // 視点モード：現在ノードの背景（状態差分 bg_variants 対応）
+    if (_isViewpoint) {
+      final base = _node['bg'] as String?;
+      if (base == null) return null;
+      for (final v in (_node['bg_variants'] as List? ?? const [])) {
+        final m = (v as Map).cast<String, dynamic>();
+        final when = (m['when'] as Map?)?.cast<String, dynamic>();
+        if (when != null && _condMet(when)) {
+          return 'assets/images/rooms/${base}_${m['suffix']}.png';
+        }
+      }
+      return 'assets/images/rooms/$base.png';
     }
     final dir = _dirs[_dirIdx];
     // ①この視点(view)固有の状態差分（例：北の棚だけ開く）→ 他方向に波及させない
@@ -194,6 +227,15 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         if (_dirIdx < 0) _dirIdx += 4;
       });
 
+  // 「戻る」：subview中なら1つ戻す。視点モードなら移動履歴を1つ戻る。
+  void _back() => setState(() {
+        if (_subStack.isNotEmpty) {
+          _subStack.removeLast();
+        } else if (_isViewpoint && _navStack.isNotEmpty) {
+          _nodeId = _navStack.removeLast();
+        }
+      });
+
   void _tap(Map<String, dynamic> o) {
     final id = o['id'] as String;
     if (o['toggle'] == true) {
@@ -208,6 +250,17 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     }
     if (!_stateOk(o['requires_state'] as List?)) {
       setState(() => _msg = ''); // 前提未達は無反応（“何か先に要る”という糸口を出さない）
+      return;
+    }
+    // Lv3: 視点移動（別ノードへ立ち位置を変える）。requires_state で通行条件も付けられる
+    final goto = o['goto'] as String?;
+    if (goto != null) {
+      setState(() {
+        _navStack.add(_nodeId);
+        _nodeId = goto;
+        _subStack.clear();
+        _msg = '';
+      });
       return;
     }
     _recordClue(o); // 収束型：手がかり(値/記号/事実)を部屋内memoに記録
@@ -1322,9 +1375,16 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 ),
               ),
             ),
-          if (inSub)
+          if (_isViewpoint) ...[
+            // 視点モード：回転は無し。subview中 or 移動履歴があれば「戻る」
+            if (inSub || _navStack.isNotEmpty)
+              TextButton(
+                onPressed: _back,
+                child: const Text('戻る', style: TextStyle(color: Colors.white)),
+              ),
+          ] else if (inSub)
             TextButton(
-              onPressed: () => setState(() => _subStack.removeLast()),
+              onPressed: _back,
               child: const Text('戻る', style: TextStyle(color: Colors.white)),
             )
           else ...[

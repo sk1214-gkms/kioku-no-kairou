@@ -174,3 +174,31 @@ a single <item>, centered, on a plain dark background, item icon, muted grimy te
 5. まず**R1を通しで**（4壁＋ズーム＋北open）作って、SD運用を確立してから量産。
 
 > 命名一覧：背景 `r1_north.png`…／R1ズーム `r1_wash_zoom(.._open) / r1_bed_zoom / r1_window_zoom`／R2ズーム `r2_shelf_zoom / r2_drawer_zoom / r2_locker_zoom`／差分 `r3_<dir>_lit`・`r8_<dir>_dark`・`r9_<dir>_open`・`r10_<dir>_on`。
+
+---
+
+## 10. 【Lv3 視点移動】R1のアート — "見渡し起点"で作る（重要）
+視点移動モデル（[設計](ナビゲーション_Lv3視点移動_設計.md)・[r1.json](../data/deep_rooms/r1.json)）では、**まず見渡しを作り、そこから各接近ビューを派生**させる。順序を守らないと「遠くの洗面台と近くの洗面台が別物」になり没入が壊れる。
+
+### ① 見渡し `r1_entrance`（最初に作る・1枚）
+STYLE_BASE ＋ §1.5-B(フルパース) ＋：
+```
+first-person view standing in the centre of a small decaying 1950s psychiatric room looking across the room: an old white porcelain washstand with a cracked mirror on the left wall, a simple iron-frame bed with bloodstained sheets along the right wall, a barred foggy window, a cold white locked door; grimy white subway tiles, peeling walls, cracked floor, deep shadows, one bare hanging bulb, strong perspective depth
+```
+→ 保存 `r1_entrance.png`
+
+### ② 各接近ビュー（①の見渡しから派生＝一致させる）
+**やり方**：見渡し `r1_entrance` の**該当部分をトリミング → img2img（denoise 0.45〜0.6）**で寄る。または **IP-Adapterに r1_entrance を入れて**各接写を生成。プロンプトは各対象のclose-up：
+| ノード | 保存名 | 対象のclose-up |
+|---|---|---|
+| at_washstand | `r1_washstand`（＋`r1_washstand_open`） | 洗面台正面・両開き棚（閉／開＋箱）・上に鏡 |
+| at_bed | `r1_bed` | 鉄枠ベッド接写・枕・血のシーツ・下の隙間 |
+| at_door | `r1_door` | 白い施錠扉・鍵穴 |
+| at_window | `r1_window` | 鉄格子の窓・窓枠の爪痕・霧 |
+
+- **一致が命**：見渡しに写った洗面台＝接近後の洗面台、が同じ形・同じ位置に見えること（img2img派生ならほぼ自動で一致）。
+- `r1_washstand_open` は閉版から「両開きの扉が開き奥に錆びた小箱」で派生（棚を開ける演出用）。
+
+### 配置
+`assets/images/rooms/` に上記名で置く（9:16直出し・スライス不要）。置けば r1.json の各ノードが自動でその絵になる。**未配置のノードは暗転**するので、まず `r1_entrance` から。
+> エントランスの4つの「進む」タップ位置(rect)は仮置き。`r1_entrance` が出たら実際の構図に合わせて私が調整します。

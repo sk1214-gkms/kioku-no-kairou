@@ -235,3 +235,18 @@ R13 最後の扉: , a final chamber, (a huge ominous locked door with a large co
 ```
 > R3暗室だけは「muted teal…」を消して赤い安全灯に。R10〜R13は末尾の red digital corruption が"崩壊の進行"。
 > 各部屋、良い1枚が出たら保存 → `output/` から scp で回収 → 私に渡してくれれば **どの絵をどの部屋のどのノードに割り当て、謎をどう配置するか** をやります（R1と同じ要領で）。
+
+### 11.1 部屋タイプ別の注意（無駄打ち防止・実地で判明）
+「豪華な家具の館ベース」だと**設備部屋まで応接室**になってしまう。以下で使い分ける：
+- **家具ベース(§11)でOK**：R2 / R4(本棚:1.5) / R6(相関板:1.4) / R7(廊下+扉) / R8(鏡:1.5) / R12(証拠箱:1.4)
+- **"簡素な臨床室"ベースに差し替え**（家具の羅列を消す）：R5 / R9 / R11
+  ```
+  dark painterly semi-realistic illustration, a cold decaying clinical room inside an old 1950s psychiatric institution, grimy tiled and plaster walls, sparse and utilitarian, muted teal and sepia palette, near-black shadows, a single faint blood-red accent, dim cinematic lighting, heavy decay (peeling walls, black mold, rust, dust), deep perspective, first-person, atmospheric depth, film grain, vertical 9:16
+  ```
+  - R5: `, (a leather examination table with dark bloodstains and restraint straps:1.6), medical charts, a metal instrument cabinet`
+  - R9: `, (tall shelves of glass jars with preserved organs and brains in fluid:1.6), a metal workbench with vials and a syringe`
+  - R11: `, (a surgical table under a large round surgical lamp:1.6), surgical instruments, an old anesthesia machine, faint red digital corruption`
+- **R3 暗室**：tealを消して赤安全灯 `:1.6`（§7/上記の修正版）。赤が弱ければNegativeの `high saturation` を削除。
+- **R10 監視室**：簡素ベース＋`(banks of old dark monitors and a recording terminal:1.6), a large power lever, tangled wiring, faint red digital corruption` ＋ **Negativeから `modern objects` を削除**（消されるため）。
+- **R13 最後の扉**：`(a huge ominous locked door with a combination mechanism:1.6), carved glyph-like marks, heavy red digital corruption, faint light from beyond`。
+- 共通：主役が家具に埋もれたら重みを上げる（`:1.5→1.7`）。設備部屋は**家具の羅列語（period furniture, drapes, persian rug）を削る**と主役が立つ。

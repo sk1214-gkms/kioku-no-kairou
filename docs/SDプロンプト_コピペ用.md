@@ -250,3 +250,144 @@ R13 最後の扉: , a final chamber, (a huge ominous locked door with a large co
 - **R10 監視室**：簡素ベース＋`(banks of old dark monitors and a recording terminal:1.6), a large power lever, tangled wiring, faint red digital corruption` ＋ **Negativeから `modern objects` を削除**（消されるため）。
 - **R13 最後の扉**：`(a huge ominous locked door with a combination mechanism:1.6), carved glyph-like marks, heavy red digital corruption, faint light from beyond`。
 - 共通：主役が家具に埋もれたら重みを上げる（`:1.5→1.7`）。設備部屋は**家具の羅列語（period furniture, drapes, persian rug）を削る**と主役が立つ。
+
+---
+
+## 12. 【アニメ版・確定レシピ】全室Lv3視点・ノード別プロンプト（★現行の本命）
+2026-07-09 方針転換：写真調 → **アニメ/マンガ調に全室統一**（[経緯メモ](../%E9%96%8B%E7%99%BA/)）。§1〜§11 の写真調は旧版。**以降はこの§12を使う**。
+- モデル：**animagineXL31.safetensors**（Animagine XL 3.1）
+- 設定：**euler_ancestral(euler a) / normal / steps 28 / cfg 6 / 832×1216 / batch 1**
+- 生成後、`python tools/crop_916.py <入力> assets/images/rooms/<bg名>.png` で中央9:16化して配置（832→幅684）。
+- **絵柄は全室共通で固定**（＝下の PREFIX / SUFFIX / NEGATIVE を一切変えない）。**変えるのは各室の「色調」と各ノードの「シーン」だけ**＝「同じ絵師の一つの館」に揃う。
+- ナビ：全室が視点移動スイート。**R1を自宅実機で検証してからR2以降を1室ずつ視点化**（生成＝先行OK）。
+
+### 最終プロンプトの組み立て
+```
+最終Positive = PREFIX + <各ノードのSCENE> + ", " + <各室のPALETTE> + SUFFIX
+```
+
+**PREFIX（固定・毎回先頭）** ※`first-person standing view`は人物召喚＋絵画調を招くので**入れない**（R1成功版に一致）
+```
+masterpiece, best quality, absurdres, (no humans:1.3), empty room, scenery, indoors, anime background art, illustration, manga style, bold ink lineart, cel shading, sharp clean lineart, high contrast,
+```
+**SUFFIX（固定・毎回末尾）**
+```
+, cracked walls, peeling paint, water stains, faint dark blood accents, eerie psychological horror mood, cinematic lighting, detailed background, vertical composition, sense of depth
+```
+**NEGATIVE（固定・全室共通）** ※人物・絵画調を強めに排除
+```
+photorealistic, photo, realistic, 3d, cgi, render, painterly, soft focus, watercolor, impressionist, sketch, motion blur, blurry, out of focus, lowres, (bad quality:1.2), text, letters, words, numbers, captions, label, watermark, signature, logo, ui, error, extra digits, jpeg artifacts, worst quality, low quality, people, person, 1girl, 1boy, human, character, silhouette, standing figure, shadow person, deformed
+```
+> **主役は必ず重み付け**：各SCENEの主対象を `(...:1.3)`（弱ければ1.5）で囲む。R2a棚が「無」になったのは主役が弱かったため。
+> 錠前や刻印は**読める文字を焼かない**（`text/letters/numbers` はNegativeのまま）。ダイヤル・時計・刻印は「文字なしの機構/記号」で描かせ、数値・文字はアプリ側で重ねる。
+
+### R1 白い部屋（cold）★見本・生成済
+PALETTE: `muted teal and desaturated blue palette, cold moonlight, cracked white tiled walls`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_bed | `R1a/img` | `r1_bed` | `an old iron bed with wrinkled sheets and a single pillow, a small barred window` |
+| at_washstand | `R1a_wash/img` | `r1_washstand` | `an old washstand with a white porcelain basin, an arched mirror above, a small cabinet under the basin, dark reddish water stains` |
+| at_door | `R1a_door/img` | `r1_door` | `a heavy closed wooden door with a prominent keyhole, an old cracked clawfoot bathtub` |
+
+### R2 準備室（cold steel）
+PALETTE: `muted teal and cold steel-blue palette, dim overhead light`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_shelf | `R2a_shelf/img` | `r2_shelf` | `a tall glass-doored medicine cabinet full of old grimy bottles, a torn paper scrap wedged behind the bottles` |
+| at_bench | `R2a_bench/img` | `r2_bench` | `a metal workbench with scattered papers and a half-open drawer, a stool` |
+| at_locker | `R2a_locker/img` | `r2_locker` | `a row of tall steel lockers side by side, one locker with a small blank metal name-plate` |
+| at_door | `R2a_door/img` | `r2_door` | `a metal door with a frosted window and a small card reader beside it` |
+
+### R3 暗室（red safelight・teal禁止）
+PALETTE: `near-black darkness lit only by a deep red safelight, ominous red glow, (red safelight:1.5)`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_devwall | `R3a_wall/img` | `r3_wall` | `developing photo prints hung on strings against a dark wall, trays of chemicals` |
+| at_clock | `R3a_clock/img` | `r3_clock` | `a wall clock with stopped hands, a faint dark spray-like trace beside it` |
+| at_door | `R3a_door/img` | `r3_door` | `a door fitted with a clockwork lock and a round blank dial face` |
+
+### R4 書斎（warm wood）
+PALETTE: `warm amber and sepia palette, candlelight, dark wood panelling, a worn persian rug`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_bookshelf | `R4a_shelf/img` | `r4_shelf` | `tall bookshelves packed with old medical books, fresh finger-grease gleaming on one spine` |
+| at_desk | `R4a_desk/img` | `r4_desk` | `a heavy wooden writing desk with scattered papers and an oil lamp` |
+| at_portrait | `R4a_portrait/img` | `r4_portrait` | `an ominous oil portrait in a heavy gilt frame on a wood-panelled wall` |
+| at_safe | `R4a_safe/img` | `r4_safe` | `an iron safe half-hidden behind a portrait frame, a blank dial lock` |
+
+### R5 診察室（clinical・簡素）
+PALETTE: `cold clinical teal-green palette, sterile grimy tiled walls`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_couch | `R5a_couch/img` | `r5_couch` | `(a leather examination table with an unnatural amount of dark blood and shadowy restraint straps:1.4), medical charts on the wall` |
+| at_cabinet | `R5a_cab/img` | `r5_cabinet` | `a locked metal medicine cabinet with a small control tag` |
+| at_door | `R5a_door/img` | `r5_door` | `a clinical door with a four-dial combination lock (no readable characters)` |
+
+### R6 記録室（grey + 赤い糸）
+PALETTE: `dim desaturated grey palette, a single red-string accent, a dusty records office`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_board | `R6a_board/img` | `r6_board` | `(an investigation board covered with photos linked by red string:1.4), one blank slot in the centre` |
+| at_files | `R6a_files/img` | `r6_files` | `a records desk with stacks of testimony papers and an open logbook` |
+| at_door | `R6a_door/img` | `r6_door` | `a door with a numeric combination lock (blank dials, no readable numbers)` |
+
+### R7 廊下（dark corridor）
+PALETTE: `long dark corridor, cold moonlight, muted blue palette, strong one-point perspective`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_hall | `R7a_hall/img` | `r7_hall` | `a long corridor with many closed doors receding into shadow, pale footprints going away and returning on the floor, a faint weapon-shaped bleed on the wall` |
+| at_door | `R7a_door/img` | `r7_door` | `a corridor door with a numeric lock, cold air drifting from beyond` |
+
+### R8 鏡の間（ornate silver・暗転差分あり）
+PALETTE: `ornate dark wood and gilt, cold silver palette, a hall of mirrors`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_mirror | `R8a_mirror/img` | `r8_mirror` | `(a large ornate gilt-framed standing mirror with an ordinary clear reflection:1.4)` |
+| at_mirror(暗転) | `R8a_mirror_dark/img` | `r8_mirror_dark` | `SCENE同上 + lights off, near-darkness lit by cold moonlight, a shadowy blood-spattered human silhouette appears only inside the mirror` |
+| at_switch | `R8a_switch/img` | `r8_switch` | `an old brass light switch on an ornate wood-panelled wall` |
+| at_door | `R8a_door/img` | `r8_door` | `a heavy ornate closed door` |
+
+### R9 標本室（formalin green・簡素）
+PALETTE: `sickly formalin-green palette, cold glow through the jars, sparse clinical room`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_specimens | `R9a_jars/img` | `r9_specimens` | `(tall shelves of glass specimen jars with preserved brains and organs in fluid:1.5), an empty syringe at the back` |
+| at_desk | `R9a_desk/img` | `r9_desk` | `a metal workbench with amber fluid bottles and a drawer holding a needle` |
+| at_door | `R9a_door/img` | `r9_door` | `a door with a small hole shaped to insert a syringe` |
+
+### R10 監視室（monitor glow・点灯差分あり）
+PALETTE: `dark room, cold blue-green monitor glow, faint red digital corruption in the corners`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_monitors | `R10a_mon/img` | `r10_monitors` | `banks of old dark monitors and a recording terminal, a coffee-stained note` |
+| at_monitors(点灯) | `R10a_mon_on/img` | `r10_monitors_on` | `SCENE同上 + power on, the monitors glow cyan-blue with faint scanlines, cold monitor light filling the room` |
+| at_power | `R10a_power/img` | `r10_power` | `a large main-power lever and a dusty bundle of wiring` |
+| at_door | `R10a_door/img` | `r10_door` | `a heavy closed door` |
+
+### R11 手術室（surgical・簡素）
+PALETTE: `cold sterile white and teal palette, surgical lamp glow, faint red digital corruption in the corners`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_table | `R11a_table/img` | `r11_table` | `(a surgical table under a large round surgical lamp:1.4), a sterilizer basin beside it` |
+| at_tray | `R11a_tray/img` | `r11_tray` | `a tray of neatly lined surgical instruments, a scalpel and a hemostat` |
+| at_door | `R11a_door/img` | `r11_door` | `a door with a control panel of ordered steps (blank, no readable text)` |
+
+### R12 証拠室（cold grey）
+PALETTE: `dim cold grey palette, a dusty evidence room, faint red digital corruption in the corners`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_evidence | `R12a_boxes/img` | `r12_evidence` | `shelves of numbered evidence boxes, a single glove visible in one open box` |
+| at_photos | `R12a_photos/img` | `r12_photos` | `a desk with stacked case files and a single stark crime-scene photograph pinned alone` |
+| at_door | `R12a_door/img` | `r12_door` | `a door with a timeline record panel` |
+
+### R13 最後の扉（crumbling void・崩壊差分あり）
+PALETTE: `crumbling desaturated void, heavy red digital corruption bleeding across the walls, faint light leaking from beyond`
+| ノード | prefix | bg名 | SCENE |
+|---|---|---|---|
+| at_door | `R13a_door/img` | `r13_door` | `(a huge ominous final door with a large combination mechanism:1.5), fragmentary carved glyph-like marks around it (illegible), faint light from beyond` |
+| at_door(崩壊) | `R13a_door_end/img` | `r13_door_end` | `SCENE同上 + the corruption at its most intense, walls dissolving into red noise` |
+
+### 生成の運用
+- **1室ずつ**：各ノード 25枚キュー（seedはrandomize）→ 良いのをローカルへscp → 私に渡す → 私が中央9:16化して `assets/images/rooms/<bg名>.png` に配置＋r*.jsonを視点スイート化。
+- 主役が弱ければ `(...:1.4→1.7)` で重み上げ。臨床室(R5/R9/R11)は家具の羅列を足さない（簡素ベースのまま）。
+- 差分bg（_dark/_on/_end）は**通常版をimg2img**（denoise 0.4〜0.5）で状態だけ変えると一致しやすい。

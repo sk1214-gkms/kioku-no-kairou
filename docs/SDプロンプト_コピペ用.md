@@ -391,3 +391,49 @@ PALETTE: `crumbling desaturated void, heavy red digital corruption bleeding acro
 - **1室ずつ**：各ノード 25枚キュー（seedはrandomize）→ 良いのをローカルへscp → 私に渡す → 私が中央9:16化して `assets/images/rooms/<bg名>.png` に配置＋r*.jsonを視点スイート化。
 - 主役が弱ければ `(...:1.4→1.7)` で重み上げ。臨床室(R5/R9/R11)は家具の羅列を足さない（簡素ベースのまま）。
 - 差分bg（_dark/_on/_end）は**通常版をimg2img**（denoise 0.4〜0.5）で状態だけ変えると一致しやすい。
+
+---
+
+## 13. 【追加生成】1壁＝1ノード用の不足画像（2026-07-10 方針A）
+R4以降は元の謎が**4壁ぶん**あり、生成済みの2〜3枚では足りないと判明。**元の4方向を「1壁＝1ノード」で忠実に視点化**するため、下の**不足壁・扉・状態差分だけ**を追加生成する。共通の **PREFIX / SUFFIX / NEGATIVE・設定は §12 と同じ**（`first-person standing view`は入れない）。各行は `PREFIX + <SCENE> + ", " + <PALETTE> + SUFFIX`。
+
+> R1/R2/R3は変換済。R8はスイッチ画像待ち。既存で足りる壁は再生成不要。
+
+### 13.1 不足「壁・扉」（最優先・各25枚）
+| bg名(prefix) | SCENE（主役 `:1.4`） | PALETTE |
+|---|---|---|
+| `r4_door` | `(a heavy closed wooden study door with its brass knob removed, exposed mounting hardware:1.4)` | `warm amber and sepia palette, candlelight, dark wood panelling` |
+| `r5_chart` | `(a cracked clinical wall covered with pinned medical charts and trembling scratch-like gouges carved into the plaster:1.4)` | `cold clinical teal-green palette, sterile grimy tiled walls` |
+| `r6_log` | `(a records wall with a metal filing cabinet, pinned testimony papers and an open night-shift logbook on a desk:1.4)` | `dim desaturated grey palette, a dusty records office` |
+| `r7_blood` | `(a long dark corridor floor with a trail of dark red bloody footprints and a weapon-shaped blood smear on the wall:1.4)` | `long dark corridor, cold moonlight, muted blue palette with dark red blood, strong one-point perspective` |
+| `r7_mud` | `(a long dark corridor floor with a trail of muddy gardener's footprints:1.4)` | `long dark corridor, cold moonlight, muted blue palette, strong one-point perspective` |
+| `r9_cabinet` | `(an old tall closed wooden cupboard against the wall, a faint long shadow stirring behind its doors:1.4)` | `sickly formalin-green palette, cold glow, sparse clinical room` |
+| `r11_chart` | `(a wall with a pinned procedure chart and an old anesthesia machine beside it:1.4)` | `cold sterile white and teal palette, surgical lamp glow, faint red digital corruption in the corners` |
+| `r12_files` | `(shelves and a desk stacked with case files, a night-shift logbook and an autopsy memo:1.4)` | `dim cold grey palette, a dusty evidence room, faint red digital corruption in the corners` |
+| `r13_glyphs` | `(a crumbling wall and beam covered with fragmentary carved glyph-like marks, illegible:1.4)` | `crumbling desaturated void, heavy red digital corruption bleeding across the walls, faint light` |
+| `r10_aux`（任意） | `(a bank of smaller auxiliary CRT monitors and a pile of unlabeled spare tapes:1.4)` | `dark room, cold blue-green monitor glow, faint red digital corruption in the corners`（※r10_monitors再利用でも可） |
+
+### 13.2 R8（スイッチ＝§前掲の改善プロンプト・扉/鏡は採用済R8a#9・R8b#7）
+| bg名(prefix) | SCENE | 備考 |
+|---|---|---|
+| `r8_switch` | `extreme close-up of (a single old toggle light switch on a rectangular wall plate:1.6), one small flip lever, mounted on a cracked plaster wall` | Negativeに `door, doorknob, door handle, lock, keyhole, ornate brass, gilt fittings, chandelier` を追加 |
+
+### 13.3 状態差分（第2バッチ・**通常版をimg2img** denoise0.4〜0.5）
+| bg名 | 元画像 | 加える語 |
+|---|---|---|
+| `r3_wall_lit` | r3_wall | `blacklight ultraviolet ON, everything bathed in eerie blue-violet UV glow, faint glowing handprints on the wall` |
+| `r8_mirror_dark` | r8_mirror | `lights off, near-darkness lit by cold moonlight, a shadowy blood-spattered figure appears only inside the mirror reflection`（Negativeから人物語を外す＝§前掲） |
+| `r9_cabinet_open` | r9_cabinet | `the cupboard doors are open, revealing an empty dark interior` |
+| `r10_monitors_on` | r10_monitors | `powered ON, screens glowing cyan-blue with faint scanlines, cold monitor light filling the room` |
+
+### 13.4 各室の「1壁＝1ノード」割り当て（変換時の対応表）
+- **R4**: N=portrait(+safe subview r4_safe) / E=r4_shelf(books) / W=r4_desk(暗号パネル) / S=**r4_door**
+- **R5**: N=**r5_chart**(刻み) / E=r5_couch(診察台) / W=r5_cabinet(薬棚) / S=r5_door
+- **R6**: N=r6_board(相関板+尋問) / E=r6_files(証言) / W=**r6_log**(証言+日誌) / S=r6_door
+- **R7**: N=r7_hall(白足跡) / E=**r7_blood** / W=**r7_mud** / S=r7_door
+- **R9**: N=r9_specimens(標本棚) / E=r9_desk(作業台) / W=**r9_cabinet**(隠し戸棚・chase) / S=r9_door
+- **R10**: W=r10_power / N=r10_monitors(scrub) / E=**r10_aux**(補助M) / S=r10_door
+- **R11**: N=r11_table(無影灯+消毒槽) / E=**r11_chart**(カルテ+麻酔器) / W=r11_tray(器具) / S=r11_door
+- **R12**: N=r12_evidence(箱+手帳) / E=**r12_files**(ファイル/日誌/検視) / W=r12_photos(現場写真) / S=r12_door
+- **R13**: 刻印wall=**r13_glyphs**（6刻印を不可視ホットスポットで） / S=r13_door
+> 太字＝今回追加生成する画像。それ以外は配置済みを流用。揃えば各室、元の各wallのオブジェクトをそのままノードに移すだけ＝**パズル完全保持**でクリーン変換できる。

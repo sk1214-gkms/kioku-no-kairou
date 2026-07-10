@@ -12,9 +12,11 @@
     "ME・MO・RY を繋ぐ。DE／OR／GE は罠。",
     "『MEMORY』。"
   ],
-  "views": {
-    "north": {
+  "start_node": "at_door",
+  "viewpoints": {
+    "at_glyphs": {
       "label": "北",
+      "bg": "r13_glyphs",
       "objects": [
         {
           "id": "a",
@@ -49,12 +51,7 @@
             "label": "刻印",
             "value": "OR"
           }
-        }
-      ]
-    },
-    "east": {
-      "label": "東",
-      "objects": [
+        },
         {
           "id": "b",
           "rect": [
@@ -88,12 +85,7 @@
             "label": "刻印",
             "value": "DE"
           }
-        }
-      ]
-    },
-    "west": {
-      "label": "西",
-      "objects": [
+        },
         {
           "id": "c",
           "rect": [
@@ -148,8 +140,9 @@
         }
       ]
     },
-    "south": {
+    "at_door": {
       "label": "南：最後の扉",
+      "bg": "r13_door",
       "objects": [
         {
           "id": "door",
@@ -166,6 +159,17 @@
             "win": true
           },
           "reveal": "英単語を刻む錠。『この館とは、何だったのか』。"
+        },
+        {
+          "id": "go_at_glyphs",
+          "rect": [
+            0,
+            150,
+            52,
+            360
+          ],
+          "label": "北の方へ",
+          "goto": "at_glyphs"
         }
       ]
     }

@@ -30,9 +30,11 @@
     "「甥が」には犯人の記憶、「凶器は」には凶器の記憶、「見ていた」にはあの夜の記憶。",
     "直視していない記憶は突きつけられない。出せないなら目を背けよ（否定で脱出）。"
   ],
-  "views": {
-    "west": {
+  "start_node": "at_door",
+  "viewpoints": {
+    "at_switch": {
       "label": "西：照明",
+      "bg": "r8_switch",
       "objects": [
         {
           "id": "lamp",
@@ -51,8 +53,9 @@
         }
       ]
     },
-    "north": {
+    "at_mirror": {
       "label": "北：肖像",
+      "bg": "r8_mirror",
       "objects": [
         {
           "id": "portrait",
@@ -93,12 +96,7 @@
           },
           "reveal": "曇った小鏡が、上機嫌に囁く。『ほら、犯人は決まった。あの甥だよ』——妙に、軽い声で。",
           "reveal_hard": "小鏡が囁く。『犯人は決まった』。"
-        }
-      ]
-    },
-    "east": {
-      "label": "東：鏡",
-      "objects": [
+        },
         {
           "id": "mirror_n",
           "rect": [
@@ -229,8 +227,9 @@
         }
       ]
     },
-    "south": {
+    "at_door": {
       "label": "南：扉",
+      "bg": "r8_door",
       "objects": [
         {
           "id": "door",
@@ -242,21 +241,30 @@
           ],
           "label": "扉",
           "reveal": "扉。鏡と対峙し、決着をつけるまでは、開かない。"
+        },
+        {
+          "id": "go_at_switch",
+          "rect": [
+            0,
+            150,
+            52,
+            360
+          ],
+          "label": "照明の方へ",
+          "goto": "at_switch"
+        },
+        {
+          "id": "go_at_mirror",
+          "rect": [
+            308,
+            150,
+            52,
+            360
+          ],
+          "label": "肖像の方へ",
+          "goto": "at_mirror"
         }
       ]
     }
-  },
-  "bg_variants": [
-    {
-      "when": {
-        "state": [
-          {
-            "interactable": "lamp",
-            "state": "off"
-          }
-        ]
-      },
-      "suffix": "dark"
-    }
-  ]
+  }
 }

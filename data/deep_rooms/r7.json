@@ -12,9 +12,11 @@
     "その時刻は、血痕03:45の半時（30分）後。",
     "真の時刻『04:15』＝0415。"
   ],
-  "views": {
-    "north": {
+  "start_node": "at_door",
+  "viewpoints": {
+    "at_hall": {
       "label": "北：白い足跡",
+      "bg": "r7_hall",
       "objects": [
         {
           "id": "editnote",
@@ -100,8 +102,9 @@
         }
       ]
     },
-    "east": {
+    "at_blood": {
       "label": "東：血の足跡",
+      "bg": "r7_blood",
       "objects": [
         {
           "id": "blood",
@@ -152,8 +155,9 @@
         }
       ]
     },
-    "west": {
+    "at_mud": {
       "label": "西：泥の足跡",
+      "bg": "r7_mud",
       "objects": [
         {
           "id": "mud",
@@ -212,8 +216,9 @@
         }
       ]
     },
-    "south": {
+    "at_door": {
       "label": "南：扉",
+      "bg": "r7_door",
       "objects": [
         {
           "id": "door",
@@ -230,6 +235,39 @@
             "win": true
           },
           "reveal": "4桁の数字錠。導いた“真の時刻”を。"
+        },
+        {
+          "id": "go_at_hall",
+          "rect": [
+            0,
+            150,
+            52,
+            360
+          ],
+          "label": "白い足跡の方へ",
+          "goto": "at_hall"
+        },
+        {
+          "id": "go_at_blood",
+          "rect": [
+            308,
+            150,
+            52,
+            360
+          ],
+          "label": "血の足跡の方へ",
+          "goto": "at_blood"
+        },
+        {
+          "id": "go_at_mud",
+          "rect": [
+            120,
+            556,
+            120,
+            74
+          ],
+          "label": "泥の足跡の方へ",
+          "goto": "at_mud"
         }
       ]
     }

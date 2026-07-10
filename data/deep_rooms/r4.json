@@ -60,9 +60,11 @@
     },
     "7305（病棟7＋病室305）。金庫→ドアノブ→南扉に取付。"
   ],
-  "views": {
-    "north": {
+  "start_node": "at_door",
+  "viewpoints": {
+    "at_portrait": {
       "label": "北：肖像画",
+      "bg": "r4_portrait",
       "objects": [
         {
           "id": "portrait",
@@ -95,7 +97,8 @@
                   "reveal_hard": "4桁の金庫。"
                 }
               }
-            ]
+            ],
+            "bg": "r4_safe"
           },
           "reveal_hard": "額裏に金庫。暗号表『○3 △0 □5』。",
           "record": {
@@ -118,8 +121,9 @@
         }
       ]
     },
-    "west": {
+    "at_desk": {
       "label": "西：暗号パネル",
+      "bg": "r4_desk",
       "objects": [
         {
           "id": "order",
@@ -152,8 +156,9 @@
         }
       ]
     },
-    "south": {
+    "at_door": {
       "label": "南：扉",
+      "bg": "r4_door",
       "objects": [
         {
           "id": "door",
@@ -167,11 +172,45 @@
           "requires_item": "item_knob",
           "win": true,
           "reveal": "ドアノブの無い扉。取り付ければ開きそうだ。"
+        },
+        {
+          "id": "go_at_portrait",
+          "rect": [
+            0,
+            150,
+            52,
+            360
+          ],
+          "label": "肖像画の方へ",
+          "goto": "at_portrait"
+        },
+        {
+          "id": "go_at_desk",
+          "rect": [
+            308,
+            150,
+            52,
+            360
+          ],
+          "label": "暗号パネルの方へ",
+          "goto": "at_desk"
+        },
+        {
+          "id": "go_at_shelf",
+          "rect": [
+            120,
+            556,
+            120,
+            74
+          ],
+          "label": "本棚の方へ",
+          "goto": "at_shelf"
         }
       ]
     },
-    "east": {
+    "at_shelf": {
       "label": "東：本棚",
+      "bg": "r4_shelf",
       "objects": [
         {
           "id": "books",

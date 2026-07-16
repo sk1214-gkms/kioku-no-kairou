@@ -20,6 +20,7 @@ class DeepRoomScreen extends StatefulWidget {
   final ValueListenable<int>? remaining; // 脳死までの残り秒（キャンペーン保持・通知）
   final void Function(int hintsUsed)? onCleared;
   final List<String> litGlyphs; // これまで点灯したトラウマ文字（点灯順＝不規則）
+  final bool showIntro; // 入室時のイントロ物語を出すか（続きから再開時は出さない）
 
   const DeepRoomScreen({
     super.key,
@@ -30,6 +31,7 @@ class DeepRoomScreen extends StatefulWidget {
     this.remaining,
     this.onCleared,
     this.litGlyphs = const [],
+    this.showIntro = true,
   });
 
   @override
@@ -112,12 +114,13 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     // 入室時は「ストーリーを読む時間」＝暗転した専用画面で intro を読ませ、
     // 「続ける」で謎解きへ。以後 _msg は短い操作フィードバック専用（字幕バー）。
     final intro = _room['intro'] as String?;
-    if (intro != null && intro.trim().isNotEmpty) {
+    // 続きから（再開）時は入室イントロを出さない＝すぐ操作できるようにする。
+    if (widget.showIntro && intro != null && intro.trim().isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _showStory(intro.trim());
       });
     } else {
-      _msg = '四方の壁を調べよう。'; // intro が無い部屋だけ、そっと探索を促す
+      _msg = _isViewpoint ? '左右の△で見渡そう。' : '四方の壁を調べよう。';
     }
   }
 

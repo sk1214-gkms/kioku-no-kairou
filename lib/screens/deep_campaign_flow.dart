@@ -43,6 +43,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
   late GameState _gs;
   _Phase _phase = _Phase.loading;
   int _idx = 0;
+  bool _resumedRoom = false; // 続きから再開した“最初の部屋”だけイントロを出さない
   EndingResult? _ending;
 
   // 脳死カウントダウン（ストーリー以外）。ストーリーは時間制限なし＝出さない。
@@ -157,6 +158,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
       _playBaseMs = 0;
       _judgmentOnly = cp != null;
       _hasJudgmentCp = cp != null;
+      _resumedRoom = cp == null && r != null; // 再開＝この部屋はイントロ省略
       if (cp != null) {
         // 「最後の審判からやり直す」：スナップショットから審判へ直行。
         // タイマーは走らせない（やり直しでDは発生しない）。スコアTは保存値で固定。
@@ -247,6 +249,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
     if (_phase == _Phase.ending) return;
     _recordFloor(_rooms[_idx]['name'] as String? ?? 'R${_idx + 1}', hintsUsed);
     setState(() {
+      _resumedRoom = false; // 次の部屋は通常どおりイントロを出す
       if (_idx < _rooms.length - 1) {
         _idx++;
       } else {
@@ -365,6 +368,7 @@ class _DeepCampaignFlowState extends State<DeepCampaignFlow>
           timed: _timed, // ストーリーは砂時計非表示
           remaining: _remaining,
           litGlyphs: _litGlyphs(_idx),
+          showIntro: !_resumedRoom, // 続きから再開した部屋はイントロ省略
           onCleared: _advance,
         );
       case _Phase.reveal:

@@ -154,7 +154,7 @@ class _TitleScreenState extends State<TitleScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _logo(),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 18),
                       if (_loading)
                         const Padding(
                           padding: EdgeInsets.all(16),
@@ -163,25 +163,18 @@ class _TitleScreenState extends State<TitleScreen> {
                       else ...[
                         if (_deepSaved != null) ...[
                           _continueButton(),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 12),
                           const Text('― はじめから ―',
                               style: TextStyle(color: Colors.white38)),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                         ],
                         _modeSelector(),
                         if (_judgmentCp != null) ...[
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 10),
                           _retryButton(),
                         ],
-                        const SizedBox(height: 26),
-                        _endingCollection(),
-                        const SizedBox(height: 18),
-                        const Text('G E D Ä C H T N I S',
-                            style: TextStyle(
-                                fontFamily: 'Blackletter',
-                                color: Color(0xFF3A3646),
-                                fontSize: 11,
-                                letterSpacing: 3)),
+                        const SizedBox(height: 12),
+                        _collectionButton(),
                       ],
                     ],
                   ),
@@ -200,8 +193,8 @@ class _TitleScreenState extends State<TitleScreen> {
       children: [
         // アプリの顔（V3：頭文字A×鍵穴）を封蝋のような円形の紋章として据える
         Container(
-          width: 104,
-          height: 104,
+          width: 88,
+          height: 88,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(color: _gold.withValues(alpha: 0.45), width: 1.5),
@@ -219,14 +212,14 @@ class _TitleScreenState extends State<TitleScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         const Text('A M N E S I E   C A S E',
             style: TextStyle(
                 fontFamily: 'Blackletter',
                 color: Color(0xFFB9B1C4),
                 fontSize: 15,
                 letterSpacing: 4)),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         Text.rich(
           const TextSpan(children: [
             TextSpan(text: 'アムネジィ・ケー'),
@@ -238,14 +231,14 @@ class _TitleScreenState extends State<TitleScreen> {
           ]),
           textAlign: TextAlign.center,
           style: const TextStyle(
-              fontSize: 32,
+              fontSize: 28,
               fontWeight: FontWeight.w800,
               letterSpacing: 3,
               color: Color(0xFFF2ECE0),
-              height: 1.18,
+              height: 1.15,
               shadows: [Shadow(color: Colors.black, blurRadius: 24)]),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 10),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -302,26 +295,50 @@ class _TitleScreenState extends State<TitleScreen> {
     );
   }
 
-  Widget _endingCollection() {
-    final teasable = _seen.isNotEmpty && _seen.length < _allEndings.length;
-    return Column(
-      children: [
-        Text('── 結末コレクション　${_seen.length} / ${_allEndings.length} ──',
-            style: const TextStyle(color: _sub, fontSize: 12)),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 6,
-          runSpacing: 6,
-          alignment: WrapAlignment.center,
-          children: [for (final e in _allEndings) _endingChip(e)],
-        ),
-        if (teasable)
-          const Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: Text('？？？ に触れると、手がかりが浮かぶ',
-                style: TextStyle(color: Color(0xFF4B465A), fontSize: 10)),
+  // 縦を圧迫しないよう、結末コレクションはボタン→ボトムシートに退避（既定は畳む）。
+  Widget _collectionButton() {
+    return TextButton(
+      onPressed: _showCollection,
+      child: Text(
+          '── 結末コレクション　${_seen.length} / ${_allEndings.length} ──',
+          style: const TextStyle(color: _sub, fontSize: 12)),
+    );
+  }
+
+  void _showCollection() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: _panel,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        final teasable = _seen.isNotEmpty && _seen.length < _allEndings.length;
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('結末コレクション　${_seen.length} / ${_allEndings.length}',
+                  style: const TextStyle(
+                      color: _gold, fontSize: 14, letterSpacing: 2)),
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                alignment: WrapAlignment.center,
+                children: [for (final e in _allEndings) _endingChip(e)],
+              ),
+              if (teasable)
+                const Padding(
+                  padding: EdgeInsets.only(top: 12),
+                  child: Text('？？？ に触れると、手がかりが浮かぶ',
+                      style: TextStyle(color: Color(0xFF4B465A), fontSize: 10)),
+                ),
+            ],
           ),
-      ],
+        );
+      },
     );
   }
 
@@ -454,8 +471,8 @@ class _TitleScreenState extends State<TitleScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
           color: sel ? _sel : _panel,
           border: Border.all(
@@ -505,10 +522,13 @@ class _TitleScreenState extends State<TitleScreen> {
                               color: _gold.withValues(alpha: 0.85))),
                     ],
                   ),
-                  const SizedBox(height: 5),
-                  Text(d['desc']!,
-                      style: const TextStyle(
-                          fontSize: 11, color: _sub, height: 1.5)),
+                  // 説明は選択中のカードだけ表示＝縦の圧迫を抑える
+                  if (sel) ...[
+                    const SizedBox(height: 5),
+                    Text(d['desc']!,
+                        style: const TextStyle(
+                            fontSize: 11, color: _sub, height: 1.5)),
+                  ],
                 ],
               ),
             ),

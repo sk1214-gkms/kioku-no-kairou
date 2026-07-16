@@ -241,28 +241,6 @@
           ],
           "label": "扉",
           "reveal": "扉。鏡と対峙し、決着をつけるまでは、開かない。"
-        },
-        {
-          "id": "go_at_switch",
-          "rect": [
-            0,
-            150,
-            52,
-            360
-          ],
-          "label": "照明の方へ",
-          "goto": "at_switch"
-        },
-        {
-          "id": "go_at_mirror",
-          "rect": [
-            308,
-            150,
-            52,
-            360
-          ],
-          "label": "肖像の方へ",
-          "goto": "at_mirror"
         }
       ]
     }

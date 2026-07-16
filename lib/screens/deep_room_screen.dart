@@ -227,6 +227,54 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
         if (_dirIdx < 0) _dirIdx += 4;
       });
 
+  // Lv3: ◁▷ で前後の壁（ノード）へ一周移動（順序は viewpoints の定義順・端で折り返し）。
+  List<String> get _nodeOrder =>
+      (_room['viewpoints'] as Map).keys.cast<String>().toList();
+  void _turn(int d) => setState(() {
+        final order = _nodeOrder;
+        if (order.length < 2) return;
+        var n = (order.indexOf(_nodeId) + d) % order.length;
+        if (n < 0) n += order.length;
+        _nodeId = order[n];
+        _subStack.clear();
+        _navStack.clear();
+        _msg = '';
+      });
+
+  /// 視点モードの左右移動ボタン（画面左右端の中央・半透明の△）。
+  /// subview(接写)中や結末表示中は出さない。
+  List<Widget> _turnArrows() {
+    if (!_isViewpoint || _subStack.isNotEmpty || _done) return const [];
+    if (_nodeOrder.length < 2) return const [];
+    Widget arrow(bool left) => Positioned(
+          left: left ? 0 : null,
+          right: left ? null : 0,
+          top: 250,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => _turn(left ? -1 : 1),
+            child: Container(
+              width: 60,
+              height: 140,
+              color: Colors.transparent,
+              alignment: Alignment.center,
+              child: Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: const Color(0x73000000),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white30),
+                ),
+                child: Icon(left ? Icons.arrow_left : Icons.arrow_right,
+                    color: Colors.white, size: 36),
+              ),
+            ),
+          ),
+        );
+    return [arrow(true), arrow(false)];
+  }
+
   // 「戻る」：subview中なら1つ戻す。視点モードなら移動履歴を1つ戻る。
   void _back() => setState(() {
         if (_subStack.isNotEmpty) {
@@ -1418,6 +1466,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                       : Container(color: const Color(0xFF15131C)),
                 ),
                 ..._hotspots(),
+                ..._turnArrows(),
                 if (_msg.trim().isNotEmpty) _subtitle(),
               ]),
             ),

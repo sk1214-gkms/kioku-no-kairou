@@ -37,19 +37,35 @@
   "hints": [
     {
       "t": "通行証は一枚では完成しない。断片を繋げ。",
-      "done_when": { "items": ["item_pass"] }
+      "done_when": {
+        "items": [
+          "item_pass"
+        ]
+      }
     },
     {
       "t": "紙片は三か所——薬棚の奥／作業台／ロッカーの『蓮見』名札の裏。",
-      "done_when": { "items": ["item_pass"] }
+      "done_when": {
+        "items": [
+          "item_pass"
+        ]
+      }
     },
     {
       "t": "さらに『受付印』が作業台の引き出しの奥にある。",
-      "done_when": { "items": ["item_stamp"] }
+      "done_when": {
+        "items": [
+          "item_stamp"
+        ]
+      }
     },
     {
       "t": "左＋右→半カルテ、それに担当医欄を足して通行証。",
-      "done_when": { "items": ["item_pass"] }
+      "done_when": {
+        "items": [
+          "item_pass"
+        ]
+      }
     },
     "通行証＋受付印＝受理印つき通行証を扉へ。"
   ],
@@ -61,7 +77,12 @@
       "objects": [
         {
           "id": "fb",
-          "rect": [120, 350, 125, 50],
+          "rect": [
+            120,
+            350,
+            125,
+            50
+          ],
           "label": "作業台の紙片",
           "gives": "item_frag_b",
           "reveal": "作業台の上に、破れた紙片の右半分。",
@@ -69,7 +90,12 @@
         },
         {
           "id": "inkdrawer",
-          "rect": [175, 405, 115, 55],
+          "rect": [
+            175,
+            405,
+            115,
+            55
+          ],
           "label": "作業台の引き出し",
           "gives": "item_stamp",
           "reveal": "引き出しの奥に、古い受付印。インクはまだ乾いていない。",
@@ -77,28 +103,15 @@
         },
         {
           "id": "poster",
-          "rect": [70, 150, 78, 120],
+          "rect": [
+            70,
+            150,
+            78,
+            120
+          ],
           "label": "古い受付表",
           "hard_only": true,
           "reveal_hard": "色褪せた受付コード一覧：7263／4150／9982／6271……。だがこの扉は、数字錠ではない。"
-        },
-        {
-          "id": "go_shelf",
-          "rect": [0, 150, 60, 380],
-          "label": "薬棚の方へ",
-          "goto": "at_shelf"
-        },
-        {
-          "id": "go_door",
-          "rect": [150, 105, 115, 180],
-          "label": "扉の方へ",
-          "goto": "at_door"
-        },
-        {
-          "id": "go_locker",
-          "rect": [298, 200, 62, 340],
-          "label": "ロッカーの方へ",
-          "goto": "at_locker"
         }
       ]
     },
@@ -108,7 +121,12 @@
       "objects": [
         {
           "id": "shelf",
-          "rect": [40, 130, 230, 220],
+          "rect": [
+            40,
+            130,
+            230,
+            220
+          ],
           "label": "薬棚",
           "gives": "item_frag_a",
           "reveal": "薬瓶の奥に、破れた紙片の左半分が挟まっていた。",
@@ -122,7 +140,12 @@
       "objects": [
         {
           "id": "locker",
-          "rect": [25, 320, 145, 210],
+          "rect": [
+            25,
+            320,
+            145,
+            210
+          ],
           "label": "『蓮見』のロッカー",
           "gives": "item_frag_c",
           "reveal": "『蓮見』の名札の裏に、カルテの担当医欄の切れ端が隠されていた。",
@@ -141,7 +164,12 @@
       "objects": [
         {
           "id": "door",
-          "rect": [90, 130, 180, 420],
+          "rect": [
+            90,
+            130,
+            180,
+            420
+          ],
           "label": "扉（通行証式）",
           "requires_item": "item_pass_valid",
           "need_msg": "扉は固く閉ざされている。受理印の捺された通行証がなければ通れない。",

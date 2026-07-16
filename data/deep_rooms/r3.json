@@ -8,11 +8,25 @@
   "hints": [
     {
       "t": "暗いままでは壁が読めない。まず光を。",
-      "done_when": { "state": [{ "interactable": "lamp", "state": "on" }] }
+      "done_when": {
+        "state": [
+          {
+            "interactable": "lamp",
+            "state": "on"
+          }
+        ]
+      }
     },
     {
       "t": "配電盤でブラックライトを点け、現像壁のメモを読む。",
-      "done_when": { "state": [{ "interactable": "lamp", "state": "on" }] }
+      "done_when": {
+        "state": [
+          {
+            "interactable": "lamp",
+            "state": "on"
+          }
+        ]
+      }
     },
     "メモは『凶行の“半刻”のち』。半刻の長さは別の覚書にある。",
     "半刻＝30分。止まった時計03:45の、30分後。",
@@ -26,47 +40,78 @@
       "objects": [
         {
           "id": "lamp",
-          "rect": [10, 120, 72, 120],
+          "rect": [
+            10,
+            120,
+            72,
+            120
+          ],
           "label": "ブラックライトの配電盤",
           "toggle": true,
-          "states": ["off", "on"]
+          "states": [
+            "off",
+            "on"
+          ]
         },
         {
           "id": "note",
-          "rect": [10, 300, 88, 130],
+          "rect": [
+            10,
+            300,
+            88,
+            130
+          ],
           "label": "古い覚書",
           "reveal": "壁の古い覚書：『一刻＝一時間、半刻＝三十分』。館の時計は、いまだ旧い刻みで動く。",
           "reveal_hard": "覚書：『半刻＝三十分』。",
-          "record": { "key": "unit", "label": "時の単位", "value": "半刻＝30分" }
+          "record": {
+            "key": "unit",
+            "label": "時の単位",
+            "value": "半刻＝30分"
+          }
         },
         {
           "id": "wall",
-          "rect": [100, 160, 175, 200],
+          "rect": [
+            100,
+            160,
+            175,
+            200
+          ],
           "label": "現像中の写真",
-          "requires_state": [{ "interactable": "lamp", "state": "on" }],
+          "requires_state": [
+            {
+              "interactable": "lamp",
+              "state": "on"
+            }
+          ],
           "reveal": "ブラックライトに、現像メモ：『像が定着したのは、凶行の“半刻（はんとき）”のち』。半刻が何分かは、書かれていない。",
           "reveal_hard": "回廊文字の現像メモ：『凶行の“半刻”のち』。",
-          "record": { "key": "memo", "label": "現像メモ", "value": "凶行の“半刻”のち" },
-          "show_when": { "state": [{ "interactable": "lamp", "state": "on" }] }
+          "record": {
+            "key": "memo",
+            "label": "現像メモ",
+            "value": "凶行の“半刻”のち"
+          },
+          "show_when": {
+            "state": [
+              {
+                "interactable": "lamp",
+                "state": "on"
+              }
+            ]
+          }
         },
         {
           "id": "auxclock",
-          "rect": [285, 150, 65, 120],
+          "rect": [
+            285,
+            150,
+            65,
+            120
+          ],
           "label": "予備の壁時計",
           "reveal": "予備の壁時計は 04:45 を指す。だが電池は切れ、針は狂っている。",
           "reveal_hard": "予備の壁時計：04:45（停止）。"
-        },
-        {
-          "id": "go_clock",
-          "rect": [298, 300, 62, 230],
-          "label": "時計の方へ",
-          "goto": "at_clock"
-        },
-        {
-          "id": "go_door",
-          "rect": [120, 548, 130, 82],
-          "label": "扉の方へ",
-          "goto": "at_door"
         }
       ]
     },
@@ -76,7 +121,12 @@
       "objects": [
         {
           "id": "scene",
-          "rect": [95, 355, 180, 48],
+          "rect": [
+            95,
+            355,
+            180,
+            48
+          ],
           "label": "あの夜の記憶",
           "editable_memory": {
             "fact_id": "truth",
@@ -92,11 +142,20 @@
         },
         {
           "id": "clock",
-          "rect": [100, 150, 160, 165],
+          "rect": [
+            100,
+            150,
+            160,
+            165
+          ],
           "label": "止まった時計",
           "reveal": "針は03:45で止まっている。これが凶行の刻——か、あるいは細工された罠か。",
           "reveal_hard": "針は03:45で止まっている。",
-          "record": { "key": "clock", "label": "止まった時計", "value": "03:45" }
+          "record": {
+            "key": "clock",
+            "label": "止まった時計",
+            "value": "03:45"
+          }
         }
       ]
     },
@@ -106,7 +165,12 @@
       "objects": [
         {
           "id": "door",
-          "rect": [105, 135, 155, 320],
+          "rect": [
+            105,
+            135,
+            155,
+            320
+          ],
           "label": "扉（時計仕掛けの錠）",
           "lock": {
             "type": "dial",

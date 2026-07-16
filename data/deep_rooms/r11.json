@@ -247,39 +247,6 @@
           "reveal": "操作盤。処置の手順を再現すれば開く。",
           "hard_only": true,
           "reveal_hard": "操作盤。手順は、誰も教えない。"
-        },
-        {
-          "id": "go_at_table",
-          "rect": [
-            0,
-            150,
-            52,
-            360
-          ],
-          "label": "北の方へ",
-          "goto": "at_table"
-        },
-        {
-          "id": "go_at_chart",
-          "rect": [
-            308,
-            150,
-            52,
-            360
-          ],
-          "label": "東の方へ",
-          "goto": "at_chart"
-        },
-        {
-          "id": "go_at_tray",
-          "rect": [
-            120,
-            556,
-            120,
-            74
-          ],
-          "label": "西の方へ",
-          "goto": "at_tray"
         }
       ]
     }

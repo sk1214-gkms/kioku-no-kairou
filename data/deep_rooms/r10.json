@@ -312,28 +312,6 @@
           ],
           "label": "扉",
           "reveal": "扉。あの夜の記録を再生し、決定的瞬間を掴むまでは、開かない。"
-        },
-        {
-          "id": "go_at_power",
-          "rect": [
-            0,
-            150,
-            52,
-            360
-          ],
-          "label": "主電源の方へ",
-          "goto": "at_power"
-        },
-        {
-          "id": "go_at_monitors",
-          "rect": [
-            308,
-            150,
-            52,
-            360
-          ],
-          "label": "モニターAの方へ",
-          "goto": "at_monitors"
         }
       ]
     }

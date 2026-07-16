@@ -47,6 +47,8 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   final List<String> _items = [];
   final List<String> _selected = [];
   String _msg = '';
+  String? _zoomTitle; // 調べたテキスト（RPG風・画面下メッセージ窓）
+  String? _zoomBody;
   bool _done = false;
   int _hintLevel = 0; // 進捗連動の現在位置（済み手順を飛ばして進む）
   int _hintsViewed = 0; // 実際に開いた（＝広告視聴した）ヒント数。結果画面用
@@ -245,6 +247,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
   /// subview(接写)中や結末表示中は出さない。
   List<Widget> _turnArrows() {
     if (!_isViewpoint || _subStack.isNotEmpty || _done) return const [];
+    if (_zoomBody != null) return const []; // メッセージ表示中は移動ボタンを隠す
     if (_nodeOrder.length < 2) return const [];
     Widget arrow(bool left) => Positioned(
           left: left ? 0 : null,
@@ -416,18 +419,71 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
     _zoom(o['label'] as String? ?? '', _reveal(o));
   }
 
-  void _zoom(String title, String body) {
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(title),
-        content: SingleChildScrollView(
-            child: Text(body, style: const TextStyle(fontSize: 16, height: 1.5))),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('閉じる'))
-        ],
+  // 調べたテキストは“ポップアップ”ではなく、画面下のRPG風メッセージ窓で見せる（世界観統一）。
+  void _zoom(String title, String body) => setState(() {
+        _zoomTitle = title;
+        _zoomBody = body;
+      });
+  void _closeZoom() => setState(() {
+        _zoomTitle = null;
+        _zoomBody = null;
+      });
+
+  /// 画面下のRPG風メッセージ窓（暗幕＋金の上枠・タップで閉じる）。DesignCanvas内に重ねる。
+  List<Widget> _zoomBox() {
+    if (_zoomBody == null) return const [];
+    return [
+      // 背後の暗幕（タップで閉じる＝モーダル。読んでいる間は他をタップさせない）
+      Positioned.fill(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: _closeZoom,
+          child: Container(color: const Color(0x66000000)),
+        ),
       ),
-    );
+      Positioned(
+        left: 0,
+        right: 0,
+        bottom: 0,
+        child: GestureDetector(
+          onTap: _closeZoom,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 92),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            decoration: const BoxDecoration(
+              color: Color(0xF0120F18),
+              border: Border(
+                  top: BorderSide(color: Color(0xFFC9A24B), width: 1.5)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if ((_zoomTitle ?? '').isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(_zoomTitle!,
+                        style: const TextStyle(
+                            color: Color(0xFFC9A24B),
+                            fontSize: 12,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                Text(_zoomBody!,
+                    style: const TextStyle(
+                        color: Color(0xFFEDEAF2), fontSize: 14.5, height: 1.6)),
+                const SizedBox(height: 6),
+                const Align(
+                  alignment: Alignment.centerRight,
+                  child: Text('▼ タップで閉じる',
+                      style: TextStyle(color: Colors.white38, fontSize: 10)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ];
   }
 
   /// 収束型：objに record:{key,label,value} があれば部屋内memoに手がかりを記録。
@@ -1468,6 +1524,7 @@ class _DeepRoomScreenState extends State<DeepRoomScreen> {
                 ..._hotspots(),
                 ..._turnArrows(),
                 if (_msg.trim().isNotEmpty) _subtitle(),
+                ..._zoomBox(),
               ]),
             ),
           ),
